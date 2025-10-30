@@ -1,73 +1,103 @@
-# Welcome to your Lovable project
+# Hi — I’m Kwandumusa “Jay” Mthethwa 👋
 
-## Project info
+> Focusing • 2nd‑year Diploma in Computer Science • Java enthusiast
 
-**URL**: https://lovable.dev/projects/621a2a29-be4b-48c8-aaa8-50fc78409dd1
+[![Twitter Follow](https://img.shields.io/badge/Follow-@thereeljaymiller-1DA1F2?style=for-the-badge\&logo=twitter)](https://www.instagram.com/thereeljaymiller)
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-Kwandumusa_Mthethwa-0A66C2?style=for-the-badge\&logo=linkedin)](https://www.linkedin.com/in/kwandumusa-mthethwa-6b7381236)
+[![TikTok](https://img.shields.io/badge/TikTok-@realjaycoding-000000?style=for-the-badge\&logo=tiktok)](https://www.tiktok.com/realjaycoding)
 
-## How can I edit this code?
+---
 
-There are several ways of editing your application.
+## About me
 
-**Use Lovable**
+I’m Jay — a 19‑year‑old from eMalahleni, Mpumalanga, South Africa. I love building small, useful CLI tools in **Java**, learning new CS fundamentals, and teaching others through short, clear tutorials.
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/621a2a29-be4b-48c8-aaa8-50fc78409dd1) and start prompting.
+* 🎯 Focus: solid Java fundamentals, OOP, clean code
+* 🧩 Interests: chess, anime, tutorials, community tutoring
+* ⚡ Pronouns: he/him
 
-Changes made via Lovable will be committed automatically to this repo.
+---
 
-**Use your preferred IDE**
+## GitHub Snapshot
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+<p align="left">
+  <img src="https://github-readme-stats.vercel.app/api?username=JayMiller08&show_icons=true&theme=tokyonight&count_private=true" alt="Jay's GitHub stats" />
+  <img src="https://github-readme-stats.vercel.app/api/top-langs/?username=JayMiller08&layout=compact&theme=tokyonight" alt="Top languages" />
+</p>
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+---
 
-Follow these steps:
+## Tech Stack
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+### Languages
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+* **Java** (main)
+* Learning: JavaScript (intro), SQL (basic concepts)
 
-# Step 3: Install the necessary dependencies.
-npm i
+### Tools & Frameworks
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
-npm run dev
-```
+* JDK & Java CLI
+* Git & GitHub (issues, PRs)
+* VS Code / IntelliJ IDEA (depending on the task)
+* GitHub Actions (beginner exploration)
 
-**Edit a file directly in GitHub**
+### Learning / Exploring
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+* Object‑Oriented Design & Design Patterns
+* Data Structures & Algorithms (practical problems)
+* Test‑Driven Development (JUnit)
+* JavaFX (simple GUIs)
 
-**Use GitHub Codespaces**
+---
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+## What I’m Doing Now
 
-## What technologies are used for this project?
+* Building and polishing **CLI utilities** in Java (ATM, Expense Tracker, Inventory Manager).
+* Improving code readability and adding unit tests.
+* Learning file I/O and simple persistence for small projects.
+* Preparing short tutorial content and example repos for beginners.
 
-This project is built with:
+---
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+## Featured Projects
 
-## How can I deploy this project?
+> (Pinned on my profile — click through for source and quick demos)
 
-Simply open [Lovable](https://lovable.dev/projects/621a2a29-be4b-48c8-aaa8-50fc78409dd1) and click on Share -> Publish.
+* **ATM‑Simulator** — Java CLI ATM simulation: accounts, deposits, withdrawals, balance tracking.
+* **BANK** — Multi‑account banking CLI: PIN auth, coupon rewards, simple account flows.
+* **Expense‑Tracker** — Track expenses by category; planning persistence & auth features.
+* **Store‑Inventory‑Manager** — Simple inventory with roles, search, stock updates.
 
-## Can I connect a custom domain to my Lovable project?
+Each project contains a `README` with run instructions and the main learning goals.
 
-Yes, you can!
+---
 
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
+## Make the README pop — graphics & badges used
 
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
+* GitHub stats (github-readme-stats) for dynamic contributions and top languages.
+* Social badges (shields.io) for clean, clickable contact links.
+* Clear section headings, short bullets and a compact Projects list to improve scanability.
+
+---
+
+## How to reach me
+
+* GitHub: [@JayMiller08](https://github.com/JayMiller08)
+* Instagram: [@thereeljaymiller](https://www.instagram.com/thereeljaymiller)
+* LinkedIn: [Kwandumusa Mthethwa](https://www.linkedin.com/in/kwandumusa-mthethwa-6b7381236)
+* TikTok: [@realjaycoding](https://www.tiktok.com/realjaycoding)
+
+---
+
+## Let’s collaborate!
+
+I’m open to feedback, small collabs, and beginner‑level mentorship projects. If you see a repo you like — fork it, open an issue, or drop me a message.
+
+---
+
+
+<!--
+  Notes for you:
+  - If you want the stat cards to show private repo counts or change style, update the query params on the github-readme-stats image URLs.
+  - Want a GIF banner instead of this plain header? I can add a simple gradient SVG/GIF header next.
+-->
