@@ -52,13 +52,13 @@ export const Media = () => {
                   </p>
                   <div className="flex flex-wrap gap-3">
                     <Button variant="accent" size="sm" asChild>
-                      <a href="https://www.tiktok.com" target="_blank" rel="noopener noreferrer">
+                      <a href="https://www.tiktok.com/@realjaycoding" target="_blank" rel="noopener noreferrer">
                         <Youtube className="mr-2 h-4 w-4" />
                         TikTok
                       </a>
                     </Button>
                     <Button variant="secondary" size="sm" asChild>
-                      <a href="https://www.instagram.com" target="_blank" rel="noopener noreferrer">
+                      <a href="https://www.instagram.com/thereeljaymiller" target="_blank" rel="noopener noreferrer">
                         <Instagram className="mr-2 h-4 w-4" />
                         Instagram
                       </a>
@@ -84,10 +84,10 @@ export const Media = () => {
                 <CardContent className="space-y-4">
                   <p className="text-muted-foreground">
                     Join The Alphas Club newsletter for weekly insights on personal development, 
-                    coding tips, career advice, and exclusive content for aspiring developers.
+                    and self-improvement, applying self-help books everyday.
                   </p>
                   <Button variant="hero" size="sm" className="w-full" asChild>
-                    <a href="#contact">
+                    <a href="https://jaymthethwa.substack.com" target="_blank" rel="noopener noreferrer">
                       <Mail className="mr-2 h-4 w-4" />
                       Subscribe to Newsletter
                     </a>

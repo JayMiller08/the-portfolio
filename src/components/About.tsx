@@ -67,9 +67,11 @@ export const About = () => {
           </div>
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-            <Button variant="hero" size="lg">
-              <Download className="mr-2 h-5 w-5" />
-              Download Resume
+            <Button variant="hero" size="lg" asChild>
+              <a href="/Kwandumusa%27s%20Resume.pdf" download>
+                <Download className="mr-2 h-5 w-5" />
+                Download Resume
+              </a>
             </Button>
             <Button variant="outline" size="lg" asChild>
               <a href="https://github.com/JayMiller08" target="_blank" rel="noopener noreferrer">

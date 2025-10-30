@@ -56,7 +56,7 @@ export const Footer = () => {
                   <Github className="h-5 w-5" />
                 </a>
                 <a
-                  href="mailto:jay@example.com"
+                  href="mailto:realjaycoding@gmail.com"
                   className="text-muted-foreground hover:text-accent transition-colors"
                   aria-label="Email"
                 >

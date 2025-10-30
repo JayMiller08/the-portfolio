@@ -1,3 +1,4 @@
+import React from 'react';
 import { motion } from "framer-motion";
 import { Mail, Send, Github, Linkedin } from "lucide-react";
 import { Button } from "./ui/button";
@@ -30,7 +31,7 @@ export const Contact = () => {
     }
 
     // For now, create a mailto link as fallback
-    const mailtoLink = `mailto:jay@example.com?subject=Portfolio Contact: ${formData.interest}&body=Name: ${formData.name}%0AEmail: ${formData.email}%0A%0AMessage:%0A${formData.message}`;
+    const mailtoLink = `mailto:realjaycoding@gmail.com?subject=Portfolio Contact: ${formData.interest}&body=Name: ${formData.name}%0AEmail: ${formData.email}%0A%0AMessage:%0A${formData.message}`;
     window.location.href = mailtoLink;
     toast({
       title: "Opening email client",
@@ -82,7 +83,7 @@ export const Contact = () => {
                 <CardContent className="pt-6">
                   <Mail className="h-10 w-10 text-accent mx-auto mb-4" />
                   <h3 className="font-semibold mb-2">Email</h3>
-                  <p className="text-sm text-muted-foreground">jay@example.com</p>
+                  <p className="text-sm text-muted-foreground">realjaycoding@gmail.com</p>
                 </CardContent>
               </Card>
             </motion.div>
