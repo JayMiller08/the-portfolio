@@ -127,7 +127,7 @@ export const Contact = () => {
                 <CardContent className="pt-6">
                   <Linkedin className="h-10 w-10 text-secondary mx-auto mb-4" />
                   <h3 className="font-semibold mb-2">LinkedIn</h3>
-                  <p className="text-sm text-muted-foreground">Kwandumusa  J. Mthethwwa</p>
+                  <p className="text-sm text-muted-foreground">Kwandumusa J. Mthethwwa</p>
                 </CardContent>
               </Card>
             </motion.div>

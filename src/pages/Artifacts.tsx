@@ -35,7 +35,7 @@ const artifacts: Artifact[] = [
       "Watch my breakdown of the skills, tools, and technologies you need to master in 2025 to land your dream dev job.",
     type: "video",
     tag: "Career",
-    url: "https://www.tiktok.com/@jaymiller08",
+    url: "https://www.tiktok.com/@realjaycoding",
   },
   {
     id: "4",
@@ -164,7 +164,7 @@ const ArtifactsPage = () => {
             </p>
             <Button variant="hero" size="lg" asChild>
               <a
-                href="https://www.tiktok.com/@jaymiller08"
+                href="https://www.tiktok.com/@realjaycoding"
                 target="_blank"
                 rel="noopener noreferrer"
               >
