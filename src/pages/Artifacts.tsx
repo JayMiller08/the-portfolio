@@ -1,70 +1,5 @@
-import { useState } from "react";
-import { ThemeProvider } from "@/components/ThemeProvider";
-import { ArrowLeft, Sparkles } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Link } from "react-router-dom";
-import { ArtifactCard, Artifact } from "@/components/ArtifactCard";
-import { EmailCaptureModal } from "@/components/EmailCaptureModal";
-import { Moon, Sun } from "lucide-react";
 import { useTheme } from "@/components/ThemeProvider";
-
-// Sample artifacts data
-const artifacts: Artifact[] = [
-  {
-    id: "1",
-    title: "Java Mastery Cheatsheet",
-    description:
-      "A comprehensive quick-reference guide covering Java fundamentals, OOP concepts, data structures, and common patterns. Perfect for interview prep!",
-    type: "pdf",
-    tag: "Java",
-    url: "/resources/java-cheatsheet.pdf",
-  },
-  {
-    id: "2",
-    title: "Portfolio UI Kit",
-    description:
-      "My custom Figma design system with reusable components, color tokens, and layouts. Use it to build your own stunning portfolio.",
-    type: "figma",
-    tag: "Design",
-    url: "https://figma.com/community",
-  },
-  {
-    id: "3",
-    title: "2025 Developer Roadmap",
-    description:
-      "Watch my breakdown of the skills, tools, and technologies you need to master in 2025 to land your dream dev job.",
-    type: "video",
-    tag: "Career",
-    url: "https://www.tiktok.com/@realjaycoding",
-  },
-  {
-    id: "4",
-    title: "React Hooks Deep Dive",
-    description:
-      "A detailed guide explaining useState, useEffect, useContext, and custom hooks with practical examples for beginners.",
-    type: "pdf",
-    tag: "React",
-    url: "/resources/react-hooks-guide.pdf",
-  },
-  {
-    id: "5",
-    title: "Coding Interview Prep Playlist",
-    description:
-      "Curated YouTube playlist with 20+ videos covering DSA, system design basics, and behavioral interview tips.",
-    type: "link",
-    tag: "Career",
-    url: "https://youtube.com/playlist",
-  },
-  {
-    id: "6",
-    title: "Git & GitHub Essentials",
-    description:
-      "Everything you need to know about version control: branching, merging, PRs, and collaboration workflows explained simply.",
-    type: "pdf",
-    tag: "Tools",
-    url: "/resources/git-essentials.pdf",
-  },
-];
+import { supabase } from "@/lib/supabaseClient"; // Assuming supabase client is imported from here
 
 const ArtifactsHeader = () => {
   const { theme, toggleTheme } = useTheme();
@@ -100,8 +35,41 @@ const ArtifactsHeader = () => {
 };
 
 const ArtifactsPage = () => {
+  const [artifacts, setArtifacts] = useState<Artifact[]>([]);
   const [selectedArtifact, setSelectedArtifact] = useState<Artifact | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    fetchArtifacts();
+  }, []);
+
+  const fetchArtifacts = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('artifacts')
+        .select('*')
+        .order('created_at', { ascending: false });
+
+      if (error) throw error;
+
+      // Map Supabase data to Artifact interface
+      const mappedArtifacts: Artifact[] = (data || []).map((item: any) => ({
+        id: item.id,
+        title: item.title,
+        description: item.description,
+        type: item.resource_type.toLowerCase() as any, // Ensure type matches union
+        tag: item.tag || 'Resource',
+        url: item.file_url,
+      }));
+
+      setArtifacts(mappedArtifacts);
+    } catch (error) {
+      console.error('Error fetching artifacts:', error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   const handleAccessClick = (artifact: Artifact) => {
     // Check if user already has access
@@ -118,6 +86,10 @@ const ArtifactsPage = () => {
       } else {
         window.open(artifact.url, "_blank");
       }
+
+      // Increment download count (fire and forget)
+      supabase.rpc('increment_download_count', { artifact_id: artifact.id });
+
     } else {
       // Show email capture modal
       setSelectedArtifact(artifact);
@@ -146,15 +118,21 @@ const ArtifactsPage = () => {
           </div>
 
           {/* Artifacts Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
-            {artifacts.map((artifact) => (
-              <ArtifactCard
-                key={artifact.id}
-                artifact={artifact}
-                onAccessClick={handleAccessClick}
-              />
-            ))}
-          </div>
+          {isLoading ? (
+            <div className="flex justify-center py-20">
+              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {artifacts.map((artifact) => (
+                <ArtifactCard
+                  key={artifact.id}
+                  artifact={artifact}
+                  onAccessClick={handleAccessClick}
+                />
+              ))}
+            </div>
+          )}
 
           {/* Bottom CTA */}
           <div className="text-center mt-16 p-8 rounded-2xl bg-muted/50 border border-border">
