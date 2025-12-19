@@ -2,6 +2,7 @@ import { Moon, Sun, Menu, X } from "lucide-react";
 import { useTheme } from "./ThemeProvider";
 import { Button } from "./ui/button";
 import { useState } from "react";
+import { Link } from "react-router-dom";
 
 export const Header = () => {
   const { theme, toggleTheme } = useTheme();
@@ -20,6 +21,7 @@ export const Header = () => {
     { label: "Projects", id: "projects" },
     { label: "Skills", id: "skills" },
     { label: "Media", id: "media" },
+    { label: "The Vault", id: "vault", isRoute: true },
     { label: "Contact", id: "contact" },
   ];
 
@@ -35,15 +37,25 @@ export const Header = () => {
 
         {/* Desktop Navigation */}
         <div className="hidden md:flex items-center gap-8">
-          {navItems.map((item) => (
-            <button
-              key={item.id}
-              onClick={() => scrollToSection(item.id)}
-              className="text-sm font-medium text-foreground/80 hover:text-foreground transition-colors"
-            >
-              {item.label}
-            </button>
-          ))}
+          {navItems.map((item) =>
+            item.isRoute ? (
+              <Link
+                key={item.id}
+                to={`/${item.id}`}
+                className="text-sm font-medium text-foreground/80 hover:text-foreground transition-colors"
+              >
+                {item.label}
+              </Link>
+            ) : (
+              <button
+                key={item.id}
+                onClick={() => scrollToSection(item.id)}
+                className="text-sm font-medium text-foreground/80 hover:text-foreground transition-colors"
+              >
+                {item.label}
+              </button>
+            )
+          )}
           <Button
             variant="ghost"
             size="icon"
@@ -93,16 +105,27 @@ export const Header = () => {
       {/* Mobile Menu */}
       {mobileMenuOpen && (
         <div className="md:hidden border-t border-border bg-background/95 backdrop-blur-lg">
-          <div className="container mx-auto px-4 py-4 flex flex-col gap-4">
-            {navItems.map((item) => (
-              <button
-                key={item.id}
-                onClick={() => scrollToSection(item.id)}
-                className="text-left text-sm font-medium text-foreground/80 hover:text-foreground transition-colors py-2"
-              >
-                {item.label}
-              </button>
-            ))}
+        <div className="container mx-auto px-4 py-4 flex flex-col gap-4">
+            {navItems.map((item) =>
+              item.isRoute ? (
+                <Link
+                  key={item.id}
+                  to={`/${item.id}`}
+                  className="text-left text-sm font-medium text-foreground/80 hover:text-foreground transition-colors py-2"
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  {item.label}
+                </Link>
+              ) : (
+                <button
+                  key={item.id}
+                  onClick={() => scrollToSection(item.id)}
+                  className="text-left text-sm font-medium text-foreground/80 hover:text-foreground transition-colors py-2"
+                >
+                  {item.label}
+                </button>
+              )
+            )}
             <Button variant="hero" size="sm" className="w-full" asChild>
               <a href="#contact">Contact</a>
             </Button>
