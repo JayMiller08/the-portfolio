@@ -1,5 +1,11 @@
-import { useTheme } from "@/components/ThemeProvider";
-import { supabase } from "@/lib/supabaseClient"; // Assuming supabase client is imported from here
+import { useState, useEffect } from "react";
+import { ThemeProvider, useTheme } from "@/components/ThemeProvider";
+import { ArrowLeft, Sparkles, Sun, Moon } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Link } from "react-router-dom";
+import { ArtifactCard, Artifact } from "@/components/ArtifactCard";
+import { EmailCaptureModal } from "@/components/EmailCaptureModal";
+import { supabase } from "@/integrations/supabase/client";
 
 const ArtifactsHeader = () => {
   const { theme, toggleTheme } = useTheme();
@@ -53,12 +59,21 @@ const ArtifactsPage = () => {
 
       if (error) throw error;
 
+      interface SupabaseArtifact {
+        id: string;
+        title: string;
+        description: string;
+        resource_type: string;
+        file_url: string;
+        tag: string;
+      }
+
       // Map Supabase data to Artifact interface
-      const mappedArtifacts: Artifact[] = (data || []).map((item: any) => ({
+      const mappedArtifacts: Artifact[] = (data || []).map((item: SupabaseArtifact) => ({
         id: item.id,
         title: item.title,
         description: item.description,
-        type: item.resource_type.toLowerCase() as any, // Ensure type matches union
+        type: item.resource_type.toLowerCase() as Artifact['type'], // Ensure type matches union
         tag: item.tag || 'Resource',
         url: item.file_url,
       }));
@@ -123,7 +138,7 @@ const ArtifactsPage = () => {
               <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
             </div>
           ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="grid grid-cols-2 md:grid-cols-2 gap-4 md:gap-6">
               {artifacts.map((artifact) => (
                 <ArtifactCard
                   key={artifact.id}

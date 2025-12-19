@@ -11,6 +11,11 @@ interface GitHubStats {
   topLanguages: { name: string; percentage: number }[];
 }
 
+interface GitHubRepo {
+  stargazers_count: number;
+  language: string | null;
+}
+
 export const Hero = () => {
   const [stats, setStats] = useState<GitHubStats | null>(null);
   const [loading, setLoading] = useState(true);
@@ -24,10 +29,10 @@ export const Hero = () => {
         const reposResponse = await fetch("https://api.github.com/users/JayMiller08/repos?per_page=100");
         const reposData = await reposResponse.json();
 
-        const totalStars = reposData.reduce((acc: number, repo: any) => acc + repo.stargazers_count, 0);
+        const totalStars = reposData.reduce((acc: number, repo: GitHubRepo) => acc + repo.stargazers_count, 0);
 
         const languageCounts: Record<string, number> = {};
-        reposData.forEach((repo: any) => {
+        reposData.forEach((repo: GitHubRepo) => {
           if (repo.language) {
             languageCounts[repo.language] = (languageCounts[repo.language] || 0) + 1;
           }
@@ -61,7 +66,7 @@ export const Hero = () => {
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
       {/* Background Image */}
-      <div 
+      <div
         className="absolute inset-0 bg-cover bg-center"
         style={{ backgroundImage: `url(${heroBg})` }}
       >
@@ -90,13 +95,19 @@ export const Hero = () => {
             </p>
 
             <p className="text-base md:text-lg text-muted-foreground mb-12 max-w-2xl mx-auto">
-              Building and teaching, documenting the journey into freelance web development, 
+              Building and teaching, documenting the journey into freelance web development,
               and creating educational content for South African teens.
             </p>
 
             <div className="flex flex-wrap gap-4 justify-center mb-16">
               <Button variant="hero" size="lg" onClick={() => document.getElementById("projects")?.scrollIntoView({ behavior: "smooth" })}>
                 View Projects
+              </Button>
+              <Button variant="outline" size="lg" asChild>
+                <a href="/vault">
+                  <Star className="mr-2 h-5 w-5" />
+                  The Vault
+                </a>
               </Button>
               <Button variant="outline" size="lg" asChild>
                 <a href="https://github.com/JayMiller08" target="_blank" rel="noopener noreferrer">
