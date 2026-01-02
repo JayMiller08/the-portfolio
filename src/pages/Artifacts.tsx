@@ -1,11 +1,8 @@
-import { useState, useEffect } from "react";
 import { ThemeProvider, useTheme } from "@/components/ThemeProvider";
-import { ArrowLeft, Sparkles, Sun, Moon } from "lucide-react";
+import { ArrowLeft, Sparkles, Sun, Moon, ShoppingBag } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
-import { ArtifactCard, Artifact } from "@/components/ArtifactCard";
-import { EmailCaptureModal } from "@/components/EmailCaptureModal";
-import { supabase } from "@/integrations/supabase/client";
+import { ProductCard, Product } from "@/components/ProductCard";
 
 const ArtifactsHeader = () => {
   const { theme, toggleTheme } = useTheme();
@@ -40,114 +37,60 @@ const ArtifactsHeader = () => {
   );
 };
 
+const digitalProducts: Product[] = [
+  {
+    id: "handbook",
+    title: "The Beginner Programmers' Survival Handbook",
+    description: "A comprehensive guide to help you navigate the early stages of your programming journey.",
+    gumroadUrl: "https://realjaycoding.gumroad.com/l/tpdhv",
+    tag: "eBook"
+  },
+  {
+    id: "playbook",
+    title: "The Self-Taught Developer Playbook",
+    description: "Your roadmap to becoming a successful self-taught developer.",
+    gumroadUrl: "https://realjaycoding.gumroad.com/l/selftaught-dev-playbook",
+    tag: "eBook"
+  },
+  {
+    id: "notion-os",
+    title: "The CS Student Life OS Notion Template",
+    description: "Organize your computer science studies and life with this all-in-one Notion template.",
+    gumroadUrl: "https://realjaycoding.gumroad.com/l/the-cs-student-life-os",
+    previewUrl: "https://cultured-wind-77f.notion.site/The-CS-Student-Life-OS-2dc0625e4ddd803c87e0c147b4280065?pvs=74",
+    tag: "Notion Template"
+  }
+];
+
 const ArtifactsPage = () => {
-  const [artifacts, setArtifacts] = useState<Artifact[]>([]);
-  const [selectedArtifact, setSelectedArtifact] = useState<Artifact | null>(null);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
-
-  useEffect(() => {
-    fetchArtifacts();
-  }, []);
-
-  const fetchArtifacts = async () => {
-    try {
-      const { data, error } = await supabase
-        .from('artifacts')
-        .select('*')
-        .order('created_at', { ascending: false });
-
-      if (error) throw error;
-
-      interface SupabaseArtifact {
-        id: string;
-        title: string;
-        description: string;
-        resource_type: string;
-        file_url: string;
-        tag: string;
-      }
-
-      // Map Supabase data to Artifact interface
-      const mappedArtifacts: Artifact[] = (data || []).map((item: SupabaseArtifact) => ({
-        id: item.id,
-        title: item.title,
-        description: item.description,
-        type: item.resource_type.toLowerCase() as Artifact['type'], // Ensure type matches union
-        tag: item.tag || 'Resource',
-        url: item.file_url,
-      }));
-
-      setArtifacts(mappedArtifacts);
-    } catch (error) {
-      console.error('Error fetching artifacts:', error);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  const handleAccessClick = (artifact: Artifact) => {
-    // Check if user already has access
-    if (localStorage.getItem("artifacts_email_captured") === "true") {
-      // Direct access
-      if (artifact.type === "pdf") {
-        const link = document.createElement("a");
-        link.href = artifact.url;
-        link.download = artifact.title;
-        link.target = "_blank";
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-      } else {
-        window.open(artifact.url, "_blank");
-      }
-
-      // Increment download count (fire and forget)
-      supabase.rpc('increment_download_count', { artifact_id: artifact.id });
-
-    } else {
-      // Show email capture modal
-      setSelectedArtifact(artifact);
-      setIsModalOpen(true);
-    }
-  };
-
   return (
     <ThemeProvider defaultTheme="light">
       <div className="min-h-screen bg-background text-foreground">
         <ArtifactsHeader />
 
         <main className="container mx-auto px-4 py-12 md:py-20">
-          {/* Hero Section */}
-          <div className="text-center mb-12 md:mb-16">
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 text-primary text-sm font-medium mb-6">
-              <Sparkles className="h-4 w-4" />
-              Free Resources
+        
+          {/* Digital Products Section */}
+          <div className="mb-20">
+            <div className="text-center mb-12">
+              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-accent/10 text-accent text-sm font-medium mb-6">
+                <ShoppingBag className="h-4 w-4" />
+                Digital Products
+              </div>
+              <h2 className="text-3xl md:text-4xl font-bold mb-4">
+                Premium Resources
+              </h2>
+              <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+                Comprehensive guides and templates to help you succeed in your developer journey.
+              </p>
             </div>
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-4">
-              The <span className="bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">Vault</span>
-            </h1>
-            <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto">
-              Curated resources to accelerate your coding journey. From cheatsheets to video tutorials — everything you need to level up.
-            </p>
-          </div>
 
-          {/* Artifacts Grid */}
-          {isLoading ? (
-            <div className="flex justify-center py-20">
-              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
-            </div>
-          ) : (
-            <div className="grid grid-cols-2 md:grid-cols-2 gap-4 md:gap-6">
-              {artifacts.map((artifact) => (
-                <ArtifactCard
-                  key={artifact.id}
-                  artifact={artifact}
-                  onAccessClick={handleAccessClick}
-                />
+            <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-6">
+              {digitalProducts.map((product) => (
+                <ProductCard key={product.id} product={product} />
               ))}
             </div>
-          )}
+          </div>
 
           {/* Bottom CTA */}
           <div className="text-center mt-16 p-8 rounded-2xl bg-muted/50 border border-border">
@@ -173,20 +116,6 @@ const ArtifactsPage = () => {
             <p>© {new Date().getFullYear()} Jay Mthethwa. All rights reserved.</p>
           </div>
         </footer>
-
-        {/* Email Capture Modal */}
-        {selectedArtifact && (
-          <EmailCaptureModal
-            isOpen={isModalOpen}
-            onClose={() => {
-              setIsModalOpen(false);
-              setSelectedArtifact(null);
-            }}
-            resourceTitle={selectedArtifact.title}
-            resourceUrl={selectedArtifact.url}
-            resourceType={selectedArtifact.type}
-          />
-        )}
       </div>
     </ThemeProvider>
   );
