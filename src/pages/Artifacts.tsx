@@ -69,7 +69,7 @@ const ArtifactsPage = () => {
         <ArtifactsHeader />
 
         <main className="container mx-auto px-4 py-12 md:py-20">
-        
+
           {/* Digital Products Section */}
           <div className="mb-20">
             <div className="text-center mb-12">
