@@ -21,15 +21,15 @@ export const Header = () => {
     { label: "Projects", id: "projects" },
     { label: "Skills", id: "skills" },
     { label: "Media", id: "media" },
-    { label: "The Vault", id: "vault", isRoute: true },
+    { label: "Resources", id: "artifacts", isRoute: true },
     { label: "Contact", id: "contact" },
   ];
 
   return (
     <header className="sticky top-0 z-50 w-full border-b border-border bg-background/80 backdrop-blur-lg">
       <nav className="container mx-auto flex h-16 items-center justify-between px-4">
-        <a 
-          href="#" 
+        <a
+          href="#"
           className="text-2xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent"
         >
           Jay Mthethwa
@@ -105,7 +105,7 @@ export const Header = () => {
       {/* Mobile Menu */}
       {mobileMenuOpen && (
         <div className="md:hidden border-t border-border bg-background/95 backdrop-blur-lg">
-        <div className="container mx-auto px-4 py-4 flex flex-col gap-4">
+          <div className="container mx-auto px-4 py-4 flex flex-col gap-4">
             {navItems.map((item) =>
               item.isRoute ? (
                 <Link

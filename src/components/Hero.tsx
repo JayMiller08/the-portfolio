@@ -104,9 +104,9 @@ export const Hero = () => {
                 View Projects
               </Button>
               <Button variant="outline" size="lg" asChild>
-                <a href="/vault">
+                <a href="/artifacts">
                   <Star className="mr-2 h-5 w-5" />
-                  The Vault
+                  Resources
                 </a>
               </Button>
               <Button variant="outline" size="lg" asChild>
