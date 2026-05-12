@@ -4,14 +4,6 @@ import { Button } from "./ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "./ui/card";
 
 export const Media = () => {
-  const contentSchedule = [
-    { day: "Monday", theme: "Motivation Monday", description: "Inspiring stories and mindset tips" },
-    { day: "Tuesday", theme: "Tip Tuesday", description: "Quick coding tips and tricks" },
-    { day: "Wednesday", theme: "Code Challenge", description: "Fun programming challenges" },
-    { day: "Thursday", theme: "Tech Thursday", description: "Latest tech news and trends" },
-    { day: "Friday", theme: "Flashback Friday", description: "Reflecting on lessons learned" },
-  ];
-
   return (
     <section id="media" className="py-24">
       <div className="container mx-auto px-4">
@@ -97,39 +89,7 @@ export const Media = () => {
             </motion.div>
           </div>
 
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-          >
-            <Card className="bg-gradient-to-r from-primary/10 to-accent/10 border-accent/20">
-              <CardHeader>
-                <CardTitle className="text-2xl text-center">Weekly Content Schedule</CardTitle>
-                <CardDescription className="text-center">
-                  Consistency is key — here's what I share each week
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
-                  {contentSchedule.map((item, index) => (
-                    <motion.div
-                      key={item.day}
-                      initial={{ opacity: 0, scale: 0.9 }}
-                      whileInView={{ opacity: 1, scale: 1 }}
-                      viewport={{ once: true }}
-                      transition={{ duration: 0.4, delay: index * 0.1 }}
-                      className="text-center p-4 bg-card/50 backdrop-blur-sm rounded-lg border border-border"
-                    >
-                      <p className="font-bold text-accent mb-1">{item.day}</p>
-                      <p className="text-sm font-semibold mb-2">{item.theme}</p>
-                      <p className="text-xs text-muted-foreground">{item.description}</p>
-                    </motion.div>
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
-          </motion.div>
+
         </div>
       </div>
     </section>
