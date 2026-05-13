@@ -7,6 +7,7 @@ import { Skills } from "@/components/Skills";
 import { Media } from "@/components/Media";
 import { Contact } from "@/components/Contact";
 import { Footer } from "@/components/Footer";
+import { CareerFrameworkPopup } from "@/components/CareerFrameworkPopup";
 
 const Index = () => {
   return (
@@ -22,6 +23,7 @@ const Index = () => {
           <Contact />
         </main>
         <Footer />
+        <CareerFrameworkPopup />
       </div>
     </ThemeProvider>
   );
