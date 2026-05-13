@@ -16,10 +16,11 @@ export const CareerFrameworkPopup = () => {
 
   useEffect(() => {
     // Check if user already downloaded or dismissed it in this session/localstorage
-    const hasDownloaded = localStorage.getItem("career_framework_downloaded");
-    const hasDismissed = localStorage.getItem("career_framework_dismissed");
+    // const hasDownloaded = localStorage.getItem("career_framework_downloaded");
+    // const hasDismissed = localStorage.getItem("career_framework_dismissed");
     
-    if (!hasDownloaded && !hasDismissed) {
+    // Temporarily disabled for testing so it always shows up
+    if (true) {
       // Add a slight delay before showing the popup so it feels natural
       const timer = setTimeout(() => {
         setIsOpen(true);
