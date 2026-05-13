@@ -77,9 +77,10 @@ export const CareerFrameworkPopup = () => {
         title: "Success!",
         description: "Your free guide is ready to download.",
       });
-    } catch (err) {
+    } catch (err: any) {
       console.error("Error saving email:", err);
-      setError("Something went wrong. Please try again.");
+      // Display the actual error message from Supabase for easier debugging
+      setError(err.message || err.details || "Something went wrong. Please try again.");
     } finally {
       setIsLoading(false);
     }
