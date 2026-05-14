@@ -30,9 +30,12 @@ export const Header = () => {
       <nav className="container mx-auto flex h-16 items-center justify-between px-4">
         <a
           href="#"
-          className="text-2xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent"
+          className="flex items-center gap-2"
         >
-          Jay Mthethwa
+          <img src="/icon.png" alt="Logo" className="w-8 h-8 object-contain rounded-md" />
+          <span className="text-2xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
+            Jay Mthethwa
+          </span>
         </a>
 
         {/* Desktop Navigation */}
