@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { Github, TrendingUp, Code2, Star } from "lucide-react";
+import { Github, TrendingUp, Code2, Star, Users } from "lucide-react";
 import { Button } from "./ui/button";
 import { useEffect, useState } from "react";
 import heroBg from "@/assets/hero-bg.jpg";
@@ -113,6 +113,12 @@ export const Hero = () => {
                 <a href="https://github.com/JayMiller08" target="_blank" rel="noopener noreferrer">
                   <Github className="mr-2 h-5 w-5" />
                   GitHub
+                </a>
+              </Button>
+              <Button variant="outline" size="lg" asChild>
+                <a href="/affiliates">
+                  <Users className="mr-2 h-5 w-5" />
+                  Affiliates
                 </a>
               </Button>
             </div>
