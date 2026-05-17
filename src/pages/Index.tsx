@@ -1,3 +1,5 @@
+import { useEffect } from "react";
+import { useLocation } from "react-router-dom";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import { Header } from "@/components/Header";
 import { Hero } from "@/components/Hero";
@@ -10,6 +12,21 @@ import { Footer } from "@/components/Footer";
 import { CareerFrameworkPopup } from "@/components/CareerFrameworkPopup";
 
 const Index = () => {
+  const location = useLocation();
+
+  useEffect(() => {
+    if (location.hash) {
+      const id = location.hash.replace("#", "");
+      // A small timeout ensures the page has rendered the sections before scrolling
+      setTimeout(() => {
+        const element = document.getElementById(id);
+        if (element) {
+          element.scrollIntoView({ behavior: "smooth", block: "start" });
+        }
+      }, 100);
+    }
+  }, [location.hash]);
+
   return (
     <ThemeProvider defaultTheme="light">
       <div className="min-h-screen bg-background text-foreground">

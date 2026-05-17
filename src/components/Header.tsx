@@ -2,13 +2,22 @@ import { Moon, Sun, Menu, X } from "lucide-react";
 import { useTheme } from "./ThemeProvider";
 import { Button } from "./ui/button";
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 
 export const Header = () => {
   const { theme, toggleTheme } = useTheme();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
+  const location = useLocation();
+  const navigate = useNavigate();
+
   const scrollToSection = (id: string) => {
+    if (location.pathname !== "/") {
+      navigate(`/#${id}`);
+      setMobileMenuOpen(false);
+      return;
+    }
+
     const element = document.getElementById(id);
     if (element) {
       element.scrollIntoView({ behavior: "smooth", block: "start" });
@@ -28,15 +37,15 @@ export const Header = () => {
   return (
     <header className="sticky top-0 z-50 w-full border-b border-border bg-background/80 backdrop-blur-lg">
       <nav className="container mx-auto flex h-16 items-center justify-between px-4">
-        <a
-          href="#"
+        <Link
+          to="/"
           className="flex items-center gap-2"
         >
           <img src="/icon.png" alt="Logo" className="w-8 h-8 object-contain rounded-md" />
           <span className="text-2xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
             Jay Mthethwa
           </span>
-        </a>
+        </Link>
 
         {/* Desktop Navigation */}
         <div className="hidden md:flex items-center gap-8">
@@ -71,8 +80,8 @@ export const Header = () => {
               <Moon className="h-5 w-5" />
             )}
           </Button>
-          <Button variant="hero" size="sm" asChild>
-            <a href="#contact">Contact</a>
+          <Button variant="hero" size="sm" onClick={() => scrollToSection("contact")}>
+            Contact
           </Button>
         </div>
 
@@ -107,7 +116,7 @@ export const Header = () => {
 
       {/* Mobile Menu */}
       {mobileMenuOpen && (
-        <div className="md:hidden border-t border-border bg-background/95 backdrop-blur-lg">
+        <div className="absolute top-full left-0 w-full md:hidden border-b border-border bg-background/95 backdrop-blur-lg shadow-lg">
           <div className="container mx-auto px-4 py-4 flex flex-col gap-4">
             {navItems.map((item) =>
               item.isRoute ? (
@@ -129,8 +138,8 @@ export const Header = () => {
                 </button>
               )
             )}
-            <Button variant="hero" size="sm" className="w-full" asChild>
-              <a href="#contact">Contact</a>
+            <Button variant="hero" size="sm" className="w-full" onClick={() => scrollToSection("contact")}>
+              Contact
             </Button>
           </div>
         </div>
