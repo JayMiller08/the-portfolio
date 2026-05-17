@@ -3,6 +3,19 @@ import { ProjectCard } from "./ProjectCard";
 export const Projects = () => {
   const featuredProjects = [
     {
+      title: "The Hive",
+      description: "A teen learning platform for courses, progress tracking, moderated community, and mentor support.",
+      technologies: ["React", "TypeScript", "Vite", "Tailwind CSS"],
+      githubUrl: "https://github.com/JayMiller08/the-hive-v0.1",
+      liveUrl: "https://the-hive-v0-1.vercel.app/",
+      features: [
+        "Interactive course learning",
+        "Progress tracking",
+        "Moderated community discussions",
+        "Mentor support system",
+      ],
+    },
+    {
       title: "Smart Farm",
       description: "Precision agriculture application integrating IoT concepts for modern farming management and monitoring.",
       technologies: ["Java", "IoT", "Data Management", "Agriculture Tech"],

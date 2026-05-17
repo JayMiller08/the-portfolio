@@ -71,7 +71,7 @@ export const ProjectCard = ({
             <Button variant="accent" size="sm" asChild className="flex-1">
               <a href={liveUrl} target="_blank" rel="noopener noreferrer">
                 <ExternalLink className="mr-2 h-4 w-4" />
-                Live Demo
+                Preview
               </a>
             </Button>
           )}
