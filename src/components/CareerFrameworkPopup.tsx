@@ -90,7 +90,7 @@ export const CareerFrameworkPopup = () => {
   const handleDownload = () => {
     localStorage.setItem("career_framework_downloaded", "true");
     const link = document.createElement("a");
-    link.href = "/ai_productivity_research_efficiency_framework.pdf";
+    link.href = "/AI%20Productivity%20Framework.pdf";
     link.download = "AI Productivity Framework.pdf";
     link.target = "_blank";
     document.body.appendChild(link);
