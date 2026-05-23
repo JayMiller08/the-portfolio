@@ -90,8 +90,8 @@ export const CareerFrameworkPopup = () => {
   const handleDownload = () => {
     localStorage.setItem("career_framework_downloaded", "true");
     const link = document.createElement("a");
-    link.href = "/software career.pdf";
-    link.download = "Software Developer Career Framework.pdf";
+    link.href = "/ai_productivity_research_efficiency_framework.pdf";
+    link.download = "AI Productivity Framework.pdf";
     link.target = "_blank";
     document.body.appendChild(link);
     link.click();
@@ -107,7 +107,7 @@ export const CareerFrameworkPopup = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="absolute inset-0 bg-background/80 backdrop-blur-sm"
+            className="absolute inset-0 bg-black/40 backdrop-blur-md"
             onClick={handleDismiss}
           />
 
@@ -116,17 +116,16 @@ export const CareerFrameworkPopup = () => {
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: 20 }}
             transition={{ type: "spring", damping: 25, stiffness: 300 }}
-            className="relative w-full max-w-lg overflow-hidden rounded-2xl border border-border bg-card p-0 shadow-2xl"
+            className="relative w-full max-w-lg overflow-hidden rounded-[2rem] border border-white/20 dark:border-white/10 bg-white/60 dark:bg-black/60 backdrop-blur-2xl p-0 shadow-[0_8px_32px_0_rgba(0,0,0,0.15)]"
           >
-            {/* Awesome gradient header */}
-            <div className="bg-gradient-to-r from-primary to-accent p-8 text-center text-primary-foreground relative overflow-hidden">
-              <div className="absolute inset-0 bg-black/10"></div>
+            {/* Glassmorphic header */}
+            <div className="relative p-8 pb-4 text-center text-foreground">
               <button
                 onClick={handleDismiss}
-                className="absolute right-4 top-4 text-primary-foreground/70 hover:text-primary-foreground transition-colors z-10"
+                className="absolute right-6 top-6 text-foreground/50 hover:text-foreground transition-colors z-10 bg-black/5 dark:bg-white/10 hover:bg-black/10 dark:hover:bg-white/20 p-2 rounded-full"
                 aria-label="Close modal"
               >
-                <X className="h-5 w-5" />
+                <X className="h-4 w-4" />
               </button>
               
               <div className="relative z-10 flex flex-col items-center">
@@ -134,20 +133,20 @@ export const CareerFrameworkPopup = () => {
                   initial={{ scale: 0.8, opacity: 0 }}
                   animate={{ scale: 1, opacity: 1 }}
                   transition={{ delay: 0.2 }}
-                  className="w-16 h-16 mb-4 rounded-2xl bg-white/20 backdrop-blur-md flex items-center justify-center border border-white/30 shadow-inner"
+                  className="w-16 h-16 mb-4 rounded-2xl bg-gradient-to-br from-white/80 to-white/30 dark:from-white/20 dark:to-white/5 backdrop-blur-xl flex items-center justify-center border border-white/50 dark:border-white/10 shadow-lg"
                 >
                   <span className="text-3xl">🚀</span>
                 </motion.div>
                 <h2 className="text-2xl font-bold tracking-tight mb-2">
-                  Software Developer Career Framework is now LIVE
+                  AI Productivity Framework is now LIVE
                 </h2>
-                <p className="text-primary-foreground/90 font-medium text-lg">
+                <p className="text-foreground/70 font-medium text-lg">
                   Get it Now for FREE!
                 </p>
               </div>
             </div>
 
-            <div className="p-8">
+            <div className="px-8 pb-8 pt-4">
               {!isUnlocked ? (
                 <form onSubmit={handleSubmit} className="space-y-4">
                   <div className="flex flex-col sm:flex-row gap-3">
@@ -161,16 +160,14 @@ export const CareerFrameworkPopup = () => {
                           setEmail(e.target.value);
                           setError("");
                         }}
-                        className={`h-12 ${error ? "border-destructive focus-visible:ring-destructive" : ""}`}
+                        className={`h-12 bg-white/50 dark:bg-black/20 backdrop-blur-md border-white/30 dark:border-white/10 focus:bg-white dark:focus:bg-black/40 transition-colors ${error ? "border-destructive focus-visible:ring-destructive" : ""}`}
                         disabled={isLoading}
                         autoFocus
                       />
                     </div>
                     <Button
                       type="submit"
-                      variant="hero"
-                      className="h-12 px-8 font-bold shadow-md w-full sm:w-auto"
-                      disabled={isLoading}
+                      className="h-12 px-8 font-bold shadow-lg w-full sm:w-auto bg-foreground text-background hover:bg-foreground/90 rounded-xl transition-all hover:scale-105"  disabled={isLoading}
                     >
                       {isLoading ? (
                         <Loader2 className="h-5 w-5 animate-spin" />
@@ -201,7 +198,7 @@ export const CareerFrameworkPopup = () => {
                   </div>
                   <Button
                     onClick={handleDownload}
-                    className="w-full h-14 text-lg font-bold bg-primary hover:bg-primary/90 text-primary-foreground shadow-lg shadow-primary/30 transition-all hover:scale-[1.02]"
+                    className="w-full h-14 text-lg font-bold bg-foreground text-background hover:bg-foreground/90 rounded-xl shadow-lg transition-all hover:scale-[1.02]"
                   >
                     <Download className="mr-2 h-5 w-5" />
                     DOWNLOAD FRAMEWORK
