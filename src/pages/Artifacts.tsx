@@ -39,18 +39,36 @@ const ArtifactsHeader = () => {
 
 const digitalProducts: Product[] = [
   {
+    id: "ai-framework",
+    title: "AI Productivity Framework",
+    description: "Boost your efficiency and streamline your workflow with this comprehensive AI productivity framework.",
+    downloadUrl: "/AI%20Productivity%20Framework.pdf",
+    tag: "Free PDF Guide",
+    image: "/images/ai_framework_preview.png"
+  },
+  {
+    id: "software-career",
+    title: "Software Developer Career Framework",
+    description: "A complete framework to plan, navigate, and accelerate your software development career.",
+    downloadUrl: "/software%20career.pdf",
+    tag: "Free PDF Guide",
+    image: "/images/software_career_preview.png"
+  },
+  {
     id: "handbook",
     title: "The Beginner Programmers' Survival Handbook",
     description: "A comprehensive guide to help you navigate the early stages of your programming journey.",
     gumroadUrl: "https://realjaycoding.gumroad.com/l/tpdhv",
-    tag: "eBook"
+    tag: "eBook",
+    image: "/images/handbook_preview.png"
   },
   {
     id: "playbook",
     title: "The Self-Taught Developer Playbook",
     description: "Your roadmap to becoming a successful self-taught developer.",
     gumroadUrl: "https://realjaycoding.gumroad.com/l/selftaught-dev-playbook",
-    tag: "eBook"
+    tag: "eBook",
+    image: "/images/playbook_preview.png"
   },
   {
     id: "notion-os",
@@ -58,7 +76,8 @@ const digitalProducts: Product[] = [
     description: "Organize your computer science studies and life with this all-in-one Notion template.",
     gumroadUrl: "https://realjaycoding.gumroad.com/l/the-cs-student-life-os",
     previewUrl: "https://cultured-wind-77f.notion.site/The-CS-Student-Life-OS-2dc0625e4ddd803c87e0c147b4280065?pvs=74",
-    tag: "Notion Template"
+    tag: "Notion Template",
+    image: "/images/notion_os_preview.png"
   }
 ];
 

@@ -7,7 +7,8 @@ export interface Product {
     id: string;
     title: string;
     description: string;
-    gumroadUrl: string;
+    gumroadUrl?: string;
+    downloadUrl?: string;
     previewUrl?: string;
     tag: string;
     image?: string;
@@ -51,16 +52,31 @@ export const ProductCard = ({ product }: ProductCardProps) => {
 
             <CardContent className="p-4 md:p-6 pt-0 mt-auto">
                 <div className="flex flex-col gap-3">
-                    <Button
-                        variant="default"
-                        className="w-full gap-2 shadow-md hover:shadow-lg transition-all"
-                        asChild
-                    >
-                        <a href={product.gumroadUrl} target="_blank" rel="noopener noreferrer">
-                            <span className="truncate">Get on Gumroad</span>
-                            <ExternalLink className="h-4 w-4 flex-shrink-0" />
-                        </a>
-                    </Button>
+                    {product.gumroadUrl && (
+                        <Button
+                            variant="default"
+                            className="w-full gap-2 shadow-md hover:shadow-lg transition-all"
+                            asChild
+                        >
+                            <a href={product.gumroadUrl} target="_blank" rel="noopener noreferrer">
+                                <span className="truncate">Get on Gumroad</span>
+                                <ExternalLink className="h-4 w-4 flex-shrink-0" />
+                            </a>
+                        </Button>
+                    )}
+
+                    {product.downloadUrl && (
+                        <Button
+                            variant="default"
+                            className="w-full gap-2 shadow-md hover:shadow-lg transition-all bg-foreground text-background hover:bg-foreground/90"
+                            asChild
+                        >
+                            <a href={product.downloadUrl} download>
+                                <span className="truncate">Download Free</span>
+                                <ExternalLink className="h-4 w-4 flex-shrink-0" />
+                            </a>
+                        </Button>
+                    )}
 
                     {product.previewUrl && (
                         <Button
