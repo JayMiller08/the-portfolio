@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { ThemeProvider, useTheme } from "@/components/ThemeProvider";
+import { useTheme } from "@/components/ThemeProvider";
 import { Link } from "react-router-dom";
 import {
   ArrowLeft,
@@ -169,155 +169,153 @@ const AdminPage = () => {
   };
 
   return (
-    <ThemeProvider defaultTheme="light">
-      <div className="min-h-screen bg-background text-foreground">
-        <AdminHeader />
+    <div className="min-h-screen bg-background text-foreground">
+      <AdminHeader />
 
-        <main className="container mx-auto px-4 py-8 md:py-12">
-          {/* Page Title */}
-          <div className="mb-8">
-            <h1 className="text-3xl md:text-4xl font-bold mb-2">
-              Admin Dashboard
-            </h1>
-            <p className="text-muted-foreground">
-              Manage your subscribers and view analytics.
-            </p>
-          </div>
+      <main className="container mx-auto px-4 py-8 md:py-12">
+        {/* Page Title */}
+        <div className="mb-8">
+          <h1 className="text-3xl md:text-4xl font-bold mb-2">
+            Admin Dashboard
+          </h1>
+          <p className="text-muted-foreground">
+            Manage your subscribers and view analytics.
+          </p>
+        </div>
 
-          {/* Stats Cards */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-            <Card>
-              <CardHeader className="flex flex-row items-center justify-between pb-2">
-                <CardTitle className="text-sm font-medium text-muted-foreground">
-                  Total Subscribers
-                </CardTitle>
-                <Users className="h-4 w-4 text-muted-foreground" />
-              </CardHeader>
-              <CardContent>
-                <div className="text-3xl font-bold">{subscribers.length}</div>
-              </CardContent>
-            </Card>
-
-            <Card>
-              <CardHeader className="flex flex-row items-center justify-between pb-2">
-                <CardTitle className="text-sm font-medium text-muted-foreground">
-                  This Month
-                </CardTitle>
-                <Calendar className="h-4 w-4 text-muted-foreground" />
-              </CardHeader>
-              <CardContent>
-                <div className="text-3xl font-bold">
-                  {
-                    subscribers.filter((sub) => {
-                      const subDate = new Date(sub.created_at);
-                      const now = new Date();
-                      return (
-                        subDate.getMonth() === now.getMonth() &&
-                        subDate.getFullYear() === now.getFullYear()
-                      );
-                    }).length
-                  }
-                </div>
-              </CardContent>
-            </Card>
-
-            <Card>
-              <CardHeader className="flex flex-row items-center justify-between pb-2">
-                <CardTitle className="text-sm font-medium text-muted-foreground">
-                  Latest Source
-                </CardTitle>
-                <Mail className="h-4 w-4 text-muted-foreground" />
-              </CardHeader>
-              <CardContent>
-                <div className="text-lg font-medium truncate">
-                  {subscribers[0]?.source || "No subscribers yet"}
-                </div>
-              </CardContent>
-            </Card>
-          </div>
-
-          {/* Actions */}
-          <div className="flex flex-wrap gap-4 mb-6">
-            <Button
-              onClick={fetchSubscribers}
-              variant="outline"
-              disabled={isLoading}
-            >
-              <RefreshCw
-                className={`mr-2 h-4 w-4 ${isLoading ? "animate-spin" : ""}`}
-              />
-              Refresh
-            </Button>
-            <Button
-              onClick={exportToCSV}
-              variant="hero"
-              disabled={isExporting || subscribers.length === 0}
-            >
-              {isExporting ? (
-                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-              ) : (
-                <Download className="mr-2 h-4 w-4" />
-              )}
-              Export to Excel
-            </Button>
-          </div>
-
-          {/* Subscribers Table */}
+        {/* Stats Cards */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
           <Card>
-            <CardHeader>
-              <CardTitle>Subscribers</CardTitle>
+            <CardHeader className="flex flex-row items-center justify-between pb-2">
+              <CardTitle className="text-sm font-medium text-muted-foreground">
+                Total Subscribers
+              </CardTitle>
+              <Users className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
-              {isLoading ? (
-                <div className="flex items-center justify-center py-12">
-                  <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
-                </div>
-              ) : subscribers.length === 0 ? (
-                <div className="text-center py-12">
-                  <Mail className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
-                  <p className="text-muted-foreground">
-                    No subscribers yet. Share your Artifacts page to start
-                    collecting emails!
-                  </p>
-                </div>
-              ) : (
-                <div className="overflow-x-auto">
-                  <Table>
-                    <TableHeader>
-                      <TableRow>
-                        <TableHead>Email</TableHead>
-                        <TableHead>Source</TableHead>
-                        <TableHead>Date</TableHead>
-                      </TableRow>
-                    </TableHeader>
-                    <TableBody>
-                      {subscribers.map((subscriber) => (
-                        <TableRow key={subscriber.id}>
-                          <TableCell className="font-medium">
-                            {subscriber.email}
-                          </TableCell>
-                          <TableCell>{subscriber.source || "N/A"}</TableCell>
-                          <TableCell>
-                            {formatDate(subscriber.created_at)}
-                          </TableCell>
-                        </TableRow>
-                      ))}
-                    </TableBody>
-                  </Table>
-                </div>
-              )}
+              <div className="text-3xl font-bold">{subscribers.length}</div>
             </CardContent>
           </Card>
-        </main>
 
-        {/* Footer */}
-        <footer className="border-t border-border py-8 mt-auto">
-          <div className="container mx-auto px-4 text-center text-muted-foreground text-sm">
-            <p>Admin Dashboard — Jay Mthethwa Portfolio</p>
-          </div>
-        </footer>
-      </div>
-    </ThemeProvider>
+          <Card>
+            <CardHeader className="flex flex-row items-center justify-between pb-2">
+              <CardTitle className="text-sm font-medium text-muted-foreground">
+                This Month
+              </CardTitle>
+              <Calendar className="h-4 w-4 text-muted-foreground" />
+            </CardHeader>
+            <CardContent>
+              <div className="text-3xl font-bold">
+                {
+                  subscribers.filter((sub) => {
+                    const subDate = new Date(sub.created_at);
+                    const now = new Date();
+                    return (
+                      subDate.getMonth() === now.getMonth() &&
+                      subDate.getFullYear() === now.getFullYear()
+                    );
+                  }).length
+                }
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader className="flex flex-row items-center justify-between pb-2">
+              <CardTitle className="text-sm font-medium text-muted-foreground">
+                Latest Source
+              </CardTitle>
+              <Mail className="h-4 w-4 text-muted-foreground" />
+            </CardHeader>
+            <CardContent>
+              <div className="text-lg font-medium truncate">
+                {subscribers[0]?.source || "No subscribers yet"}
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+
+        {/* Actions */}
+        <div className="flex flex-wrap gap-4 mb-6">
+          <Button
+            onClick={fetchSubscribers}
+            variant="outline"
+            disabled={isLoading}
+          >
+            <RefreshCw
+              className={`mr-2 h-4 w-4 ${isLoading ? "animate-spin" : ""}`}
+            />
+            Refresh
+          </Button>
+          <Button
+            onClick={exportToCSV}
+            variant="hero"
+            disabled={isExporting || subscribers.length === 0}
+          >
+            {isExporting ? (
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+            ) : (
+              <Download className="mr-2 h-4 w-4" />
+            )}
+            Export to Excel
+          </Button>
+        </div>
+
+        {/* Subscribers Table */}
+        <Card>
+          <CardHeader>
+            <CardTitle>Subscribers</CardTitle>
+          </CardHeader>
+          <CardContent>
+            {isLoading ? (
+              <div className="flex items-center justify-center py-12">
+                <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
+              </div>
+            ) : subscribers.length === 0 ? (
+              <div className="text-center py-12">
+                <Mail className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
+                <p className="text-muted-foreground">
+                  No subscribers yet. Share your Artifacts page to start
+                  collecting emails!
+                </p>
+              </div>
+            ) : (
+              <div className="overflow-x-auto">
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead>Email</TableHead>
+                      <TableHead>Source</TableHead>
+                      <TableHead>Date</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {subscribers.map((subscriber) => (
+                      <TableRow key={subscriber.id}>
+                        <TableCell className="font-medium">
+                          {subscriber.email}
+                        </TableCell>
+                        <TableCell>{subscriber.source || "N/A"}</TableCell>
+                        <TableCell>
+                          {formatDate(subscriber.created_at)}
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </div>
+            )}
+          </CardContent>
+        </Card>
+      </main>
+
+      {/* Footer */}
+      <footer className="border-t border-border py-8 mt-auto">
+        <div className="container mx-auto px-4 text-center text-muted-foreground text-sm">
+          <p>Admin Dashboard — Jay Mthethwa Portfolio</p>
+        </div>
+      </footer>
+    </div>
   );
 };
 

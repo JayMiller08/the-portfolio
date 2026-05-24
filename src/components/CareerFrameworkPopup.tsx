@@ -2,17 +2,24 @@ import { useState, useEffect } from "react";
 import { X, Download, Loader2 } from "lucide-react";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
-import { supabase } from "@/integrations/supabase/client";
-import { useToast } from "@/hooks/use-toast";
+import { useSubscribe } from "@/hooks/useSubscribe";
 import { motion, AnimatePresence } from "framer-motion";
 
 export const CareerFrameworkPopup = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const [email, setEmail] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState("");
-  const [isUnlocked, setIsUnlocked] = useState(false);
-  const { toast } = useToast();
+  const { 
+    email, 
+    setEmail, 
+    isLoading, 
+    error, 
+    setError, 
+    isUnlocked, 
+    setIsUnlocked, 
+    handleSubmit 
+  } = useSubscribe({
+    source: "Career Framework Popup",
+    onSuccessMessage: "Your free guide is ready to download.",
+  });
 
   useEffect(() => {
     // Check if user already downloaded or dismissed it in this session/localstorage
@@ -29,62 +36,9 @@ export const CareerFrameworkPopup = () => {
     }
   }, []);
 
-  const validateEmail = (email: string) => {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return emailRegex.test(email);
-  };
-
   const handleDismiss = () => {
     localStorage.setItem("career_framework_dismissed", "true");
     setIsOpen(false);
-  };
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setError("");
-
-    if (!email.trim()) {
-      setError("Email is required");
-      return;
-    }
-
-    if (!validateEmail(email)) {
-      setError("Please enter a valid email address");
-      return;
-    }
-
-    setIsLoading(true);
-
-    try {
-      const { error: supabaseError } = await supabase
-        .from("subscribers")
-        .insert([
-          {
-            email: email.trim().toLowerCase(),
-            source: "Career Framework Popup",
-          },
-        ]);
-
-      if (supabaseError) {
-        if (supabaseError.code === "23505") {
-          // Email already exists, that's fine
-        } else {
-          throw supabaseError;
-        }
-      }
-
-      setIsUnlocked(true);
-      toast({
-        title: "Success!",
-        description: "Your free guide is ready to download.",
-      });
-    } catch (err: any) {
-      console.error("Error saving email:", err);
-      // Display the actual error message from Supabase for easier debugging
-      setError(err.message || err.details || "Something went wrong. Please try again.");
-    } finally {
-      setIsLoading(false);
-    }
   };
 
   const handleDownload = () => {
@@ -122,10 +76,10 @@ export const CareerFrameworkPopup = () => {
             <div className="relative p-8 pb-4 text-center text-foreground">
               <button
                 onClick={handleDismiss}
-                className="absolute right-6 top-6 text-foreground/50 hover:text-foreground transition-colors z-10 bg-black/5 dark:bg-white/10 hover:bg-black/10 dark:hover:bg-white/20 p-2 rounded-full"
+                className="absolute right-4 top-4 flex h-8 w-8 items-center justify-center text-foreground/50 hover:text-foreground transition-colors z-50 bg-black/5 dark:bg-white/10 hover:bg-black/10 dark:hover:bg-white/20 rounded-full"
                 aria-label="Close modal"
               >
-                <X className="h-4 w-4" />
+                <X className="h-4 w-4 pointer-events-none" />
               </button>
               
               <div className="relative z-10 flex flex-col items-center">

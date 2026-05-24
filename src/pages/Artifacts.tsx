@@ -1,4 +1,4 @@
-import { ThemeProvider, useTheme } from "@/components/ThemeProvider";
+import { useTheme } from "@/components/ThemeProvider";
 import { ArrowLeft, Sparkles, Sun, Moon, ShoppingBag } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
@@ -83,60 +83,58 @@ const digitalProducts: Product[] = [
 
 const ArtifactsPage = () => {
   return (
-    <ThemeProvider defaultTheme="light">
-      <div className="min-h-screen bg-background text-foreground">
-        <ArtifactsHeader />
+    <div className="min-h-screen bg-background text-foreground">
+      <ArtifactsHeader />
 
-        <main className="container mx-auto px-4 py-12 md:py-20">
+      <main className="container mx-auto px-4 py-12 md:py-20">
 
-          {/* Digital Products Section */}
-          <div className="mb-20">
-            <div className="text-center mb-12">
-              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-accent/10 text-accent text-sm font-medium mb-6">
-                <ShoppingBag className="h-4 w-4" />
-                Digital Products
-              </div>
-              <h2 className="text-3xl md:text-4xl font-bold mb-4">
-                Premium Resources
-              </h2>
-              <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-                Comprehensive guides and templates to help you succeed in your developer journey.
-              </p>
+        {/* Digital Products Section */}
+        <div className="mb-20">
+          <div className="text-center mb-12">
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-accent/10 text-accent text-sm font-medium mb-6">
+              <ShoppingBag className="h-4 w-4" />
+              Digital Products
             </div>
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-              {digitalProducts.map((product) => (
-                <ProductCard key={product.id} product={product} />
-              ))}
-            </div>
-          </div>
-
-          {/* Bottom CTA */}
-          <div className="text-center mt-16 p-8 rounded-2xl bg-muted/50 border border-border">
-            <h2 className="text-2xl font-bold mb-2">Want more resources?</h2>
-            <p className="text-muted-foreground mb-6">
-              Follow me on TikTok for daily coding tips and tutorials!
+            <h2 className="text-3xl md:text-4xl font-bold mb-4">
+              Premium Resources
+            </h2>
+            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+              Comprehensive guides and templates to help you succeed in your developer journey.
             </p>
-            <Button variant="hero" size="lg" asChild>
-              <a
-                href="https://www.tiktok.com/@realjaycoding"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                Follow on TikTok
-              </a>
-            </Button>
           </div>
-        </main>
 
-        {/* Footer */}
-        <footer className="border-t border-border py-8">
-          <div className="container mx-auto px-4 text-center text-muted-foreground text-sm">
-            <p>© {new Date().getFullYear()} Jay Mthethwa. All rights reserved.</p>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {digitalProducts.map((product) => (
+              <ProductCard key={product.id} product={product} />
+            ))}
           </div>
-        </footer>
-      </div>
-    </ThemeProvider>
+        </div>
+
+        {/* Bottom CTA */}
+        <div className="text-center mt-16 p-8 rounded-2xl bg-muted/50 border border-border">
+          <h2 className="text-2xl font-bold mb-2">Want more resources?</h2>
+          <p className="text-muted-foreground mb-6">
+            Follow me on TikTok for daily coding tips and tutorials!
+          </p>
+          <Button variant="hero" size="lg" asChild>
+            <a
+              href="https://www.tiktok.com/@realjaycoding"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Follow on TikTok
+            </a>
+          </Button>
+        </div>
+      </main>
+
+      {/* Footer */}
+      <footer className="border-t border-border py-8">
+        <div className="container mx-auto px-4 text-center text-muted-foreground text-sm">
+          <p>© {new Date().getFullYear()} Jay Mthethwa. All rights reserved.</p>
+        </div>
+      </footer>
+    </div>
   );
 };
 
