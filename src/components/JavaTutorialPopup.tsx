@@ -1,11 +1,11 @@
 import { useState, useEffect } from "react";
-import { X, Download, Loader2 } from "lucide-react";
+import { X, Loader2, Bell } from "lucide-react";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 import { useSubscribe } from "@/hooks/useSubscribe";
 import { motion, AnimatePresence } from "framer-motion";
 
-export const CareerFrameworkPopup = () => {
+export const JavaTutorialPopup = () => {
   const [isOpen, setIsOpen] = useState(false);
   const { 
     email, 
@@ -14,20 +14,17 @@ export const CareerFrameworkPopup = () => {
     error, 
     setError, 
     isUnlocked, 
-    setIsUnlocked, 
     handleSubmit 
   } = useSubscribe({
-    source: "Career Framework Popup",
-    onSuccessMessage: "Your free guide is ready to download.",
+    source: "Java Tutorial Popup",
+    onSuccessMessage: "You will be notified when the tutorials are live!",
   });
 
   useEffect(() => {
-    // Check if user already downloaded or dismissed it in this session/localstorage
-    // const hasDownloaded = localStorage.getItem("career_framework_downloaded");
-    // const hasDismissed = localStorage.getItem("career_framework_dismissed");
+    // Check if user already dismissed it in this session/localstorage
+    const hasDismissed = localStorage.getItem("java_tutorial_dismissed");
     
-    // Temporarily disabled for testing so it always shows up
-    if (true) {
+    if (!hasDismissed) {
       // Add a slight delay before showing the popup so it feels natural
       const timer = setTimeout(() => {
         setIsOpen(true);
@@ -37,19 +34,7 @@ export const CareerFrameworkPopup = () => {
   }, []);
 
   const handleDismiss = () => {
-    localStorage.setItem("career_framework_dismissed", "true");
-    setIsOpen(false);
-  };
-
-  const handleDownload = () => {
-    localStorage.setItem("career_framework_downloaded", "true");
-    const link = document.createElement("a");
-    link.href = "/AI%20Productivity%20Framework.pdf";
-    link.download = "AI Productivity Framework.pdf";
-    link.target = "_blank";
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
+    localStorage.setItem("java_tutorial_dismissed", "true");
     setIsOpen(false);
   };
 
@@ -89,13 +74,13 @@ export const CareerFrameworkPopup = () => {
                   transition={{ delay: 0.2 }}
                   className="w-16 h-16 mb-4 rounded-2xl bg-gradient-to-br from-white/80 to-white/30 dark:from-white/20 dark:to-white/5 backdrop-blur-xl flex items-center justify-center border border-white/50 dark:border-white/10 shadow-lg"
                 >
-                  <span className="text-3xl">🚀</span>
+                  <span className="text-3xl">☕</span>
                 </motion.div>
                 <h2 className="text-2xl font-bold tracking-tight mb-2">
-                  AI Productivity Framework is now LIVE
+                  Java Tutorials are coming soon!
                 </h2>
                 <p className="text-foreground/70 font-medium text-lg">
-                  Get it Now for FREE!
+                  Enter your email to be notified when they are live.
                 </p>
               </div>
             </div>
@@ -126,7 +111,7 @@ export const CareerFrameworkPopup = () => {
                       {isLoading ? (
                         <Loader2 className="h-5 w-5 animate-spin" />
                       ) : (
-                        "GET"
+                        "Notify Me"
                       )}
                     </Button>
                   </div>
@@ -134,7 +119,7 @@ export const CareerFrameworkPopup = () => {
                     <p className="text-sm text-destructive font-medium animate-in fade-in slide-in-from-top-1">{error}</p>
                   )}
                   <p className="text-xs text-center text-muted-foreground mt-4">
-                    Join other developers upgrading their careers. No spam, unsubscribe anytime.
+                    Join other developers upgrading their skills. No spam, unsubscribe anytime.
                   </p>
                 </form>
               ) : (
@@ -148,14 +133,14 @@ export const CareerFrameworkPopup = () => {
                       <span className="text-green-600 text-xl">✓</span>
                     </div>
                     <h3 className="text-lg font-semibold">You're all set!</h3>
-                    <p className="text-muted-foreground text-sm">Click the button below to download your framework.</p>
+                    <p className="text-muted-foreground text-sm">We'll notify you as soon as the tutorials are ready.</p>
                   </div>
                   <Button
-                    onClick={handleDownload}
+                    onClick={handleDismiss}
                     className="w-full h-14 text-lg font-bold bg-foreground text-background hover:bg-foreground/90 rounded-xl shadow-lg transition-all hover:scale-[1.02]"
                   >
-                    <Download className="mr-2 h-5 w-5" />
-                    DOWNLOAD FRAMEWORK
+                    <Bell className="mr-2 h-5 w-5" />
+                    Close
                   </Button>
                 </motion.div>
               )}
