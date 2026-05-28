@@ -21,20 +21,14 @@ export const JavaTutorialPopup = () => {
   });
 
   useEffect(() => {
-    // Check if user already dismissed it in this session/localstorage
-    const hasDismissed = localStorage.getItem("java_tutorial_dismissed");
-    
-    if (!hasDismissed) {
-      // Add a slight delay before showing the popup so it feels natural
-      const timer = setTimeout(() => {
-        setIsOpen(true);
-      }, 1500);
-      return () => clearTimeout(timer);
-    }
+    // Always show the popup on reload
+    const timer = setTimeout(() => {
+      setIsOpen(true);
+    }, 1500);
+    return () => clearTimeout(timer);
   }, []);
 
   const handleDismiss = () => {
-    localStorage.setItem("java_tutorial_dismissed", "true");
     setIsOpen(false);
   };
 
