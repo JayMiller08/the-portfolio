@@ -45,10 +45,10 @@ export const Projects = () => {
     <section id="projects" className="py-24">
       <div className="container mx-auto px-4">
         <div className="max-w-6xl mx-auto">
-          <h2 className="text-4xl md:text-5xl font-bold mb-4 text-center">
-            Featured <span className="bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">Projects</span>
+          <h2 className="text-4xl md:text-5xl font-black mb-4 text-center text-neutral-950 tracking-tight">
+            Featured Projects
           </h2>
-          <p className="text-center text-muted-foreground mb-12 text-lg">
+          <p className="text-center text-neutral-500 mb-12 text-lg font-medium">
             Showcasing my journey from Java fundamentals to real-world applications
           </p>
 
@@ -63,7 +63,7 @@ export const Projects = () => {
               href="https://github.com/JayMiller08?tab=repositories" 
               target="_blank" 
               rel="noopener noreferrer"
-              className="inline-flex items-center text-accent hover:text-accent/80 font-medium text-lg group"
+              className="inline-flex items-center text-neutral-900 hover:text-neutral-600 font-semibold text-base group transition-colors"
             >
               View all projects on GitHub
               <span className="ml-2 group-hover:translate-x-1 transition-transform">→</span>
