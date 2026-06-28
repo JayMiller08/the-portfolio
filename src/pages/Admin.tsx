@@ -393,7 +393,7 @@ const AdminPage = () => {
                     </TableRow>
                   </TableHeader>
                   <TableBody>
-                    {subscribers.map((subscriber) => (
+                    {subscribers.slice(0, displayCount).map((subscriber) => (
                       <TableRow key={subscriber.id}>
                         <TableCell className="font-medium">
                           {subscriber.email}
@@ -406,6 +406,17 @@ const AdminPage = () => {
                     ))}
                   </TableBody>
                 </Table>
+              </div>
+            )}
+            
+            {subscribers.length > displayCount && (
+              <div className="mt-6 flex justify-center">
+                <Button 
+                  variant="outline" 
+                  onClick={() => setDisplayCount(prev => prev + 30)}
+                >
+                  Load More
+                </Button>
               </div>
             )}
           </CardContent>
