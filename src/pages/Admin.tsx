@@ -37,7 +37,6 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 
 interface Subscriber {
@@ -119,30 +118,8 @@ const AdminPage = () => {
 
   const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#8884d8', '#82ca9d'];
 
-  const fetchSubscribers = async () => {
-    setIsLoading(true);
-    try {
-      const { data, error } = await supabase
-        .from("subscribers")
-        .select("*")
-        .order("created_at", { ascending: false });
-
-      if (error) throw error;
-      setSubscribers(data || []);
-    } catch (error) {
-      console.error("Error fetching subscribers:", error);
-      toast({
-        title: "Error",
-        description: "Failed to load subscribers. Please try again.",
-        variant: "destructive",
-      });
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
   useEffect(() => {
-    fetchSubscribers();
+    setIsLoading(false);
   }, []);
 
   const exportToCSV = () => {
@@ -225,31 +202,29 @@ const AdminPage = () => {
         const headers = lines[0].split(',').map((h) => h.replace(/"/g, '').trim().toLowerCase());
         const emailIndex = headers.findIndex(h => h === 'email');
         const sourceIndex = headers.findIndex(h => h === 'source');
+        const createdAtIndex = headers.findIndex(h => h === 'created at' || h === 'created_at');
 
         if (emailIndex === -1) {
           throw new Error("CSV must contain an 'Email' column");
         }
 
-        const newSubscribers = lines.slice(1).map((line) => {
+        const newSubscribers: Subscriber[] = lines.slice(1).map((line, index) => {
           const cells = line.split(',').map((c) => c.replace(/"/g, '').trim());
           const email = cells[emailIndex];
           const source = sourceIndex !== -1 && cells[sourceIndex] ? cells[sourceIndex] : 'Imported';
+          const created_at = createdAtIndex !== -1 && cells[createdAtIndex] ? cells[createdAtIndex] : new Date().toISOString();
           
-          return { email, source };
+          return { id: String(index), email, source, created_at };
         }).filter(sub => sub.email);
 
         if (newSubscribers.length === 0) throw new Error("No valid subscribers found");
 
-        const { error } = await supabase.from("subscribers").insert(newSubscribers);
-
-        if (error) throw error;
+        setSubscribers(newSubscribers);
 
         toast({
           title: "Import successful",
-          description: `Imported ${newSubscribers.length} subscribers.`,
+          description: `Loaded ${newSubscribers.length} subscribers from CSV.`,
         });
-
-        fetchSubscribers();
       } catch (error: any) {
         console.error("Import error:", error);
         toast({
@@ -356,16 +331,6 @@ const AdminPage = () => {
 
         {/* Actions */}
         <div className="flex flex-wrap gap-4 mb-6">
-          <Button
-            onClick={fetchSubscribers}
-            variant="outline"
-            disabled={isLoading}
-          >
-            <RefreshCw
-              className={`mr-2 h-4 w-4 ${isLoading ? "animate-spin" : ""}`}
-            />
-            Refresh
-          </Button>
           <Button
             onClick={exportToCSV}
             variant="hero"
