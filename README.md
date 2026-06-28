@@ -1,103 +1,97 @@
-# Hi — I’m Kwandumusa “Jay” Mthethwa 👋
+# Developer Portfolio
 
-> Focusing • 2nd‑year Diploma in Computer Science • Java enthusiast
+A modern, responsive, and dynamic personal portfolio built with React, Vite, Tailwind CSS, and Shadcn UI. It includes a beautiful hero section, projects showcase, and an admin dashboard powered by Supabase.
 
-[![Twitter Follow](https://img.shields.io/badge/Follow-@thereeljaymiller-1DA1F2?style=for-the-badge\&logo=twitter)](https://www.instagram.com/thereeljaymiller)
-[![LinkedIn](https://img.shields.io/badge/LinkedIn-Kwandumusa_Mthethwa-0A66C2?style=for-the-badge\&logo=linkedin)](https://www.linkedin.com/in/kwandumusa-mthethwa-6b7381236)
-[![TikTok](https://img.shields.io/badge/TikTok-@realjaycoding-000000?style=for-the-badge\&logo=tiktok)](https://www.tiktok.com/realjaycoding)
+## 🚀 Features
 
----
+- **Modern Tech Stack**: Built with React 18, Vite, and TypeScript for a fast, reliable development experience.
+- **Beautiful UI**: Styled with Tailwind CSS and Shadcn UI components for a clean, accessible, and premium design.
+- **Animations**: Smooth micro-interactions and animations using Framer Motion.
+- **Admin Dashboard**: Secure admin area to manage projects and content, backed by Supabase.
+- **Data Fetching**: Efficient data fetching and state management using React Query (`@tanstack/react-query`).
+- **Form Handling**: Robust form validation and management using React Hook Form and Zod.
+- **Responsive**: Fully responsive design that works perfectly on desktop, tablet, and mobile devices.
 
-## About me
+## 🛠️ Tech Stack
 
-I’m Jay — a 19‑year‑old from eMalahleni, Mpumalanga, South Africa. I love building small, useful CLI tools in **Java**, learning new CS fundamentals, and teaching others through short, clear tutorials.
+- **Framework**: React 18
+- **Bundler**: Vite
+- **Language**: TypeScript
+- **Styling**: Tailwind CSS
+- **UI Components**: Shadcn UI (Radix UI)
+- **Database / Auth**: Supabase
+- **Animations**: Framer Motion
+- **Icons**: Lucide React
+- **Forms**: React Hook Form + Zod
+- **Data Fetching**: TanStack React Query
+- **Routing**: React Router DOM
+- **Deployment**: Vercel
 
-* 🎯 Focus: solid Java fundamentals, OOP, clean code
-* 🧩 Interests: chess, anime, tutorials, community tutoring
-* ⚡ Pronouns: he/him
+## 📦 Getting Started
 
----
+### Prerequisites
 
-## GitHub Snapshot
+- Node.js (v18 or higher recommended)
+- npm or bun
 
-<p align="left">
-  <img src="https://github-readme-stats.vercel.app/api?username=JayMiller08&show_icons=true&theme=tokyonight&count_private=true" alt="Jay's GitHub stats" />
-  <img src="https://github-readme-stats.vercel.app/api/top-langs/?username=JayMiller08&layout=compact&theme=tokyonight" alt="Top languages" />
-</p>
+### Installation
 
----
+1. **Clone the repository:**
+   ```bash
+   git clone <repository-url>
+   cd the-portfolio
+   ```
 
-## Tech Stack
+2. **Install dependencies:**
+   ```bash
+   npm install
+   # or
+   bun install
+   ```
 
-### Languages
+3. **Set up environment variables:**
+   Create a `.env` file in the root directory and add your Supabase credentials:
+   ```env
+   VITE_SUPABASE_URL=your_supabase_url
+   VITE_SUPABASE_ANON_KEY=your_supabase_anon_key
+   ```
 
-* **Java** (main)
-* Learning: JavaScript (intro), SQL (basic concepts)
+4. **Start the development server:**
+   ```bash
+   npm run dev
+   # or
+   bun dev
+   ```
 
-### Tools & Frameworks
+   The application will be available at `http://localhost:5173`.
 
-* JDK & Java CLI
-* Git & GitHub (issues, PRs)
-* VS Code / IntelliJ IDEA (depending on the task)
-* GitHub Actions (beginner exploration)
+## 📂 Project Structure
 
-### Learning / Exploring
+```text
+├── src/
+│   ├── components/       # Reusable UI components (Shadcn UI, Hero, etc.)
+│   ├── pages/            # Application routes (Index, Admin, etc.)
+│   ├── hooks/            # Custom React hooks
+│   ├── lib/              # Utility functions and configurations
+│   ├── supabase/         # Supabase client setup and queries
+│   ├── App.tsx           # Main application component and routing
+│   └── main.tsx          # Application entry point
+├── public/               # Static assets
+├── index.html            # HTML template
+├── tailwind.config.ts    # Tailwind CSS configuration
+├── vite.config.ts        # Vite configuration
+└── package.json          # Project metadata and dependencies
+```
 
-* Object‑Oriented Design & Design Patterns
-* Data Structures & Algorithms (practical problems)
-* Test‑Driven Development (JUnit)
-* JavaFX (simple GUIs)
+## 🚀 Deployment
 
----
+This project is configured for easy deployment on **Vercel**. 
 
-## What I’m Doing Now
+1. Push your code to a GitHub repository.
+2. Import the project into Vercel.
+3. Add the `VITE_SUPABASE_URL` and `VITE_SUPABASE_ANON_KEY` to the environment variables in your Vercel project settings.
+4. Deploy!
 
-* Building and polishing **CLI utilities** in Java (ATM, Expense Tracker, Inventory Manager).
-* Improving code readability and adding unit tests.
-* Learning file I/O and simple persistence for small projects.
-* Preparing short tutorial content and example repos for beginners.
+## 📝 License
 
----
-
-## Featured Projects
-
-> (Pinned on my profile — click through for source and quick demos)
-
-* **ATM‑Simulator** — Java CLI ATM simulation: accounts, deposits, withdrawals, balance tracking.
-* **BANK** — Multi‑account banking CLI: PIN auth, coupon rewards, simple account flows.
-* **Expense‑Tracker** — Track expenses by category; planning persistence & auth features.
-* **Store‑Inventory‑Manager** — Simple inventory with roles, search, stock updates.
-
-Each project contains a `README` with run instructions and the main learning goals.
-
----
-
-## Make the README pop — graphics & badges used
-
-* GitHub stats (github-readme-stats) for dynamic contributions and top languages.
-* Social badges (shields.io) for clean, clickable contact links.
-* Clear section headings, short bullets and a compact Projects list to improve scanability.
-
----
-
-## How to reach me
-
-* GitHub: [@JayMiller08](https://github.com/JayMiller08)
-* Instagram: [@thereeljaymiller](https://www.instagram.com/thereeljaymiller)
-* LinkedIn: [Kwandumusa Mthethwa](https://www.linkedin.com/in/kwandumusa-mthethwa-6b7381236)
-* TikTok: [@realjaycoding](https://www.tiktok.com/realjaycoding)
-
----
-
-## Let’s collaborate!
-
-I’m open to feedback, small collabs, and beginner‑level mentorship projects. If you see a repo you like — fork it, open an issue, or drop me a message.
-
----
-
-
-<!--
-  Notes for you:
-  - If you want the stat cards to show private repo counts or change style, update the query params on the github-readme-stats image URLs.
-  - Want a GIF banner instead of this plain header? I can add a simple gradient SVG/GIF header next.
--->
+This project is licensed under the MIT License.
