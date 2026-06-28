@@ -17,9 +17,9 @@ interface GitHubRepo {
 
 export const Hero = () => {
   const [stats, setStats] = useState<GitHubStats>({
-    publicRepos: 24,
-    totalStars: 5,
-    followers: 5,
+    publicRepos: 48,
+    totalStars: 8,
+    followers: 7,
     topLanguages: [{ name: "TypeScript", percentage: 100 }]
   });
   const [loading, setLoading] = useState(true);
@@ -52,9 +52,9 @@ export const Hero = () => {
           .slice(0, 3);
 
         setStats({
-          publicRepos: userData.public_repos,
-          followers: userData.followers,
-          totalStars,
+          publicRepos: 48,
+          followers: 7,
+          totalStars: 8,
           topLanguages,
         });
       } catch (error) {
@@ -162,7 +162,7 @@ export const Hero = () => {
                       <Github className="h-5 w-5 text-neutral-700" />
                       <p className="text-3xl font-black text-neutral-900">{stats.publicRepos}</p>
                     </div>
-                    <p className="text-sm text-neutral-500 font-medium">Repositories</p>
+                    <p className="text-sm text-neutral-500 font-medium">Total Repositories</p>
                   </div>
 
                   <div className="bg-white border border-neutral-200/60 rounded-2xl p-5 shadow-[0_4px_20px_-4px_rgba(0,0,0,0.05)] hover:shadow-[0_8px_30px_-4px_rgba(0,0,0,0.08)] transition-all duration-300">
@@ -187,7 +187,7 @@ export const Hero = () => {
                         {stats.topLanguages[0]?.name || "TypeScript"}
                       </p>
                     </div>
-                    <p className="text-sm text-neutral-500 font-medium">Top Language</p>
+                    <p className="text-sm text-neutral-500 font-medium">Top language</p>
                   </div>
                 </motion.div>
               </motion.div>
