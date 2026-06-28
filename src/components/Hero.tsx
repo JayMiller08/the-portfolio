@@ -1,8 +1,7 @@
 import { motion } from "framer-motion";
-import { Github, TrendingUp, Code2, Star } from "lucide-react";
+import { Github, TrendingUp, Code2, Star, Users, ArrowRight } from "lucide-react";
 import { Button } from "./ui/button";
 import { useEffect, useState } from "react";
-import heroBg from "@/assets/hero-bg.jpg";
 
 interface GitHubStats {
   publicRepos: number;
@@ -17,7 +16,12 @@ interface GitHubRepo {
 }
 
 export const Hero = () => {
-  const [stats, setStats] = useState<GitHubStats | null>(null);
+  const [stats, setStats] = useState<GitHubStats>({
+    publicRepos: 24,
+    totalStars: 5,
+    followers: 5,
+    topLanguages: [{ name: "TypeScript", percentage: 100 }]
+  });
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -60,106 +64,144 @@ export const Hero = () => {
       }
     };
 
-    fetchGitHubStats();
+    const timer = setTimeout(() => {
+      fetchGitHubStats();
+    }, 500);
+    return () => clearTimeout(timer);
   }, []);
 
   return (
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
-      {/* Background Image */}
-      <div
-        className="absolute inset-0 bg-cover bg-center"
-        style={{ backgroundImage: `url(${heroBg})` }}
-      >
-        <div className="absolute inset-0 bg-gradient-to-b from-background/90 via-background/80 to-background" />
-      </div>
-
+    <section className="relative overflow-visible bg-white pt-2 pb-16">
       {/* Content */}
-      <div className="container relative z-10 mx-auto px-4 py-20">
-        <div className="max-w-4xl mx-auto text-center">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-          >
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-muted/50 backdrop-blur-sm border border-border mb-6">
-              <Code2 className="h-4 w-4 text-accent" />
-              <span className="text-sm font-medium">Available for freelance & internships</span>
-            </div>
+      <div className="container relative z-10 mx-auto px-4 bg-transparent pt-0 mt-0">
+        <div className="max-w-6xl mx-auto relative bg-transparent pt-0 mt-0">
+          {/* Absolute Digital Tools Badge */}
+          <div className="absolute top-0 right-0 z-20">
+            <a
+              href="/artifacts"
+              className="inline-flex items-center gap-3 px-4 py-2 rounded-full bg-neutral-100 border border-neutral-200 text-xs text-neutral-600 font-semibold hover:bg-neutral-200 hover:scale-105 hover:shadow-md hover:shadow-neutral-300/50 transition-all duration-300 ease-in-out group shadow-sm"
+            >
+              <span>Digital Tools</span>
+              <div className="flex h-5 w-5 items-center justify-center rounded-full bg-white border border-neutral-200 text-neutral-800 shadow-sm group-hover:translate-x-1 transition-transform duration-300">
+                <ArrowRight className="h-3 w-3" />
+              </div>
+            </a>
+          </div>
 
-            <h1 className="text-5xl md:text-7xl font-bold mb-6 bg-gradient-to-r from-foreground via-accent to-primary bg-clip-text text-transparent">
-              Jay Mthethwa
-            </h1>
-
-            <p className="text-xl md:text-2xl text-muted-foreground mb-4 font-medium">
-              Java Dev • React Learner • Tech Storyteller
-            </p>
-
-            <p className="text-base md:text-lg text-muted-foreground mb-12 max-w-2xl mx-auto">
-              Building and teaching, documenting the journey into freelance web development,
-              and creating educational content for South African teens.
-            </p>
-
-            <div className="flex flex-wrap gap-4 justify-center mb-16">
-              <Button variant="hero" size="lg" onClick={() => document.getElementById("projects")?.scrollIntoView({ behavior: "smooth" })}>
-                View Projects
-              </Button>
-              <Button variant="outline" size="lg" asChild>
-                <a href="/artifacts">
-                  <Star className="mr-2 h-5 w-5" />
-                  Resources
-                </a>
-              </Button>
-              <Button variant="outline" size="lg" asChild>
-                <a href="https://github.com/JayMiller08" target="_blank" rel="noopener noreferrer">
-                  <Github className="mr-2 h-5 w-5" />
-                  GitHub
-                </a>
-              </Button>
-            </div>
-
-            {/* GitHub Stats */}
-            {!loading && stats && (
+          <div className="flex flex-col lg:grid lg:grid-cols-2 lg:gap-8 items-center pt-4 mt-0 bg-transparent">
+            {/* Left Column (Content) */}
+            <div className="lg:col-span-1 flex flex-col text-left pt-0 mt-0 bg-transparent relative z-10 animate-fade-in-up w-full">
               <motion.div
-                initial={{ opacity: 0, y: 20 }}
+                initial={{ opacity: 0, y: 35 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.8, delay: 0.3 }}
-                className="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-3xl mx-auto"
+                transition={{ duration: 0.8 }}
               >
-                <div className="bg-card/50 backdrop-blur-sm border border-border rounded-xl p-6 hover:bg-card/70 transition-colors">
-                  <div className="flex items-center justify-center gap-2 mb-2">
-                    <Github className="h-5 w-5 text-primary" />
-                    <p className="text-3xl font-bold text-foreground">{stats.publicRepos}</p>
-                  </div>
-                  <p className="text-sm text-muted-foreground">Repositories</p>
+                <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-neutral-100 border border-neutral-200 mb-6 w-fit mx-auto lg:mx-0">
+                  <Code2 className="h-4 w-4 text-neutral-800" />
+                  <span className="text-sm font-semibold text-neutral-800">Available for freelance & internships</span>
                 </div>
 
-                <div className="bg-card/50 backdrop-blur-sm border border-border rounded-xl p-6 hover:bg-card/70 transition-colors">
-                  <div className="flex items-center justify-center gap-2 mb-2">
-                    <Star className="h-5 w-5 text-secondary" />
-                    <p className="text-3xl font-bold text-foreground">{stats.totalStars}</p>
-                  </div>
-                  <p className="text-sm text-muted-foreground">Total Stars</p>
+                <h1 className="text-5xl md:text-6xl lg:text-7xl lg:whitespace-nowrap font-black mb-6 text-neutral-950 tracking-tight leading-none select-none text-center lg:text-left">
+                  <span className="inline-block">
+                    {"Jay".split("").map((letter, index) => (
+                      <span key={`jay-${index}`} className="pulsate-hover">
+                        {letter}
+                      </span>
+                    ))}
+                  </span>
+                  {"\u00A0"}
+                  <span className="inline-block">
+                    {"Mthethwa".split("").map((letter, index) => (
+                      <span key={`mth-${index}`} className="pulsate-hover">
+                        {letter}
+                      </span>
+                    ))}
+                  </span>
+                </h1>
+
+                <p className="text-xl md:text-2xl text-neutral-800 mb-4 font-semibold text-center lg:text-left">
+                  Java Dev • React Learner • Tech Storyteller
+                </p>
+
+                <p className="text-base md:text-lg text-neutral-600 mb-8 max-w-xl text-center lg:text-left mx-auto lg:mx-0">
+                  Building and teaching, documenting the journey into freelance web development,
+                  and creating educational content for South African teens.
+                </p>
+
+                <div className="flex flex-wrap gap-4 items-center justify-center lg:justify-start mb-8 bg-transparent">
+                  <Button
+                    variant="hero"
+                    size="lg"
+                    onClick={() => document.getElementById("projects")?.scrollIntoView({ behavior: "smooth" })}
+                  >
+                    View Projects
+                  </Button>
+                  <Button variant="outline" size="lg" asChild>
+                    <a href="https://github.com/JayMiller08" target="_blank" rel="noopener noreferrer">
+                      <Github className="mr-2 h-5 w-5" />
+                      GitHub
+                    </a>
+                  </Button>
+                  <Button variant="outline" size="lg" asChild>
+                    <a href="/affiliates">
+                      <Users className="mr-2 h-5 w-5" />
+                      Affiliates
+                    </a>
+                  </Button>
                 </div>
 
-                <div className="bg-card/50 backdrop-blur-sm border border-border rounded-xl p-6 hover:bg-card/70 transition-colors">
-                  <div className="flex items-center justify-center gap-2 mb-2">
-                    <TrendingUp className="h-5 w-5 text-accent" />
-                    <p className="text-3xl font-bold text-foreground">{stats.followers}</p>
+                {/* GitHub Stats (Bento Grid) */}
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.8, delay: 0.3 }}
+                  className="grid grid-cols-2 gap-4 lg:grid-cols-4 items-center justify-center w-full"
+                >
+                  <div className="bg-white border border-neutral-200/60 rounded-2xl p-5 shadow-[0_4px_20px_-4px_rgba(0,0,0,0.05)] hover:shadow-[0_8px_30px_-4px_rgba(0,0,0,0.08)] transition-all duration-300">
+                    <div className="flex items-center gap-2 mb-2">
+                      <Github className="h-5 w-5 text-neutral-700" />
+                      <p className="text-3xl font-black text-neutral-900">{stats.publicRepos}</p>
+                    </div>
+                    <p className="text-sm text-neutral-500 font-medium">Repositories</p>
                   </div>
-                  <p className="text-sm text-muted-foreground">Followers</p>
-                </div>
 
-                <div className="bg-card/50 backdrop-blur-sm border border-border rounded-xl p-6 hover:bg-card/70 transition-colors">
-                  <div className="mb-2">
-                    <p className="text-2xl font-bold text-foreground">
-                      {stats.topLanguages[0]?.name || "Java"}
-                    </p>
+                  <div className="bg-white border border-neutral-200/60 rounded-2xl p-5 shadow-[0_4px_20px_-4px_rgba(0,0,0,0.05)] hover:shadow-[0_8px_30px_-4px_rgba(0,0,0,0.08)] transition-all duration-300">
+                    <div className="flex items-center gap-2 mb-2">
+                      <Star className="h-5 w-5 text-neutral-700" />
+                      <p className="text-3xl font-black text-neutral-900">{stats.totalStars}</p>
+                    </div>
+                    <p className="text-sm text-neutral-500 font-medium">Total Stars</p>
                   </div>
-                  <p className="text-sm text-muted-foreground">Top Language</p>
-                </div>
+
+                  <div className="bg-white border border-neutral-200/60 rounded-2xl p-5 shadow-[0_4px_20px_-4px_rgba(0,0,0,0.05)] hover:shadow-[0_8px_30px_-4px_rgba(0,0,0,0.08)] transition-all duration-300">
+                    <div className="flex items-center gap-2 mb-2">
+                      <TrendingUp className="h-5 w-5 text-neutral-700" />
+                      <p className="text-3xl font-black text-neutral-900">{stats.followers}</p>
+                    </div>
+                    <p className="text-sm text-neutral-500 font-medium">Followers</p>
+                  </div>
+
+                  <div className="bg-white border border-neutral-200/60 rounded-2xl p-5 shadow-[0_4px_20px_-4px_rgba(0,0,0,0.05)] hover:shadow-[0_8px_30px_-4px_rgba(0,0,0,0.08)] transition-all duration-300">
+                    <div className="mb-2">
+                      <p className="text-lg md:text-xl font-black text-neutral-900 tracking-tight pt-1">
+                        {stats.topLanguages[0]?.name || "TypeScript"}
+                      </p>
+                    </div>
+                    <p className="text-sm text-neutral-500 font-medium">Top Language</p>
+                  </div>
+                </motion.div>
               </motion.div>
-            )}
-          </motion.div>
+            </div>
+
+            {/* Right Column (Image) */}
+            <div className="hidden lg:flex lg:col-span-1 flex-col justify-end items-center lg:items-end bg-transparent overflow-visible animate-fade-in-up w-full">
+              <img
+                src="/images/jay.jpg"
+                alt="Jay Mthethwa"
+                className="w-[70%] max-w-[260px] mx-auto lg:w-full lg:max-w-[450px] lg:ml-auto h-auto object-contain mix-blend-multiply"
+              />
+            </div>
+          </div>
         </div>
       </div>
     </section>

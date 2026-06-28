@@ -1,10 +1,10 @@
 import { createClient } from '@supabase/supabase-js';
 
-const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
-const supabaseKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
+const supabaseUrl = import.meta.env.VITE_SUPABASE_URL || 'https://placeholder.supabase.co';
+const supabaseKey = import.meta.env.VITE_SUPABASE_ANON_KEY || 'placeholder';
 
-if (!supabaseUrl || !supabaseKey) {
-  console.error("Missing Supabase URL or Key");
+if (!import.meta.env.VITE_SUPABASE_URL || !import.meta.env.VITE_SUPABASE_ANON_KEY) {
+  console.warn("Missing Supabase URL or Key. Using placeholder values to prevent runtime crashes.");
 }
 
 export const supabase = createClient(supabaseUrl, supabaseKey);

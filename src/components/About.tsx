@@ -23,7 +23,7 @@ export const About = () => {
   ];
 
   return (
-    <section id="about" className="py-24 bg-muted/30">
+    <section id="about" className="py-24 bg-white border-t border-neutral-100">
       <div className="container mx-auto px-4">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -32,12 +32,12 @@ export const About = () => {
           transition={{ duration: 0.6 }}
           className="max-w-4xl mx-auto"
         >
-          <h2 className="text-4xl md:text-5xl font-bold mb-6 text-center">
-            My <span className="bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">Story</span>
+          <h2 className="text-4xl md:text-5xl font-black mb-6 text-center text-neutral-950 tracking-tight">
+            My Story
           </h2>
           
-          <div className="prose prose-lg dark:prose-invert mx-auto mb-12">
-            <p className="text-center text-lg text-muted-foreground">
+          <div className="prose prose-lg mx-auto mb-12">
+            <p className="text-center text-lg text-neutral-600 font-medium max-w-2xl mx-auto leading-relaxed">
               I'm a 19-year-old South African developer with a strong Java background, 
               currently transitioning into JavaScript and React. I'm passionate about building 
               meaningful projects, teaching others, and documenting my journey into freelance 
@@ -55,11 +55,11 @@ export const About = () => {
                 viewport={{ once: true }}
                 transition={{ duration: 0.6, delay: index * 0.1 }}
               >
-                <Card className="h-full bg-card/50 backdrop-blur-sm border-border hover:bg-card/70 transition-all hover:shadow-lg">
+                <Card className="h-full bg-white border border-neutral-200/60 rounded-2xl shadow-[0_4px_20px_-4px_rgba(0,0,0,0.05)] hover:shadow-[0_8px_30px_-4px_rgba(0,0,0,0.08)] hover:-translate-y-1 transition-all duration-300">
                   <CardContent className="p-6">
-                    <item.icon className="h-10 w-10 text-accent mb-4" />
-                    <h3 className="text-xl font-semibold mb-2">{item.title}</h3>
-                    <p className="text-muted-foreground">{item.description}</p>
+                     <item.icon className="h-10 w-10 text-neutral-800 mb-4" />
+                     <h3 className="text-xl font-bold text-neutral-900 mb-2">{item.title}</h3>
+                     <p className="text-neutral-500 text-sm leading-relaxed">{item.description}</p>
                   </CardContent>
                 </Card>
               </motion.div>

@@ -2,12 +2,14 @@ import { ExternalLink, Eye, ShoppingBag } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "./ui/card";
 import { Button } from "./ui/button";
 import { Badge } from "./ui/badge";
+import { EmailDownloadDialog } from "./EmailDownloadDialog";
 
 export interface Product {
     id: string;
     title: string;
     description: string;
-    gumroadUrl: string;
+    gumroadUrl?: string;
+    downloadUrl?: string;
     previewUrl?: string;
     tag: string;
     image?: string;
@@ -16,6 +18,20 @@ export interface Product {
 interface ProductCardProps {
     product: Product;
 }
+
+const getTagStyles = (tag: string) => {
+    const baseStyle = "backdrop-blur-md shadow-sm border font-semibold";
+    switch (tag.toLowerCase()) {
+        case "ebook":
+            return `${baseStyle} bg-gradient-to-r from-violet-500/90 to-fuchsia-500/90 text-white border-white/20 dark:border-white/10`;
+        case "free pdf guide":
+            return `${baseStyle} bg-gradient-to-r from-emerald-500/90 to-teal-500/90 text-white border-white/20 dark:border-white/10`;
+        case "notion template":
+            return `${baseStyle} bg-gradient-to-r from-orange-500/90 to-rose-500/90 text-white border-white/20 dark:border-white/10`;
+        default:
+            return `${baseStyle} bg-background/80 text-foreground border-border/50`;
+    }
+};
 
 export const ProductCard = ({ product }: ProductCardProps) => {
     return (
@@ -34,7 +50,7 @@ export const ProductCard = ({ product }: ProductCardProps) => {
                     </div>
                 )}
                 <div className="absolute top-2 right-2">
-                    <Badge variant="secondary" className="backdrop-blur-md bg-background/80 shadow-sm">
+                    <Badge className={getTagStyles(product.tag)}>
                         {product.tag}
                     </Badge>
                 </div>
@@ -51,16 +67,30 @@ export const ProductCard = ({ product }: ProductCardProps) => {
 
             <CardContent className="p-4 md:p-6 pt-0 mt-auto">
                 <div className="flex flex-col gap-3">
-                    <Button
-                        variant="default"
-                        className="w-full gap-2 shadow-md hover:shadow-lg transition-all"
-                        asChild
-                    >
-                        <a href={product.gumroadUrl} target="_blank" rel="noopener noreferrer">
-                            <span className="truncate">Get on Gumroad</span>
-                            <ExternalLink className="h-4 w-4 flex-shrink-0" />
-                        </a>
-                    </Button>
+                    {product.gumroadUrl && (
+                        <Button
+                            variant="default"
+                            className="w-full gap-2 shadow-md hover:shadow-lg transition-all"
+                            asChild
+                        >
+                            <a href={product.gumroadUrl} target="_blank" rel="noopener noreferrer">
+                                <span className="truncate">Get on Gumroad</span>
+                                <ExternalLink className="h-4 w-4 flex-shrink-0" />
+                            </a>
+                        </Button>
+                    )}
+
+                    {product.downloadUrl && (
+                        <EmailDownloadDialog product={product}>
+                            <Button
+                                variant="default"
+                                className="w-full gap-2 shadow-md hover:shadow-lg transition-all bg-foreground text-background hover:bg-foreground/90"
+                            >
+                                <span className="truncate">Download Free</span>
+                                <ExternalLink className="h-4 w-4 flex-shrink-0" />
+                            </Button>
+                        </EmailDownloadDialog>
+                    )}
 
                     {product.previewUrl && (
                         <Button

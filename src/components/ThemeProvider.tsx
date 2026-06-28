@@ -14,21 +14,18 @@ type ThemeProviderState = {
 
 const ThemeProviderContext = createContext<ThemeProviderState | undefined>(undefined);
 
-export function ThemeProvider({ children, defaultTheme = "light" }: ThemeProviderProps) {
-  const [theme, setTheme] = useState<Theme>(() => {
-    const stored = localStorage.getItem("theme") as Theme;
-    return stored || defaultTheme;
-  });
+export function ThemeProvider({ children }: ThemeProviderProps) {
+  const theme = "light";
 
   useEffect(() => {
     const root = window.document.documentElement;
-    root.classList.remove("light", "dark");
-    root.classList.add(theme);
-    localStorage.setItem("theme", theme);
-  }, [theme]);
+    root.classList.remove("dark");
+    root.classList.add("light");
+    localStorage.setItem("theme", "light");
+  }, []);
 
   const toggleTheme = () => {
-    setTheme((prev) => (prev === "light" ? "dark" : "light"));
+    // No-op to lock theme
   };
 
   return (
