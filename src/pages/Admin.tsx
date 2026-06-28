@@ -1,4 +1,18 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo, useRef } from "react";
+import {
+  Area,
+  AreaChart,
+  Bar,
+  BarChart,
+  CartesianGrid,
+  Cell,
+  ResponsiveContainer,
+  Tooltip,
+  XAxis,
+  YAxis,
+  PieChart,
+  Pie,
+} from "recharts";
 import { useTheme } from "@/components/ThemeProvider";
 import { Link } from "react-router-dom";
 import {
@@ -11,6 +25,7 @@ import {
   RefreshCw,
   Moon,
   Sun,
+  Upload,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -69,7 +84,40 @@ const AdminPage = () => {
   const [subscribers, setSubscribers] = useState<Subscriber[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isExporting, setIsExporting] = useState(false);
+  const [isImporting, setIsImporting] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
   const { toast } = useToast();
+
+  const growthData = useMemo(() => {
+    if (!subscribers.length) return [];
+    
+    // Sort ascending by date
+    const sorted = [...subscribers].sort((a, b) => new Date(a.created_at).getTime() - new Date(b.created_at).getTime());
+    
+    const countsByDate = sorted.reduce((acc, sub) => {
+      const date = new Date(sub.created_at).toLocaleDateString("en-US", { month: "short", day: "numeric" });
+      acc[date] = (acc[date] || 0) + 1;
+      return acc;
+    }, {} as Record<string, number>);
+    
+    let cumulative = 0;
+    return Object.entries(countsByDate).map(([date, count]) => {
+      cumulative += count;
+      return { date, count: cumulative };
+    });
+  }, [subscribers]);
+
+  const sourceData = useMemo(() => {
+    const counts = subscribers.reduce((acc, sub) => {
+      const source = sub.source || "Imported";
+      acc[source] = (acc[source] || 0) + 1;
+      return acc;
+    }, {} as Record<string, number>);
+    
+    return Object.entries(counts).map(([name, value]) => ({ name, value })).sort((a, b) => b.value - a.value);
+  }, [subscribers]);
+
+  const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#8884d8', '#82ca9d'];
 
   const fetchSubscribers = async () => {
     setIsLoading(true);
@@ -156,6 +204,77 @@ const AdminPage = () => {
     } finally {
       setIsExporting(false);
     }
+  };
+
+  const handleImportCSV = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    setIsImporting(true);
+    const reader = new FileReader();
+
+    reader.onload = async (e) => {
+      try {
+        const text = e.target?.result as string;
+        if (!text) throw new Error("File is empty");
+
+        const lines = text.split('\n').filter((line) => line.trim() !== '');
+        if (lines.length < 2) throw new Error("CSV contains no data rows");
+
+        // Parse headers
+        const headers = lines[0].split(',').map((h) => h.replace(/"/g, '').trim().toLowerCase());
+        const emailIndex = headers.findIndex(h => h === 'email');
+        const sourceIndex = headers.findIndex(h => h === 'source');
+
+        if (emailIndex === -1) {
+          throw new Error("CSV must contain an 'Email' column");
+        }
+
+        const newSubscribers = lines.slice(1).map((line) => {
+          const cells = line.split(',').map((c) => c.replace(/"/g, '').trim());
+          const email = cells[emailIndex];
+          const source = sourceIndex !== -1 && cells[sourceIndex] ? cells[sourceIndex] : 'Imported';
+          
+          return { email, source };
+        }).filter(sub => sub.email);
+
+        if (newSubscribers.length === 0) throw new Error("No valid subscribers found");
+
+        const { error } = await supabase.from("subscribers").insert(newSubscribers);
+
+        if (error) throw error;
+
+        toast({
+          title: "Import successful",
+          description: `Imported ${newSubscribers.length} subscribers.`,
+        });
+
+        fetchSubscribers();
+      } catch (error: any) {
+        console.error("Import error:", error);
+        toast({
+          title: "Import failed",
+          description: error.message || "Something went wrong parsing the file.",
+          variant: "destructive",
+        });
+      } finally {
+        setIsImporting(false);
+        if (fileInputRef.current) {
+          fileInputRef.current.value = "";
+        }
+      }
+    };
+
+    reader.onerror = () => {
+      toast({
+        title: "Import failed",
+        description: "Failed to read file.",
+        variant: "destructive",
+      });
+      setIsImporting(false);
+    };
+
+    reader.readAsText(file);
   };
 
   const formatDate = (dateString: string) => {
@@ -259,10 +378,29 @@ const AdminPage = () => {
             )}
             Export to Excel
           </Button>
+          <input
+            type="file"
+            accept=".csv"
+            ref={fileInputRef}
+            className="hidden"
+            onChange={handleImportCSV}
+          />
+          <Button
+            onClick={() => fileInputRef.current?.click()}
+            variant="hero"
+            disabled={isImporting}
+          >
+            {isImporting ? (
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+            ) : (
+              <Upload className="mr-2 h-4 w-4" />
+            )}
+            Import CSV
+          </Button>
         </div>
 
         {/* Subscribers Table */}
-        <Card>
+        <Card className="mb-8">
           <CardHeader>
             <CardTitle>Subscribers</CardTitle>
           </CardHeader>
@@ -307,6 +445,71 @@ const AdminPage = () => {
             )}
           </CardContent>
         </Card>
+        {/* Charts */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+          <Card>
+            <CardHeader>
+              <CardTitle>Subscriber Growth</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="h-[300px] w-full">
+                {growthData.length > 0 ? (
+                  <ResponsiveContainer width="100%" height="100%">
+                    <AreaChart data={growthData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
+                      <defs>
+                        <linearGradient id="colorCount" x1="0" y1="0" x2="0" y2="1">
+                          <stop offset="5%" stopColor="#8884d8" stopOpacity={0.8}/>
+                          <stop offset="95%" stopColor="#8884d8" stopOpacity={0}/>
+                        </linearGradient>
+                      </defs>
+                      <CartesianGrid strokeDasharray="3 3" vertical={false} />
+                      <XAxis dataKey="date" tickLine={false} axisLine={false} tickMargin={10} />
+                      <YAxis tickLine={false} axisLine={false} tickMargin={10} />
+                      <Tooltip contentStyle={{ borderRadius: '8px', border: '1px solid #e2e8f0' }} />
+                      <Area type="monotone" dataKey="count" stroke="#8884d8" fillOpacity={1} fill="url(#colorCount)" />
+                    </AreaChart>
+                  </ResponsiveContainer>
+                ) : (
+                  <div className="flex items-center justify-center h-full text-muted-foreground">No data available</div>
+                )}
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader>
+              <CardTitle>Subscriber Sources</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="h-[300px] w-full">
+                {sourceData.length > 0 ? (
+                  <ResponsiveContainer width="100%" height="100%">
+                    <PieChart>
+                      <Pie
+                        data={sourceData}
+                        cx="50%"
+                        cy="50%"
+                        innerRadius={60}
+                        outerRadius={80}
+                        paddingAngle={5}
+                        dataKey="value"
+                        label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
+                      >
+                        {sourceData.map((entry, index) => (
+                          <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                        ))}
+                      </Pie>
+                      <Tooltip contentStyle={{ borderRadius: '8px', border: '1px solid #e2e8f0' }} />
+                    </PieChart>
+                  </ResponsiveContainer>
+                ) : (
+                  <div className="flex items-center justify-center h-full text-muted-foreground">No data available</div>
+                )}
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+
       </main>
 
       {/* Footer */}
