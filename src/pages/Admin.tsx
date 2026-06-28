@@ -84,6 +84,7 @@ const AdminPage = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [isExporting, setIsExporting] = useState(false);
   const [isImporting, setIsImporting] = useState(false);
+  const [displayCount, setDisplayCount] = useState(20);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const { toast } = useToast();
 
