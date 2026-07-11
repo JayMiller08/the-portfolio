@@ -1,12 +1,14 @@
 import { motion } from "framer-motion";
-import { Github, TrendingUp, Code2, Star, Users, ArrowRight } from "lucide-react";
+import { Github, TrendingUp, Code2, Star, Users, ArrowRight, UserPlus, CalendarDays } from "lucide-react";
 import { Button } from "./ui/button";
 import { useEffect, useState } from "react";
 
 interface GitHubStats {
   publicRepos: number;
   followers: number;
+  following: number;
   totalStars: number;
+  memberSince: number;
   topLanguages: { name: string; percentage: number }[];
 }
 
@@ -17,9 +19,11 @@ interface GitHubRepo {
 
 export const Hero = () => {
   const [stats, setStats] = useState<GitHubStats>({
-    publicRepos: 48,
-    totalStars: 8,
-    followers: 7,
+    publicRepos: 27,
+    totalStars: 5,
+    followers: 8,
+    following: 10,
+    memberSince: 2024,
     topLanguages: [{ name: "TypeScript", percentage: 100 }]
   });
   const [loading, setLoading] = useState(true);
@@ -52,9 +56,13 @@ export const Hero = () => {
           .slice(0, 3);
 
         setStats({
-          publicRepos: 48,
-          followers: 7,
-          totalStars: 8,
+          publicRepos: userData.public_repos,
+          followers: userData.followers,
+          following: userData.following,
+          totalStars,
+          memberSince: userData.created_at
+            ? new Date(userData.created_at).getFullYear()
+            : 2024,
           topLanguages,
         });
       } catch (error) {
@@ -179,6 +187,22 @@ export const Hero = () => {
                       <p className="text-3xl font-black text-neutral-900">{stats.followers}</p>
                     </div>
                     <p className="text-sm text-neutral-500 font-medium">Followers</p>
+                  </div>
+
+                  <div className="bg-white border border-neutral-200/60 rounded-2xl p-5 shadow-[0_4px_20px_-4px_rgba(0,0,0,0.05)] hover:shadow-[0_8px_30px_-4px_rgba(0,0,0,0.08)] transition-all duration-300">
+                    <div className="flex items-center gap-2 mb-2">
+                      <UserPlus className="h-5 w-5 text-neutral-700" />
+                      <p className="text-3xl font-black text-neutral-900">{stats.following}</p>
+                    </div>
+                    <p className="text-sm text-neutral-500 font-medium">Following</p>
+                  </div>
+
+                  <div className="bg-white border border-neutral-200/60 rounded-2xl p-5 shadow-[0_4px_20px_-4px_rgba(0,0,0,0.05)] hover:shadow-[0_8px_30px_-4px_rgba(0,0,0,0.08)] transition-all duration-300">
+                    <div className="flex items-center gap-2 mb-2">
+                      <CalendarDays className="h-5 w-5 text-neutral-700" />
+                      <p className="text-3xl font-black text-neutral-900">{stats.memberSince}</p>
+                    </div>
+                    <p className="text-sm text-neutral-500 font-medium">On GitHub since</p>
                   </div>
 
                   <div className="bg-white border border-neutral-200/60 rounded-2xl p-5 shadow-[0_4px_20px_-4px_rgba(0,0,0,0.05)] hover:shadow-[0_8px_30px_-4px_rgba(0,0,0,0.08)] transition-all duration-300">
