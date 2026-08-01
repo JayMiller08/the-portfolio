@@ -3,6 +3,8 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "./ui/
 import { Button } from "./ui/button";
 import { Badge } from "./ui/badge";
 import { EmailDownloadDialog } from "./EmailDownloadDialog";
+import { BuyDialog } from "./BuyDialog";
+import { formatPrice, type StorePrice } from "@/lib/store";
 
 export interface Product {
     id: string;
@@ -13,10 +15,14 @@ export interface Product {
     previewUrl?: string;
     tag: string;
     image?: string;
+    /** Matches a row in the products table; enables direct Paystack checkout. */
+    slug?: string;
 }
 
 interface ProductCardProps {
     product: Product;
+    /** Live pricing, when this product is on sale through the store. */
+    price?: StorePrice;
 }
 
 const getTagStyles = (tag: string) => {
@@ -33,7 +39,11 @@ const getTagStyles = (tag: string) => {
     }
 };
 
-export const ProductCard = ({ product }: ProductCardProps) => {
+export const ProductCard = ({ product, price }: ProductCardProps) => {
+    // Sell directly through Paystack once the product is priced and active;
+    // until then the existing Gumroad link keeps working.
+    const canBuyDirect = Boolean(product.slug && price && price.price_cents > 0);
+
     return (
         <Card className="group relative overflow-hidden hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 border-border/50 bg-card h-full flex flex-col hover:border-primary/50">
             {/* Image or Gradient Placeholder */}
@@ -67,7 +77,26 @@ export const ProductCard = ({ product }: ProductCardProps) => {
 
             <CardContent className="p-4 md:p-6 pt-0 mt-auto">
                 <div className="flex flex-col gap-3">
-                    {product.gumroadUrl && (
+                    {canBuyDirect && (
+                        <BuyDialog
+                            slug={product.slug!}
+                            title={product.title}
+                            priceCents={price!.price_cents}
+                            currency={price!.currency}
+                        >
+                            <Button
+                                variant="default"
+                                className="w-full gap-2 shadow-md hover:shadow-lg transition-all"
+                            >
+                                <span className="truncate">
+                                    Buy for {formatPrice(price!.price_cents, price!.currency)}
+                                </span>
+                                <ShoppingBag className="h-4 w-4 flex-shrink-0" />
+                            </Button>
+                        </BuyDialog>
+                    )}
+
+                    {!canBuyDirect && product.gumroadUrl && (
                         <Button
                             variant="default"
                             className="w-full gap-2 shadow-md hover:shadow-lg transition-all"

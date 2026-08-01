@@ -3,6 +3,7 @@ import { ArrowLeft, Sparkles, Sun, Moon, ShoppingBag } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { ProductCard, Product } from "@/components/ProductCard";
+import { useStorePrices } from "@/hooks/useStorePrices";
 
 const ArtifactsHeader = () => {
   const { theme, toggleTheme } = useTheme();
@@ -56,6 +57,7 @@ const digitalProducts: Product[] = [
   },
   {
     id: "handbook",
+    slug: "handbook",
     title: "The Beginner Programmers' Survival Handbook",
     description: "A comprehensive guide to help you navigate the early stages of your programming journey.",
     gumroadUrl: "https://realjaycoding.gumroad.com/l/tpdhv",
@@ -64,6 +66,7 @@ const digitalProducts: Product[] = [
   },
   {
     id: "playbook",
+    slug: "playbook",
     title: "The Self-Taught Developer Playbook",
     description: "Your roadmap to becoming a successful self-taught developer.",
     gumroadUrl: "https://realjaycoding.gumroad.com/l/selftaught-dev-playbook",
@@ -72,6 +75,7 @@ const digitalProducts: Product[] = [
   },
   {
     id: "notion-os",
+    slug: "notion-os",
     title: "The CS Student Life OS Notion Template",
     description: "Organize your computer science studies and life with this all-in-one Notion template.",
     gumroadUrl: "https://realjaycoding.gumroad.com/l/the-cs-student-life-os",
@@ -82,6 +86,8 @@ const digitalProducts: Product[] = [
 ];
 
 const ArtifactsPage = () => {
+  const { data: prices } = useStorePrices();
+
   return (
     <div className="min-h-screen bg-background text-foreground">
       <ArtifactsHeader />
@@ -105,7 +111,11 @@ const ArtifactsPage = () => {
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {digitalProducts.map((product) => (
-              <ProductCard key={product.id} product={product} />
+              <ProductCard
+                key={product.id}
+                product={product}
+                price={product.slug ? prices?.[product.slug] : undefined}
+              />
             ))}
           </div>
         </div>
