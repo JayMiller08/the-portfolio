@@ -93,8 +93,13 @@ npx supabase secrets set PAYSTACK_SECRET_KEY=sk_live_xxxxxxxxxxxx
 ```
 
 ```bash
-npx supabase secrets set SITE_URL=https://jaymthethwa.vercel.app
+npx supabase secrets set SITE_URL=https://www.jaymthethwa.co.za
 ```
+
+`SITE_URL` must be the exact origin the browser reports — scheme, `www.`, and
+**no trailing slash**. It is both the post-payment redirect target and the
+allowed CORS origin, so a mismatch blocks every checkout in the browser. (The
+functions strip trailing slashes defensively, but keep it clean anyway.)
 
 Optional, to enable the confirmation email (without it, buyers still get the
 on-screen download link):
