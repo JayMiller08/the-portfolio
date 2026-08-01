@@ -79,7 +79,8 @@ const digitalProducts: Product[] = [
     title: "Build Your First 5 Java Projects",
     description: "Go from following tutorials to writing real Java, one project at a time.",
     gumroadUrl: "https://realjaycoding.gumroad.com/l/java-projects",
-    tag: "eBook"
+    tag: "eBook",
+    image: "/images/java_projects_preview.png"
   }
 ];
 
