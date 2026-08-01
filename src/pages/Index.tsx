@@ -8,7 +8,6 @@ import { Projects } from "@/components/Projects";
 import { Skills } from "@/components/Skills";
 import { Media } from "@/components/Media";
 import { Contact } from "@/components/Contact";
-import { JavaProjectsPopup } from "@/components/JavaProjectsPopup";
 
 const Index = () => {
   const location = useLocation();
@@ -34,7 +33,6 @@ const Index = () => {
       <Skills />
       <Media />
       <Contact />
-      <JavaProjectsPopup />
     </Layout>
   );
 };
