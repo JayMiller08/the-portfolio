@@ -5,6 +5,21 @@ Nothing goes live until you complete every step below — products ship in the
 migration as **inactive with a zero price**, and an inactive product cannot be
 bought.
 
+> ### ⚠️ Read this before running any command
+>
+> **Every Supabase command starts with `npx`, and must be run from the project
+> folder** (`C:\WORK DOCS\portfolio\the-portfolio`).
+>
+> ```
+> supabase login       ✗  "The term 'supabase' is not recognized"
+> npx supabase login   ✓
+> ```
+>
+> The CLI is installed as a dev dependency of this project, not system-wide, so
+> there is no global `supabase` command — that is expected, not a broken
+> install. `npx` locates it by searching upward from your current directory,
+> which is why the project folder matters.
+
 ## How it works
 
 ```
