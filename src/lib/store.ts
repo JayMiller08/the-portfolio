@@ -10,12 +10,24 @@ export interface StorePrice {
 
 /**
  * Formats a minor-unit amount (cents) for display, e.g. 14900 -> "R149.00".
+ *
+ * The en-ZA locale renders this as "R 149,00", which is technically correct but
+ * not how South African storefronts usually price things. So the symbol is taken
+ * from the currency and the number is formatted with a decimal point and no
+ * separating space.
  */
 export const formatPrice = (cents: number, currency: string): string => {
-  return new Intl.NumberFormat("en-ZA", {
-    style: "currency",
-    currency,
+  const amount = new Intl.NumberFormat("en-US", {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
   }).format(cents / 100);
+
+  const symbol =
+    new Intl.NumberFormat("en-ZA", { style: "currency", currency })
+      .formatToParts(0)
+      .find((part) => part.type === "currency")?.value ?? currency;
+
+  return `${symbol}${amount}`;
 };
 
 /**
