@@ -74,14 +74,12 @@ const digitalProducts: Product[] = [
     image: "/images/playbook_preview.png"
   },
   {
-    id: "notion-os",
-    slug: "notion-os",
-    title: "The CS Student Life OS Notion Template",
-    description: "Organize your computer science studies and life with this all-in-one Notion template.",
-    gumroadUrl: "https://realjaycoding.gumroad.com/l/the-cs-student-life-os",
-    previewUrl: "https://cultured-wind-77f.notion.site/The-CS-Student-Life-OS-2dc0625e4ddd803c87e0c147b4280065?pvs=74",
-    tag: "Notion Template",
-    image: "/images/notion_os_preview.png"
+    id: "java-projects",
+    slug: "java-projects",
+    title: "Build Your First 5 Java Projects",
+    description: "Go from following tutorials to writing real Java, one project at a time.",
+    gumroadUrl: "https://realjaycoding.gumroad.com/l/java-projects",
+    tag: "eBook"
   }
 ];
 
