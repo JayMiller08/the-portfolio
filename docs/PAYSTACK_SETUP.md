@@ -32,18 +32,37 @@ Two rules this design enforces:
 
 ## 1. Install and link the Supabase CLI
 
-```bash
-npm install -g supabase
-```
+The Supabase CLI **cannot be installed globally with npm** — `npm install -g
+supabase` fails by design. It is installed as a dev dependency of this project
+instead (already in `package.json`), so run it with `npx` from the project root:
 
 ```bash
-supabase link --project-ref YOUR_PROJECT_REF
+npm install
+```
+
+Every command below is prefixed with `npx` for this reason. Verify it works:
+
+```bash
+npx supabase --version
+```
+
+Sign in (this opens a browser to authorise the CLI):
+
+```bash
+npx supabase login
+```
+
+Then link this folder to your project. The project ref is the subdomain of your
+Supabase URL — for `https://abcdefgh.supabase.co` it is `abcdefgh`:
+
+```bash
+npx supabase link --project-ref YOUR_PROJECT_REF
 ```
 
 ## 2. Apply the database migration
 
 ```bash
-supabase db push
+npx supabase db push
 ```
 
 This creates `products`, `orders`, and the private `product-files` storage
@@ -55,18 +74,18 @@ bucket.
 are set directly on Supabase and are only readable by your Edge Functions:
 
 ```bash
-supabase secrets set PAYSTACK_SECRET_KEY=sk_live_xxxxxxxxxxxx
+npx supabase secrets set PAYSTACK_SECRET_KEY=sk_live_xxxxxxxxxxxx
 ```
 
 ```bash
-supabase secrets set SITE_URL=https://jaymthethwa.vercel.app
+npx supabase secrets set SITE_URL=https://jaymthethwa.vercel.app
 ```
 
 Optional, to enable the confirmation email (without it, buyers still get the
 on-screen download link):
 
 ```bash
-supabase secrets set RESEND_API_KEY=re_xxxxxxxxxxxx STORE_FROM_EMAIL="Jay <store@yourdomain.com>"
+npx supabase secrets set RESEND_API_KEY=re_xxxxxxxxxxxx STORE_FROM_EMAIL="Jay <store@yourdomain.com>"
 ```
 
 Start with your **test** key (`sk_test_…`) and switch to live only after a full
@@ -79,15 +98,15 @@ directly and has no Supabase session. Its own signature check is what secures
 it.
 
 ```bash
-supabase functions deploy paystack-initialize
+npx supabase functions deploy paystack-initialize
 ```
 
 ```bash
-supabase functions deploy paystack-verify
+npx supabase functions deploy paystack-verify
 ```
 
 ```bash
-supabase functions deploy paystack-webhook --no-verify-jwt
+npx supabase functions deploy paystack-webhook --no-verify-jwt
 ```
 
 ## 5. Upload the product files and set real prices
