@@ -1,37 +1,31 @@
-import { useEffect } from "react";
-import { useLocation } from "react-router-dom";
-
 import { Layout } from "@/components/Layout";
 import { Hero } from "@/components/Hero";
+import { RouteChooser } from "@/components/RouteChooser";
 import { About } from "@/components/About";
-import { Projects } from "@/components/Projects";
-import { Skills } from "@/components/Skills";
-import { Media } from "@/components/Media";
 import { Contact } from "@/components/Contact";
+import { useDocumentMeta } from "@/hooks/useDocumentMeta";
+import { useHashScroll } from "@/hooks/useHashScroll";
 
+/**
+ * The landing page.
+ *
+ * It disambiguates between the two tracks, but is not a splash screen: someone
+ * who reads nothing else still gets the name, both stat rows, the story and a
+ * way to make contact.
+ */
 const Index = () => {
-  const location = useLocation();
-
-  useEffect(() => {
-    if (location.hash) {
-      const id = location.hash.replace("#", "");
-      // A small timeout ensures the page has rendered the sections before scrolling
-      setTimeout(() => {
-        const element = document.getElementById(id);
-        if (element) {
-          element.scrollIntoView({ behavior: "smooth", block: "start" });
-        }
-      }, 100);
-    }
-  }, [location.hash]);
+  useDocumentMeta({
+    title: "Jay Mthethwa | Web Developer & Content Creator",
+    description:
+      "Third-year Computer Science student at Tshwane University of Technology. I build web applications, and create tech education content on contract for Zaio Institute of Technology.",
+  });
+  useHashScroll();
 
   return (
     <Layout>
-      <Hero />
+      <Hero variant="landing" />
+      <RouteChooser />
       <About />
-      <Projects />
-      <Skills />
-      <Media />
       <Contact />
     </Layout>
   );

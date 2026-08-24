@@ -2,7 +2,6 @@ import { motion } from "framer-motion";
 import { Instagram, Mail } from "lucide-react";
 import { Button } from "./ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "./ui/card";
-import { ReachStats } from "./ReachStats";
 import { ZaioCredential } from "./ZaioCredential";
 import { TwoAccounts } from "./TwoAccounts";
 import { CraftBreakdown } from "./CraftBreakdown";
@@ -34,8 +33,6 @@ export const ContentCreation = () => {
               edited by me, on contract and on my own channel.
             </p>
           </motion.div>
-
-          <ReachStats className="mb-16" />
 
           <div className="grid lg:grid-cols-2 gap-6 mb-16">
             <ZaioCredential />
