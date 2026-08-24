@@ -117,8 +117,8 @@ const CheckoutSuccess = () => {
               <p className="text-muted-foreground mb-8">{state.message}</p>
               <p className="text-sm text-muted-foreground mb-6">
                 If you were charged, email{" "}
-                <a className="underline" href="mailto:kwandumthethwa08@gmail.com">
-                  kwandumthethwa08@gmail.com
+                <a className="underline" href="mailto:realjaycoding@gmail.com">
+                  realjaycoding@gmail.com
                 </a>{" "}
                 with your reference{reference ? ` (${reference})` : ""} and I'll sort it out.
               </p>

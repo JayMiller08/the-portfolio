@@ -8,7 +8,7 @@ export const About = () => {
     {
       icon: GraduationCap,
       title: "Student & Learner",
-      description: "Diploma in Computer Science (Extended) at Tshwane University of Technology",
+      description: "Diploma in Computer Science (Extended), Tshwane University of Technology — third year",
     },
     {
       icon: Users,
@@ -38,8 +38,8 @@ export const About = () => {
           
           <div className="prose prose-lg mx-auto mb-12">
             <p className="text-center text-lg text-neutral-600 font-medium max-w-2xl mx-auto leading-relaxed">
-              I'm a 19-year-old South African developer with a strong Java background, 
-              currently transitioning into JavaScript and React. I'm passionate about building 
+              I'm a South African developer and content creator in my third year of Computer 
+              Science at Tshwane University of Technology. I'm passionate about building 
               meaningful projects, teaching others, and documenting my journey into freelance 
               web development. My mission is to empower South African teens through accessible 
               tech education and inspire them to pursue their coding dreams.

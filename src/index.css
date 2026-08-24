@@ -126,3 +126,22 @@ All colors MUST be HSL.
     text-shadow: 0 0 16px rgba(200, 200, 200, 0.8), 0 0 24px rgba(200, 200, 200, 0.5), 0 0 32px rgba(200, 200, 200, 0.3);
   }
 }
+
+/* Respect the visitor's reduced-motion setting.
+   framer-motion is handled separately by MotionConfig reducedMotion="user" in
+   App.tsx; this covers the CSS animations and transitions it does not own. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  .pulsate-hover:hover {
+    animation: none;
+    transform: none;
+  }
+}
