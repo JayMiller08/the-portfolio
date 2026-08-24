@@ -2,55 +2,74 @@ import { motion } from "framer-motion";
 import { Badge } from "./ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
 
+/**
+ * How far along I actually am with something. Ordered most to least depth.
+ * These are the only permitted values, so a level cannot drift into prose.
+ */
+export type SkillLevel = "Strong" | "Working" | "Building with" | "Exploring";
+
+interface Skill {
+  name: string;
+  level: SkillLevel;
+}
+
+interface SkillCategory {
+  title: string;
+  skills: Skill[];
+}
+
 export const Skills = () => {
-  const skillCategories = [
+  const skillCategories: SkillCategory[] = [
     {
       title: "Languages",
       skills: [
-        { name: "Java", level: "Confident" },
-        { name: "JavaScript", level: "Intermediate" },
-        { name: "HTML/CSS", level: "Moderate" },
-        { name: "SQL", level: "Learning" },
+        { name: "Java", level: "Strong" },
+        { name: "TypeScript", level: "Working" },
+        { name: "JavaScript", level: "Working" },
+        { name: "HTML/CSS", level: "Working" },
+        { name: "SQL", level: "Building with" },
       ],
     },
     {
       title: "Frameworks & Libraries",
       skills: [
-        { name: "React", level: "Learning" },
-        { name: "Tailwind CSS", level: "Intermediate" },
-        { name: "Node.js", level: "Learning" },
+        { name: "React", level: "Working" },
+        { name: "Tailwind CSS", level: "Working" },
+        { name: "Node.js", level: "Building with" },
       ],
     },
     {
       title: "Tools & Technologies",
       skills: [
-        { name: "Git/GitHub", level: "Confident" },
-        { name: "VS Code", level: "Confident" },
-        { name: "IntelliJ IDEA", level: "Confident" },
-        { name: "Docker", level: "Novice" },
+        { name: "Git/GitHub", level: "Strong" },
+        { name: "VS Code", level: "Strong" },
+        { name: "IntelliJ IDEA", level: "Strong" },
+        { name: "Docker", level: "Exploring" },
       ],
     },
     {
       title: "Core Competencies",
       skills: [
-        { name: "Object-Oriented Programming", level: "Confident" },
-        { name: "Data Structures & Algorithms", level: "Intermediate" },
-        { name: "Problem Solving", level: "Confident" },
-        { name: "Technical Teaching", level: "Confident" },
+        { name: "Object-Oriented Programming", level: "Strong" },
+        { name: "Data Structures & Algorithms", level: "Working" },
+        { name: "Problem Solving", level: "Strong" },
+        { name: "Technical Teaching", level: "Strong" },
       ],
     },
   ];
 
-  const getLevelColor = (level: string) => {
+  // Background darkens with depth of experience. Text tones are chosen so every
+  // pill clears WCAG AA against its own background, including the lightest tier.
+  const getLevelColor = (level: SkillLevel) => {
     switch (level) {
-      case "Confident":
+      case "Strong":
         return "bg-neutral-900 text-white font-semibold";
-      case "Intermediate":
-        return "bg-neutral-200 text-neutral-800 font-semibold";
-      case "Moderate":
-        return "bg-neutral-100 text-neutral-700 font-medium";
-      default:
-        return "bg-neutral-50 text-neutral-500 font-medium";
+      case "Working":
+        return "bg-neutral-200 text-neutral-900 font-semibold";
+      case "Building with":
+        return "bg-neutral-100 text-neutral-800 font-medium";
+      case "Exploring":
+        return "bg-neutral-50 text-neutral-700 font-medium border border-neutral-200";
     }
   };
 
@@ -113,7 +132,7 @@ export const Skills = () => {
           >
             <Card className="bg-white border border-neutral-200 rounded-2xl p-6 shadow-[0_4px_24px_rgba(0,0,0,0.04)]">
               <CardContent className="p-8">
-                <h3 className="text-2xl font-black mb-2 text-neutral-900 tracking-tight">Currently Learning</h3>
+                <h3 className="text-2xl font-black mb-2 text-neutral-900 tracking-tight">Currently deepening</h3>
                 <p className="text-neutral-500 mb-6 font-medium max-w-2xl mx-auto">
                   Following a 4-week JavaScript intensive program, deepening React knowledge, 
                   and building practical projects for my freelance web development journey.
