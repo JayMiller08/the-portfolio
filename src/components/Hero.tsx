@@ -1,82 +1,19 @@
 import { motion } from "framer-motion";
-import { Github, TrendingUp, Code2, Star, Users, ArrowRight, UserPlus, CalendarDays } from "lucide-react";
+import { Github, Code2, Users, ArrowRight, CalendarDays, Braces } from "lucide-react";
 import { Button } from "./ui/button";
-import { useEffect, useState } from "react";
-
-interface GitHubStats {
-  publicRepos: number;
-  followers: number;
-  following: number;
-  totalStars: number;
-  memberSince: number;
-  topLanguages: { name: string; percentage: number }[];
-}
-
-interface GitHubRepo {
-  stargazers_count: number;
-  language: string | null;
-}
+import { StatRow } from "./StatRow";
+import { useGitHubStats } from "@/hooks/useGitHubStats";
 
 export const Hero = () => {
-  const [stats, setStats] = useState<GitHubStats>({
-    publicRepos: 27,
-    totalStars: 5,
-    followers: 8,
-    following: 10,
-    memberSince: 2024,
-    topLanguages: [{ name: "TypeScript", percentage: 100 }]
-  });
-  const [loading, setLoading] = useState(true);
+  const { stats } = useGitHubStats();
 
-  useEffect(() => {
-    const fetchGitHubStats = async () => {
-      try {
-        const userResponse = await fetch("https://api.github.com/users/JayMiller08");
-        const userData = await userResponse.json();
-
-        const reposResponse = await fetch("https://api.github.com/users/JayMiller08/repos?per_page=100");
-        const reposData = await reposResponse.json();
-
-        const totalStars = reposData.reduce((acc: number, repo: GitHubRepo) => acc + repo.stargazers_count, 0);
-
-        const languageCounts: Record<string, number> = {};
-        reposData.forEach((repo: GitHubRepo) => {
-          if (repo.language) {
-            languageCounts[repo.language] = (languageCounts[repo.language] || 0) + 1;
-          }
-        });
-
-        const total = Object.values(languageCounts).reduce((a: number, b: number) => a + b, 0);
-        const topLanguages = Object.entries(languageCounts)
-          .map(([name, count]) => ({
-            name,
-            percentage: Math.round((count / total) * 100),
-          }))
-          .sort((a, b) => b.percentage - a.percentage)
-          .slice(0, 3);
-
-        setStats({
-          publicRepos: userData.public_repos,
-          followers: userData.followers,
-          following: userData.following,
-          totalStars,
-          memberSince: userData.created_at
-            ? new Date(userData.created_at).getFullYear()
-            : 2024,
-          topLanguages,
-        });
-      } catch (error) {
-        console.error("Error fetching GitHub stats:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    const timer = setTimeout(() => {
-      fetchGitHubStats();
-    }, 500);
-    return () => clearTimeout(timer);
-  }, []);
+  // Stars, followers and following are deliberately not surfaced: they are small
+  // numbers that read as achievements when displayed this prominently.
+  const githubItems = [
+    { icon: Github, value: String(stats.publicRepos), label: "Total repositories" },
+    { icon: Braces, value: stats.topLanguage, label: "Top language", variant: "text" as const },
+    { icon: CalendarDays, value: String(stats.memberSince), label: "On GitHub since" },
+  ];
 
   return (
     <section className="relative overflow-visible bg-white pt-2 pb-16">
@@ -158,62 +95,8 @@ export const Hero = () => {
                   </Button>
                 </div>
 
-                {/* GitHub Stats (Bento Grid) */}
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.8, delay: 0.3 }}
-                  className="grid grid-cols-2 gap-4 lg:grid-cols-4 items-center justify-center w-full"
-                >
-                  <div className="bg-white border border-neutral-200/60 rounded-2xl p-5 shadow-[0_4px_20px_-4px_rgba(0,0,0,0.05)] hover:shadow-[0_8px_30px_-4px_rgba(0,0,0,0.08)] transition-all duration-300">
-                    <div className="flex items-center gap-2 mb-2">
-                      <Github className="h-5 w-5 text-neutral-700" />
-                      <p className="text-3xl font-black text-neutral-900">{stats.publicRepos}</p>
-                    </div>
-                    <p className="text-sm text-neutral-500 font-medium">Total Repositories</p>
-                  </div>
-
-                  <div className="bg-white border border-neutral-200/60 rounded-2xl p-5 shadow-[0_4px_20px_-4px_rgba(0,0,0,0.05)] hover:shadow-[0_8px_30px_-4px_rgba(0,0,0,0.08)] transition-all duration-300">
-                    <div className="flex items-center gap-2 mb-2">
-                      <Star className="h-5 w-5 text-neutral-700" />
-                      <p className="text-3xl font-black text-neutral-900">{stats.totalStars}</p>
-                    </div>
-                    <p className="text-sm text-neutral-500 font-medium">Total Stars</p>
-                  </div>
-
-                  <div className="bg-white border border-neutral-200/60 rounded-2xl p-5 shadow-[0_4px_20px_-4px_rgba(0,0,0,0.05)] hover:shadow-[0_8px_30px_-4px_rgba(0,0,0,0.08)] transition-all duration-300">
-                    <div className="flex items-center gap-2 mb-2">
-                      <TrendingUp className="h-5 w-5 text-neutral-700" />
-                      <p className="text-3xl font-black text-neutral-900">{stats.followers}</p>
-                    </div>
-                    <p className="text-sm text-neutral-500 font-medium">Followers</p>
-                  </div>
-
-                  <div className="bg-white border border-neutral-200/60 rounded-2xl p-5 shadow-[0_4px_20px_-4px_rgba(0,0,0,0.05)] hover:shadow-[0_8px_30px_-4px_rgba(0,0,0,0.08)] transition-all duration-300">
-                    <div className="flex items-center gap-2 mb-2">
-                      <UserPlus className="h-5 w-5 text-neutral-700" />
-                      <p className="text-3xl font-black text-neutral-900">{stats.following}</p>
-                    </div>
-                    <p className="text-sm text-neutral-500 font-medium">Following</p>
-                  </div>
-
-                  <div className="bg-white border border-neutral-200/60 rounded-2xl p-5 shadow-[0_4px_20px_-4px_rgba(0,0,0,0.05)] hover:shadow-[0_8px_30px_-4px_rgba(0,0,0,0.08)] transition-all duration-300">
-                    <div className="flex items-center gap-2 mb-2">
-                      <CalendarDays className="h-5 w-5 text-neutral-700" />
-                      <p className="text-3xl font-black text-neutral-900">{stats.memberSince}</p>
-                    </div>
-                    <p className="text-sm text-neutral-500 font-medium">On GitHub since</p>
-                  </div>
-
-                  <div className="bg-white border border-neutral-200/60 rounded-2xl p-5 shadow-[0_4px_20px_-4px_rgba(0,0,0,0.05)] hover:shadow-[0_8px_30px_-4px_rgba(0,0,0,0.08)] transition-all duration-300">
-                    <div className="mb-2">
-                      <p className="text-lg md:text-xl font-black text-neutral-900 tracking-tight pt-1">
-                        {stats.topLanguages[0]?.name || "TypeScript"}
-                      </p>
-                    </div>
-                    <p className="text-sm text-neutral-500 font-medium">Top language</p>
-                  </div>
-                </motion.div>
+                {/* GitHub activity — same component and treatment as the reach row */}
+                <StatRow items={githubItems} ariaLabel="GitHub activity" className="w-full" />
               </motion.div>
             </div>
 

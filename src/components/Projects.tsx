@@ -17,6 +17,14 @@ export const Projects = () => {
         "Offline-capable PWA with subscriptions and plan gating",
       ],
     },
+    {
+      // No repository, stack or feature list here on purpose: my involvement is
+      // organisational, and listing any of those would imply I wrote the code.
+      title: "AmanziGuard — Iqembulamanzi NPC",
+      description:
+        "A web-based system that lets community members report sewer incidents and infrastructure damage directly to their local municipality. The municipality dispatches repair crews from the report, and any resident can track the progress of a repair using the incident number issued when it was logged.",
+      role: "Deputy Chairperson, Iqembulamanzi NPC (August 2025 – present). Associated with Tshwane University of Technology.",
+    },
   ];
 
   return (
@@ -24,13 +32,13 @@ export const Projects = () => {
       <div className="container mx-auto px-4">
         <div className="max-w-6xl mx-auto">
           <h2 className="text-4xl md:text-5xl font-black mb-4 text-center text-neutral-950 tracking-tight">
-            Featured Project
+            Projects
           </h2>
-          <p className="text-center text-neutral-500 mb-12 text-lg font-medium">
+          <p className="text-center text-neutral-600 mb-12 text-lg font-medium">
             Showcasing my latest work
           </p>
 
-          <div className="max-w-2xl mx-auto mb-12">
+          <div className="grid lg:grid-cols-2 gap-8 items-stretch mb-12">
             {featuredProjects.map((project, index) => (
               <ProjectCard key={project.title} {...project} index={index} />
             ))}
@@ -44,7 +52,9 @@ export const Projects = () => {
               className="inline-flex items-center text-neutral-900 hover:text-neutral-600 font-semibold text-base group transition-colors"
             >
               View all projects on GitHub
-              <span className="ml-2 group-hover:translate-x-1 transition-transform">→</span>
+              <span aria-hidden="true" className="ml-2 group-hover:translate-x-1 transition-transform">
+                →
+              </span>
             </a>
           </div>
         </div>
