@@ -18,4 +18,7 @@ export const REDLINE_WORKBOOK: Product = {
   description:
     "Paste your portfolio URL and read what the recruiter actually saw — graded the way a hiring manager does: first impression, proof, clarity, craft.",
   tag: "Interactive Workbook",
+  // Screenshot of the grader's own homepage, captured at 1600x900 so it fills
+  // the card's 16:9 frame without cropping. Retake it if the homepage changes.
+  image: "/images/redline_grader_preview.png",
 };
