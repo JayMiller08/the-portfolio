@@ -1,12 +1,18 @@
 import { useEffect, useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
-import { ArrowLeft, Download, Loader2, AlertCircle, Clock } from "lucide-react";
+import { ArrowLeft, Download, Loader2, AlertCircle, Clock, ExternalLink } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { verifyPayment } from "@/lib/store";
 
 type State =
   | { kind: "loading" }
-  | { kind: "paid"; title: string; downloadUrl: string }
+  | {
+      kind: "paid";
+      title: string;
+      url: string;
+      delivery: "download" | "access";
+      emailed: boolean;
+    }
   | { kind: "pending" }
   | { kind: "error"; message: string };
 
@@ -27,11 +33,14 @@ const CheckoutSuccess = () => {
     verifyPayment(reference)
       .then((result) => {
         if (cancelled) return;
-        if (result.status === "paid" && result.download_url) {
+        const url = result.access_url ?? result.download_url;
+        if (result.status === "paid" && url) {
           setState({
             kind: "paid",
             title: result.title ?? "your purchase",
-            downloadUrl: result.download_url,
+            url,
+            delivery: result.access_url ? "access" : "download",
+            emailed: Boolean(result.emailed),
           });
         } else {
           setState({ kind: "pending" });
@@ -81,17 +90,40 @@ const CheckoutSuccess = () => {
               </div>
               <h1 className="text-2xl font-bold mb-2">Thank you!</h1>
               <p className="text-muted-foreground mb-8">
-                <strong className="text-foreground">{state.title}</strong> is ready. We've also
-                emailed a copy, so you can come back to it later.
+                <strong className="text-foreground">{state.title}</strong> is ready.{" "}
+                {/* Only claim an email went out when one actually did. */}
+                {state.emailed
+                  ? "We've also emailed you a copy, so you can come back to it later."
+                  : state.delivery === "access"
+                    ? "Bookmark the link below so you can come back to it."
+                    : "Download it now and keep the file somewhere safe."}
               </p>
               <Button size="lg" className="w-full" asChild>
-                <a href={state.downloadUrl} target="_blank" rel="noopener noreferrer">
-                  <Download className="mr-2 h-5 w-5" />
-                  Download now
+                <a href={state.url} target="_blank" rel="noopener noreferrer">
+                  {state.delivery === "access" ? (
+                    <>
+                      <ExternalLink aria-hidden="true" className="mr-2 h-5 w-5" />
+                      Open {state.title}
+                    </>
+                  ) : (
+                    <>
+                      <Download aria-hidden="true" className="mr-2 h-5 w-5" />
+                      Download now
+                    </>
+                  )}
                 </a>
               </Button>
+              {state.delivery === "download" && (
+                <p className="text-xs text-muted-foreground mt-4">
+                  This download link is valid for 24 hours.
+                </p>
+              )}
               <p className="text-xs text-muted-foreground mt-4">
-                This download link is valid for 24 hours.
+                Lost it later? Email{" "}
+                <a className="underline" href="mailto:realjaycoding@gmail.com">
+                  realjaycoding@gmail.com
+                </a>{" "}
+                with your reference ({reference}).
               </p>
             </>
           )}
@@ -101,8 +133,8 @@ const CheckoutSuccess = () => {
               <Clock className="h-10 w-10 mx-auto mb-6 text-muted-foreground" />
               <h1 className="text-2xl font-bold mb-2">Payment still processing</h1>
               <p className="text-muted-foreground mb-8">
-                Your payment hasn't cleared yet. Refresh in a moment — as soon as it does, we'll
-                email your download automatically.
+                Your payment hasn't cleared yet. Check again in a moment — your link appears here
+                as soon as it does.
               </p>
               <Button variant="outline" size="lg" onClick={() => window.location.reload()}>
                 Check again

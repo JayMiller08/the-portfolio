@@ -4,7 +4,7 @@ import { Button } from "./ui/button";
 import { Badge } from "./ui/badge";
 import { EmailDownloadDialog } from "./EmailDownloadDialog";
 import { BuyDialog } from "./BuyDialog";
-import { formatPrice, type StorePrice } from "@/lib/store";
+import { formatPrice, isLaunchOffer, isSoldOut, type StorePrice } from "@/lib/store";
 
 export interface Product {
     id: string;
@@ -34,6 +34,8 @@ const getTagStyles = (tag: string) => {
             return `${baseStyle} bg-gradient-to-r from-emerald-500/90 to-teal-500/90 text-white border-white/20 dark:border-white/10`;
         case "notion template":
             return `${baseStyle} bg-gradient-to-r from-orange-500/90 to-rose-500/90 text-white border-white/20 dark:border-white/10`;
+        case "interactive workbook":
+            return `${baseStyle} bg-gradient-to-r from-red-600/90 to-rose-600/90 text-white border-white/20 dark:border-white/10`;
         default:
             return `${baseStyle} bg-background/80 text-foreground border-border/50`;
     }
@@ -43,6 +45,8 @@ export const ProductCard = ({ product, price }: ProductCardProps) => {
     // Sell directly through Paystack once the product is priced and active;
     // until then the existing Gumroad link keeps working.
     const canBuyDirect = Boolean(product.slug && price && price.price_cents > 0);
+    const launch = isLaunchOffer(price);
+    const soldOut = isSoldOut(price);
 
     return (
         <Card className="group relative overflow-hidden hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 border-border/50 bg-card h-full flex flex-col hover:border-primary/50">
@@ -83,6 +87,7 @@ export const ProductCard = ({ product, price }: ProductCardProps) => {
                             title={product.title}
                             priceCents={price!.price_cents}
                             currency={price!.currency}
+                            delivery={price!.delivery}
                         >
                             <Button
                                 variant="default"
@@ -91,12 +96,24 @@ export const ProductCard = ({ product, price }: ProductCardProps) => {
                                 <span className="truncate">
                                     Buy for {formatPrice(price!.price_cents, price!.currency)}
                                 </span>
-                                <ShoppingBag className="h-4 w-4 flex-shrink-0" />
+                                <ShoppingBag aria-hidden="true" className="h-4 w-4 flex-shrink-0" />
                             </Button>
                         </BuyDialog>
                     )}
 
-                    {!canBuyDirect && product.gumroadUrl && (
+                    {launch && price && (
+                        <p className="text-xs font-semibold text-center text-foreground">
+                            Launch price &middot; {price.launch_remaining} of {price.launch_quantity} spots left
+                        </p>
+                    )}
+
+                    {soldOut && (
+                        <Button variant="outline" className="w-full" disabled>
+                            Launch spots sold out
+                        </Button>
+                    )}
+
+                    {!canBuyDirect && !soldOut && product.gumroadUrl && (
                         <Button
                             variant="default"
                             className="w-full gap-2 shadow-md hover:shadow-lg transition-all"

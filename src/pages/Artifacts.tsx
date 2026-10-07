@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { ProductCard, Product } from "@/components/ProductCard";
 import { useStorePrices } from "@/hooks/useStorePrices";
+import { REDLINE_WORKBOOK } from "@/data/redlineWorkbook";
 
 const ArtifactsHeader = () => {
   const { theme, toggleTheme } = useTheme();
@@ -39,6 +40,7 @@ const ArtifactsHeader = () => {
 };
 
 const digitalProducts: Product[] = [
+  REDLINE_WORKBOOK,
   {
     id: "ai-framework",
     title: "AI Productivity Framework",
@@ -109,13 +111,22 @@ const ArtifactsPage = () => {
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {digitalProducts.map((product) => (
-              <ProductCard
-                key={product.id}
-                product={product}
-                price={product.slug ? prices?.[product.slug] : undefined}
-              />
-            ))}
+            {digitalProducts
+              // A product with no store offer and no fallback link has no way
+              // to be bought or downloaded, so its card is not shown at all.
+              .filter(
+                (product) =>
+                  product.downloadUrl ||
+                  product.gumroadUrl ||
+                  (product.slug && prices?.[product.slug]),
+              )
+              .map((product) => (
+                <ProductCard
+                  key={product.id}
+                  product={product}
+                  price={product.slug ? prices?.[product.slug] : undefined}
+                />
+              ))}
           </div>
         </div>
 
