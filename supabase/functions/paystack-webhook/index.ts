@@ -41,15 +41,33 @@ function timingSafeEqual(a: string, b: string): boolean {
   return diff === 0;
 }
 
-async function sendDownloadEmail(
+async function sendDeliveryEmail(
   to: string,
   productTitle: string,
-  downloadUrl: string,
+  url: string,
+  kind: "download" | "access",
 ): Promise<boolean> {
   if (!RESEND_API_KEY || !FROM_EMAIL) {
     console.warn("Email not configured (RESEND_API_KEY / STORE_FROM_EMAIL missing); skipping send");
     return false;
   }
+
+  const body =
+    kind === "access"
+      ? `
+        <p>Thanks for your purchase!</p>
+        <p><strong>${productTitle}</strong> is ready:</p>
+        <p><a href="${url}">Open ${productTitle}</a></p>
+        <p>Bookmark that link. Reply to this email if you have any trouble.</p>
+        <p>— Jay Mthethwa</p>
+      `
+      : `
+        <p>Thanks for your purchase!</p>
+        <p><strong>${productTitle}</strong> is ready to download:</p>
+        <p><a href="${url}">Download your file</a></p>
+        <p>This link is valid for 7 days. Reply to this email if you have any trouble.</p>
+        <p>— Jay Mthethwa</p>
+      `;
 
   const res = await fetch("https://api.resend.com/emails", {
     method: "POST",
@@ -60,14 +78,8 @@ async function sendDownloadEmail(
     body: JSON.stringify({
       from: FROM_EMAIL,
       to,
-      subject: `Your download: ${productTitle}`,
-      html: `
-        <p>Thanks for your purchase!</p>
-        <p><strong>${productTitle}</strong> is ready to download:</p>
-        <p><a href="${downloadUrl}">Download your file</a></p>
-        <p>This link is valid for 7 days. Reply to this email if you have any trouble.</p>
-        <p>— Jay Mthethwa</p>
-      `,
+      subject: kind === "access" ? `Your access: ${productTitle}` : `Your download: ${productTitle}`,
+      html: body,
     }),
   });
 
@@ -122,7 +134,7 @@ Deno.serve(async (req) => {
 
   const { data: order, error: orderError } = await supabase
     .from("orders")
-    .select("id, email, status, amount_cents, product_id, products(title, storage_path)")
+    .select("id, email, status, amount_cents, product_id, products(title, storage_path, access_url)")
     .eq("reference", reference)
     .maybeSingle();
 
@@ -153,7 +165,11 @@ Deno.serve(async (req) => {
     return new Response("Amount mismatch", { status: 200 });
   }
 
-  const product = order.products as unknown as { title: string; storage_path: string } | null;
+  const product = order.products as unknown as {
+    title: string;
+    storage_path: string | null;
+    access_url: string | null;
+  } | null;
 
   await supabase
     .from("orders")
@@ -164,7 +180,13 @@ Deno.serve(async (req) => {
     })
     .eq("id", order.id);
 
-  if (product) {
+  let deliveryUrl: string | null = null;
+  let kind: "download" | "access" = "download";
+
+  if (product?.access_url) {
+    deliveryUrl = product.access_url;
+    kind = "access";
+  } else if (product?.storage_path) {
     const { data: signed, error: signError } = await supabase.storage
       .from("product-files")
       .createSignedUrl(product.storage_path, EMAIL_LINK_TTL_SECONDS);
@@ -174,13 +196,17 @@ Deno.serve(async (req) => {
       // so a failed email does not cost the customer their purchase.
       console.error("Could not sign download URL", signError);
     } else {
-      const sent = await sendDownloadEmail(order.email, product.title, signed.signedUrl);
-      if (sent) {
-        await supabase
-          .from("orders")
-          .update({ email_sent_at: new Date().toISOString() })
-          .eq("id", order.id);
-      }
+      deliveryUrl = signed.signedUrl;
+    }
+  }
+
+  if (product && deliveryUrl) {
+    const sent = await sendDeliveryEmail(order.email, product.title, deliveryUrl, kind);
+    if (sent) {
+      await supabase
+        .from("orders")
+        .update({ email_sent_at: new Date().toISOString() })
+        .eq("id", order.id);
     }
   }
 

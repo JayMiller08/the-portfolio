@@ -1,8 +1,9 @@
 // Starts a Paystack transaction for a single product.
 //
-// The browser sends only a product slug and an email address. The price is
-// looked up server-side from the products table and never accepted from the
-// client, so a tampered request cannot change what gets charged.
+// The browser sends only a product slug and an email address. The price comes
+// from store_offers() — the same query the storefront displays from — and is
+// never accepted from the client, so a tampered request cannot change what
+// gets charged, and the charged price always matches the one on screen.
 
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.89.0";
 import { corsHeaders, jsonResponse } from "../_shared/cors.ts";
@@ -51,24 +52,45 @@ Deno.serve(async (req) => {
 
   const supabase = createClient(SUPABASE_URL, SERVICE_ROLE_KEY);
 
-  const { data: product, error: productError } = await supabase
-    .from("products")
-    .select("id, title, price_cents, currency, active")
+  // store_offers() only returns active products, and resolves launch vs regular
+  // pricing from paid-order counts.
+  const { data: offer, error: offerError } = await supabase
+    .rpc("store_offers")
     .eq("slug", slug)
-    .maybeSingle();
+    .maybeSingle<{
+      product_id: string;
+      title: string;
+      currency: string;
+      price_cents: number | null;
+      price_tier: "launch" | "regular";
+      launch_price_cents: number | null;
+    }>();
 
-  if (productError) {
-    console.error("Product lookup failed", productError);
+  if (offerError) {
+    console.error("Offer lookup failed", offerError);
     return jsonResponse({ error: "Could not start checkout" }, 500, origin);
   }
-  if (!product || !product.active) {
+  if (!offer) {
     return jsonResponse({ error: "This product is not available" }, 404, origin);
   }
-  // Guards against selling a product whose real price was never configured.
-  if (product.price_cents <= 0) {
-    console.error(`Product ${slug} is active but has no price set`);
-    return jsonResponse({ error: "This product is not available" }, 409, origin);
+  // A zero price means none is set — for a launch product, that the launch
+  // spots are gone and no regular price has been chosen yet. Never charge it.
+  if (!offer.price_cents || offer.price_cents <= 0) {
+    const soldOut = offer.launch_price_cents !== null;
+    return jsonResponse(
+      { error: soldOut ? "The launch spots have sold out." : "This product is not available" },
+      409,
+      origin,
+    );
   }
+
+  const product = {
+    id: offer.product_id,
+    title: offer.title,
+    currency: offer.currency,
+    price_cents: offer.price_cents,
+    price_tier: offer.price_tier,
+  };
 
   const reference = `${slug}-${crypto.randomUUID()}`;
 
@@ -84,7 +106,7 @@ Deno.serve(async (req) => {
       currency: product.currency,
       reference,
       callback_url: `${SITE_URL}/checkout/success`,
-      metadata: { product_slug: slug, product_title: product.title },
+      metadata: { product_slug: slug, product_title: product.title, price_tier: product.price_tier },
     }),
   });
 
@@ -104,6 +126,7 @@ Deno.serve(async (req) => {
     amount_cents: product.price_cents,
     currency: product.currency,
     status: "pending",
+    price_tier: product.price_tier,
   });
 
   if (orderError) {

@@ -44,7 +44,7 @@ Deno.serve(async (req) => {
 
   const { data: order, error: orderError } = await supabase
     .from("orders")
-    .select("id, status, amount_cents, products(title, storage_path)")
+    .select("id, status, amount_cents, email_sent_at, products(title, storage_path, access_url)")
     .eq("reference", reference)
     .maybeSingle();
 
@@ -56,7 +56,11 @@ Deno.serve(async (req) => {
     return jsonResponse({ error: "Order not found" }, 404, origin);
   }
 
-  const product = order.products as unknown as { title: string; storage_path: string } | null;
+  const product = order.products as unknown as {
+    title: string;
+    storage_path: string | null;
+    access_url: string | null;
+  } | null;
 
   // If the webhook has not landed yet, ask Paystack directly so the customer is
   // not left staring at a pending page.
@@ -99,6 +103,24 @@ Deno.serve(async (req) => {
     return jsonResponse({ error: "Product is unavailable" }, 500, origin);
   }
 
+  // Lets the success page say whether a copy was actually emailed, rather than
+  // claiming it was when no email provider is configured.
+  const emailed = Boolean(order.email_sent_at);
+
+  // Web-app products are delivered as a link; there is no file to sign.
+  if (product.access_url) {
+    return jsonResponse(
+      { status: "paid", title: product.title, access_url: product.access_url, emailed },
+      200,
+      origin,
+    );
+  }
+
+  if (!product.storage_path) {
+    console.error(`Order ${reference} has a product with no delivery method`);
+    return jsonResponse({ error: "Could not prepare your download" }, 500, origin);
+  }
+
   const { data: signed, error: signError } = await supabase.storage
     .from("product-files")
     .createSignedUrl(product.storage_path, DOWNLOAD_TTL_SECONDS);
@@ -109,7 +131,7 @@ Deno.serve(async (req) => {
   }
 
   return jsonResponse(
-    { status: "paid", title: product.title, download_url: signed.signedUrl },
+    { status: "paid", title: product.title, download_url: signed.signedUrl, emailed },
     200,
     origin,
   );
