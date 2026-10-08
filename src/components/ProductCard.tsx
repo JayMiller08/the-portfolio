@@ -1,9 +1,11 @@
-import { ExternalLink, Eye, ShoppingBag } from "lucide-react";
+import { Bell, ExternalLink, Eye, ShoppingBag } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "./ui/card";
 import { Button } from "./ui/button";
 import { Badge } from "./ui/badge";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "./ui/dialog";
 import { EmailDownloadDialog } from "./EmailDownloadDialog";
 import { BuyDialog } from "./BuyDialog";
+import { WaitlistForm } from "./WaitlistForm";
 import { formatPrice, isLaunchOffer, isSoldOut, type StorePrice } from "@/lib/store";
 
 export interface Product {
@@ -17,12 +19,28 @@ export interface Product {
     image?: string;
     /** Matches a row in the products table; enables direct Paystack checkout. */
     slug?: string;
+    /**
+     * Pre-launch terms. When set and the store has no offer for this product,
+     * the card collects waitlist emails instead of taking payment. Used for
+     * wording only — the store is the authority on price once it goes on sale.
+     */
+    waitlist?: {
+        launchPriceCents: number;
+        launchQuantity: number;
+        currency: string;
+    };
 }
 
 interface ProductCardProps {
     product: Product;
     /** Live pricing, when this product is on sale through the store. */
     price?: StorePrice;
+    /**
+     * Whether store offers loaded successfully. A missing offer only means
+     * "not on sale yet" when the lookup worked; after a failed lookup the card
+     * must not fall into waitlist mode for a product that may well be on sale.
+     */
+    storeReady?: boolean;
 }
 
 const getTagStyles = (tag: string) => {
@@ -41,12 +59,13 @@ const getTagStyles = (tag: string) => {
     }
 };
 
-export const ProductCard = ({ product, price }: ProductCardProps) => {
+export const ProductCard = ({ product, price, storeReady = false }: ProductCardProps) => {
     // Sell directly through Paystack once the product is priced and active;
     // until then the existing Gumroad link keeps working.
     const canBuyDirect = Boolean(product.slug && price && price.price_cents > 0);
     const launch = isLaunchOffer(price);
     const soldOut = isSoldOut(price);
+    const onWaitlist = Boolean(product.waitlist && product.slug && storeReady && !price);
 
     return (
         <Card className="group relative overflow-hidden hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 border-border/50 bg-card h-full flex flex-col hover:border-primary/50">
@@ -105,6 +124,41 @@ export const ProductCard = ({ product, price }: ProductCardProps) => {
                         <p className="text-xs font-semibold text-center text-foreground">
                             Launch price &middot; {price.launch_remaining} of {price.launch_quantity} spots left
                         </p>
+                    )}
+
+                    {onWaitlist && product.waitlist && (
+                        <>
+                            <Dialog>
+                                <DialogTrigger asChild>
+                                    <Button
+                                        variant="default"
+                                        className="w-full gap-2 shadow-md hover:shadow-lg transition-all"
+                                    >
+                                        <span className="truncate">Join the waitlist</span>
+                                        <Bell aria-hidden="true" className="h-4 w-4 flex-shrink-0" />
+                                    </Button>
+                                </DialogTrigger>
+                                <DialogContent className="w-[calc(100%-2rem)] sm:max-w-md">
+                                    <DialogHeader>
+                                        <DialogTitle>{product.title} is coming soon</DialogTitle>
+                                        <DialogDescription>
+                                            Launch price{" "}
+                                            {formatPrice(product.waitlist.launchPriceCents, product.waitlist.currency)}{" "}
+                                            for the first {product.waitlist.launchQuantity} buyers. Join the waitlist
+                                            to hear the moment it opens.
+                                        </DialogDescription>
+                                    </DialogHeader>
+                                    <div className="pt-2">
+                                        <WaitlistForm productSlug={product.slug!} autoFocus />
+                                    </div>
+                                </DialogContent>
+                            </Dialog>
+                            <p className="text-xs font-semibold text-center text-foreground">
+                                Coming soon &middot;{" "}
+                                {formatPrice(product.waitlist.launchPriceCents, product.waitlist.currency)} for
+                                the first {product.waitlist.launchQuantity}
+                            </p>
+                        </>
                     )}
 
                     {soldOut && (

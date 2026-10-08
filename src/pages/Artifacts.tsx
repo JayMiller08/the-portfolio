@@ -87,7 +87,7 @@ const digitalProducts: Product[] = [
 ];
 
 const ArtifactsPage = () => {
-  const { data: prices } = useStorePrices();
+  const { data: prices, isSuccess: storeReady } = useStorePrices();
 
   return (
     <div className="min-h-screen bg-background text-foreground">
@@ -113,18 +113,21 @@ const ArtifactsPage = () => {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {digitalProducts
               // A product with no store offer and no fallback link has no way
-              // to be bought or downloaded, so its card is not shown at all.
+              // to be bought or downloaded, so its card is not shown at all —
+              // unless it has a pre-launch waitlist and the store lookup worked.
               .filter(
                 (product) =>
                   product.downloadUrl ||
                   product.gumroadUrl ||
-                  (product.slug && prices?.[product.slug]),
+                  (product.slug && prices?.[product.slug]) ||
+                  (product.waitlist && storeReady),
               )
               .map((product) => (
                 <ProductCard
                   key={product.id}
                   product={product}
                   price={product.slug ? prices?.[product.slug] : undefined}
+                  storeReady={storeReady}
                 />
               ))}
           </div>
