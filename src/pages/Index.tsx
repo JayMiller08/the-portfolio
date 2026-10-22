@@ -3,7 +3,7 @@ import { Hero } from "@/components/Hero";
 import { RouteChooser } from "@/components/RouteChooser";
 import { About } from "@/components/About";
 import { Contact } from "@/components/Contact";
-import { WorkbookLaunchPopup } from "@/components/WorkbookLaunchPopup";
+import { BlankFilePopup } from "@/components/BlankFilePopup";
 import { useDocumentMeta } from "@/hooks/useDocumentMeta";
 import { useHashScroll } from "@/hooks/useHashScroll";
 
@@ -28,7 +28,7 @@ const Index = () => {
       <RouteChooser />
       <About />
       <Contact />
-      <WorkbookLaunchPopup />
+      <BlankFilePopup />
     </Layout>
   );
 };
