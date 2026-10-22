@@ -1,6 +1,14 @@
 {
     "rewrites": [
         {
+            "source": "/blank-file",
+            "destination": "/blank-file.html"
+        },
+        {
+            "source": "/blank-file/",
+            "destination": "/blank-file.html"
+        },
+        {
             "source": "/(.*)",
             "destination": "/index.html"
         }

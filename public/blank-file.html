@@ -1,0 +1,1232 @@
+<!doctype html>
+<html lang="en">
+<head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-GSM1J50HSP"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-GSM1J50HSP');
+</script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Blank File · Java cohort for first-years | Real Jay Coding</title>
+<meta name="description" content="A 4-week Java cohort for first-years writing a Java exam or sup this season. Learn to write it yourself, without AI, with a crew that checks in every day. R149, full refund if it's not for you.">
+<meta name="author" content="Jay Mthethwa">
+<link rel="canonical" href="https://www.jaymthethwa.co.za/blank-file">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://www.jaymthethwa.co.za/blank-file">
+<meta property="og:title" content="Blank File · In the exam, it's you and a blank file">
+<meta property="og:description" content="4-week Java cohort for first-years. Live lessons, daily check-ins, timed tests and a mock exam. R149, starts Mon 9 Nov. Full refund after week 1 if it's not for you.">
+<meta property="og:image" content="https://www.jaymthethwa.co.za/images/blank-file-og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Blank File · In the exam, it's you and a blank file">
+<meta name="twitter:description" content="4-week Java cohort for first-years. R149, starts Mon 9 Nov. Full refund after week 1 if it's not for you.">
+<meta name="twitter:image" content="https://www.jaymthethwa.co.za/images/blank-file-og.png">
+<meta name="theme-color" content="#0A0C11">
+<link rel="icon" type="image/png" href="/icon.png">
+<link rel="apple-touch-icon" href="/icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=Geist:wght@400..700&family=JetBrains+Mono:wght@400;500;700&display=swap">
+<style>
+/* Layout: one centred column (max 1120px). Hero splits copy | live IDE; every section opens with a mono "// comment" eyebrow.
+   Single dark look by choice: the brand is a dark IDE. Syntax colours double as the accent system. */
+:root {
+  color-scheme: dark;
+  --bg: #0A0C11;
+  --bg-raised: #10131A;
+  --ide-bg: rgba(13, 16, 23, .86);
+  --console-bg: rgba(7, 9, 13, .7);
+  --header-bg: rgba(10, 12, 17, .74);
+  --header-solid: #0A0C11;
+  --glass: rgba(236, 240, 255, .035);
+  --glass-hi: rgba(236, 240, 255, .07);
+  --glass-strong: rgba(16, 19, 27, .78);
+  --line: rgba(226, 232, 255, .09);
+  --line-strong: rgba(226, 232, 255, .16);
+  --fg: #E9EBF2;
+  --fg-soft: #CDD1DC;
+  --muted: #9BA1B0;
+  --faint: #666C7B;
+  --emerald: #3DDC97;
+  --emerald-hi: #5BE6A9;
+  --emerald-ink: #04261A;
+  --emerald-soft: rgba(61, 220, 151, .11);
+  --emerald-edge: rgba(61, 220, 151, .34);
+  --violet: #B794F6;
+  --violet-soft: rgba(183, 148, 246, .11);
+  --violet-edge: rgba(183, 148, 246, .28);
+  --amber: #F2C178;
+  --cyan: #7FD4E8;
+  --danger: #F2777A;
+  --danger-soft: rgba(242, 119, 122, .12);
+  --shadow: rgba(0, 0, 0, .55);
+
+  --font-display: "Bricolage Grotesque", "Segoe UI", system-ui, sans-serif;
+  --font-body: "Geist", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --font-code: "JetBrains Mono", ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+
+  --r-sm: 8px;
+  --r-md: 14px;
+  --r-lg: 20px;
+}
+
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--font-body);
+  font-size: 16px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0 0 auto;
+  height: env(safe-area-inset-top, 0px);
+  z-index: 40;
+  background: var(--header-solid);
+}
+code, pre, kbd { font-family: var(--font-code); }
+a { color: inherit; }
+
+.ambient {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(640px 420px at 8% 4%, rgba(61, 220, 151, .10), transparent 70%),
+    radial-gradient(720px 520px at 96% 22%, rgba(183, 148, 246, .11), transparent 70%),
+    radial-gradient(900px 600px at 50% 112%, rgba(61, 220, 151, .05), transparent 70%);
+}
+.ambient::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(rgba(226, 232, 255, .07) 1px, transparent 1px);
+  background-size: 26px 26px;
+  -webkit-mask-image: linear-gradient(180deg, #000 0%, transparent 55%);
+  mask-image: linear-gradient(180deg, #000 0%, transparent 55%);
+}
+
+.site-header, main, footer { position: relative; z-index: 1; }
+
+.wrap {
+  width: 100%;
+  max-width: 1120px;
+  margin-inline: auto;
+  padding-left: max(clamp(16px, 4vw, 32px), env(safe-area-inset-left, 0px));
+  padding-right: max(clamp(16px, 4vw, 32px), env(safe-area-inset-right, 0px));
+}
+
+/* ---------- Header ---------- */
+.site-header {
+  position: sticky;
+  top: env(safe-area-inset-top, 0px);
+  z-index: 30;
+  background: var(--header-bg);
+  -webkit-backdrop-filter: blur(14px) saturate(140%);
+  backdrop-filter: blur(14px) saturate(140%);
+  border-bottom: 1px solid var(--line);
+}
+.site-header .wrap {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding-block: 11px;
+}
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-code);
+  font-size: 14px;
+  font-weight: 500;
+  text-decoration: none;
+  color: var(--fg);
+  white-space: nowrap;
+}
+.brand .prompt { color: var(--emerald); }
+.header-right { display: flex; align-items: center; gap: 18px; }
+.header-meta { font-family: var(--font-code); font-size: 12.5px; color: var(--muted); white-space: nowrap; }
+@media (max-width: 680px) { .header-meta { display: none; } }
+
+/* ---------- Buttons ---------- */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  font-family: var(--font-body);
+  font-weight: 650;
+  text-decoration: none;
+  border-radius: 12px;
+  border: 0;
+  cursor: pointer;
+  transition: transform .15s ease, background-color .15s ease, box-shadow .15s ease;
+}
+.btn:focus-visible, .opt:focus-visible, summary:focus-visible, .link-btn:focus-visible {
+  outline: 2px solid var(--violet);
+  outline-offset: 3px;
+}
+.btn-primary {
+  background: var(--emerald);
+  color: var(--emerald-ink);
+  padding: 16px 22px;
+  font-size: 17px;
+  box-shadow: 0 0 0 1px var(--emerald-edge), 0 14px 34px -14px rgba(61, 220, 151, .65);
+}
+.btn-primary:hover { background: var(--emerald-hi); transform: translateY(-1px); }
+.btn-primary .btn-price {
+  font-family: var(--font-code);
+  font-weight: 700;
+  padding-left: 12px;
+  border-left: 1px solid rgba(4, 38, 26, .28);
+}
+.btn-sm { padding: 9px 14px; font-size: 14px; border-radius: 10px; }
+.btn-block { width: 100%; }
+
+/* ---------- Shared type ---------- */
+.eyebrow {
+  margin: 0 0 18px;
+  font-family: var(--font-code);
+  font-size: 13px;
+  color: var(--emerald);
+  letter-spacing: .01em;
+}
+.eyebrow .slashes { color: var(--faint); }
+h1, h2, h3 { text-wrap: balance; }
+h2 {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(1.95rem, 4.3vw, 3.15rem);
+  line-height: 1.04;
+  letter-spacing: -0.03em;
+  font-variation-settings: "opsz" 72;
+}
+.section {
+  padding-block: clamp(64px, 9vw, 116px);
+  border-top: 1px solid var(--line);
+}
+.section-head { max-width: 760px; margin-bottom: clamp(30px, 4vw, 52px); }
+.section-head p { margin: 16px 0 0; max-width: 60ch; font-size: 17px; color: var(--muted); }
+.inline-code {
+  font-family: var(--font-code);
+  font-size: .88em;
+  padding: 1px 6px;
+  border-radius: 5px;
+  background: var(--glass-hi);
+  color: var(--fg);
+}
+
+/* ---------- Hero ---------- */
+.hero { padding-block: clamp(40px, 7vw, 88px) clamp(64px, 8vw, 108px); }
+.hero-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.05fr) minmax(0, .95fr);
+  gap: clamp(36px, 5vw, 64px);
+  align-items: center;
+}
+@media (max-width: 920px) { .hero-grid { grid-template-columns: minmax(0, 1fr); } }
+h1 {
+  margin: 0 0 22px;
+  font-family: var(--font-display);
+  font-weight: 750;
+  font-size: clamp(2.6rem, 6.3vw, 4.8rem);
+  line-height: .98;
+  letter-spacing: -0.04em;
+  font-variation-settings: "opsz" 96;
+}
+h1 .bf {
+  font-family: var(--font-code);
+  font-weight: 500;
+  font-size: .8em;
+  letter-spacing: -0.05em;
+  color: var(--emerald);
+  background: var(--emerald-soft);
+  box-shadow: inset 0 0 0 1px var(--emerald-edge);
+  padding: 0 .16em;
+  border-radius: 8px;
+  white-space: nowrap;
+}
+.caret {
+  display: inline-block;
+  width: .07em;
+  height: .82em;
+  margin-left: .08em;
+  vertical-align: -.06em;
+  background: var(--emerald);
+  animation: blink 1.1s steps(1) infinite;
+}
+@keyframes blink { 50% { opacity: 0; } }
+.lede { margin: 0 0 30px; max-width: 54ch; font-size: clamp(17px, 1.6vw, 19px); color: var(--muted); }
+.lede strong { color: var(--fg); font-weight: 600; }
+
+.promises { list-style: none; margin: 22px 0 0; padding: 0; display: grid; gap: 10px; }
+.promises li { display: flex; gap: 10px; align-items: flex-start; font-size: 15px; color: var(--fg-soft); }
+.tick { flex: none; width: 18px; height: 18px; margin-top: 3px; color: var(--emerald); }
+
+.facts {
+  margin: 34px 0 0;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 1px;
+  background: var(--line);
+  border: 1px solid var(--line);
+  border-radius: var(--r-md);
+  overflow: hidden;
+}
+.facts > div { background: var(--bg-raised); padding: 13px 15px; min-width: 0; }
+.facts dt {
+  font-family: var(--font-code);
+  font-size: 11px;
+  letter-spacing: .09em;
+  text-transform: uppercase;
+  color: var(--faint);
+}
+.facts dd { margin: 3px 0 0; font-weight: 600; font-variant-numeric: tabular-nums; }
+.facts .sub { display: block; font-family: var(--font-code); font-size: 11.5px; font-weight: 500; color: var(--emerald); }
+@media (max-width: 560px) { .facts { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+
+/* ---------- IDE ---------- */
+.ide {
+  min-width: 0;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--r-lg);
+  background: var(--ide-bg);
+  -webkit-backdrop-filter: blur(18px);
+  backdrop-filter: blur(18px);
+  box-shadow: 0 44px 90px -36px var(--shadow), 0 0 0 1px var(--violet-soft);
+  overflow: hidden;
+}
+.ide-bar {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--line);
+  font-family: var(--font-code);
+  font-size: 12px;
+  color: var(--muted);
+}
+.dots { display: flex; gap: 6px; }
+.dots span { width: 10px; height: 10px; border-radius: 50%; background: var(--line-strong); }
+.file-tab {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 4px 10px;
+  border-radius: 6px;
+  background: var(--glass-hi);
+  color: var(--fg);
+}
+.file-tab i { width: 7px; height: 7px; border-radius: 50%; background: var(--amber); }
+.exam-mode { margin-left: auto; display: flex; align-items: center; gap: 7px; color: var(--emerald); white-space: nowrap; }
+.exam-mode i { width: 7px; height: 7px; border-radius: 50%; background: var(--emerald); box-shadow: 0 0 10px var(--emerald); }
+.ide-body {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  font-family: var(--font-code);
+  font-size: 13.5px;
+  line-height: 1.8;
+  min-height: calc(9 * 1.8em + 34px);
+}
+.gutter {
+  margin: 0;
+  padding: 17px 0 17px 14px;
+  min-width: 2.4em;
+  text-align: right;
+  white-space: pre;
+  color: var(--faint);
+  user-select: none;
+  font: inherit;
+}
+.code {
+  margin: 0;
+  padding: 17px 18px 17px 16px;
+  overflow-x: auto;
+  white-space: pre;
+  color: var(--fg);
+  font: inherit;
+}
+.t-kw { color: var(--violet); }
+.t-type { color: var(--cyan); }
+.t-str { color: var(--emerald); }
+.t-num { color: var(--amber); }
+.t-pun { color: var(--muted); }
+.ide-caret {
+  display: inline-block;
+  width: 2px;
+  height: 1.15em;
+  vertical-align: -.22em;
+  background: var(--emerald);
+  animation: blink 1.1s steps(1) infinite;
+}
+.console {
+  border-top: 1px solid var(--line);
+  background: var(--console-bg);
+  padding: 12px 16px;
+  min-height: 72px;
+  font-family: var(--font-code);
+  font-size: 12.5px;
+  line-height: 1.75;
+}
+.console .cmd { color: var(--muted); }
+.console .cmd b { color: var(--emerald); font-weight: 500; }
+.console .out { color: var(--fg); }
+.console .ok { color: var(--emerald); }
+.status {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 16px;
+  padding: 7px 14px;
+  border-top: 1px solid var(--line);
+  font-family: var(--font-code);
+  font-size: 11px;
+  color: var(--faint);
+}
+.status .ai-off { color: var(--emerald); }
+.ide-caption { margin: 14px 4px 0; font-size: 14.5px; color: var(--muted); }
+@media (max-width: 480px) {
+  .ide-body { font-size: 12px; }
+  .ide-bar .dots { display: none; }
+}
+
+/* ---------- Pains ---------- */
+.pains {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(26px, 3.5vw, 40px) clamp(28px, 5vw, 64px);
+}
+@media (max-width: 720px) { .pains { grid-template-columns: minmax(0, 1fr); } }
+.pain { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 14px; align-items: start; }
+.pain .x {
+  font-family: var(--font-code);
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--danger);
+  background: var(--danger-soft);
+  border-radius: 6px;
+  padding: 3px 7px;
+  margin-top: 2px;
+}
+.pain h3 { margin: 0 0 6px; font-size: 19px; line-height: 1.3; font-weight: 650; }
+.pain p { margin: 0; color: var(--muted); font-size: 15.5px; max-width: 46ch; }
+
+/* ---------- Outcomes ---------- */
+.run {
+  border: 1px solid var(--line-strong);
+  border-radius: var(--r-lg);
+  background: var(--glass);
+  overflow: hidden;
+}
+.run-head {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 6px 16px;
+  padding: 12px 20px;
+  border-bottom: 1px solid var(--line);
+  font-family: var(--font-code);
+  font-size: 12.5px;
+  color: var(--muted);
+}
+.run-head .ok { color: var(--emerald); font-weight: 700; letter-spacing: .04em; }
+.wins { list-style: none; margin: 0; padding: 0; }
+.wins li {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 16px;
+  padding: 18px 20px;
+  border-bottom: 1px solid var(--line);
+}
+.wins li:last-child { border-bottom: 0; }
+.wins .ok { font-family: var(--font-code); font-weight: 700; color: var(--emerald); padding-top: 1px; }
+.wins strong { display: block; font-size: 18px; font-weight: 650; line-height: 1.35; }
+.wins .desc { display: block; margin-top: 3px; color: var(--muted); font-size: 15.5px; max-width: 66ch; }
+
+/* ---------- Rhythm ---------- */
+.rhythm {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 1px;
+  background: var(--line);
+  border: 1px solid var(--line);
+  border-radius: var(--r-lg);
+  overflow: hidden;
+}
+.rhythm > div { background: var(--bg-raised); padding: 22px 20px 24px; min-width: 0; }
+.day {
+  font-family: var(--font-code);
+  font-size: 12px;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--emerald);
+}
+.rhythm h3 { margin: 10px 0 6px; font-size: 18px; font-weight: 650; }
+.rhythm p { margin: 0; color: var(--muted); font-size: 15px; }
+@media (max-width: 920px) { .rhythm { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 520px) { .rhythm { grid-template-columns: minmax(0, 1fr); } }
+
+/* ---------- Weeks ---------- */
+.weeks { border-top: 1px solid var(--line); }
+.week {
+  display: grid;
+  grid-template-columns: 170px minmax(0, 1fr) 250px;
+  gap: 26px;
+  padding: 28px 0;
+  border-bottom: 1px solid var(--line);
+  align-items: start;
+}
+.week-label { font-family: var(--font-code); font-size: 12.5px; color: var(--muted); font-variant-numeric: tabular-nums; }
+.week-label b { display: block; font-size: 15px; font-weight: 700; color: var(--fg); }
+.week h3 {
+  margin: 0 0 8px;
+  font-family: var(--font-display);
+  font-size: 25px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+}
+.week p { margin: 0; color: var(--muted); font-size: 15.5px; max-width: 58ch; }
+.test {
+  border: 1px solid var(--violet-edge);
+  background: var(--violet-soft);
+  border-radius: 12px;
+  padding: 12px 14px;
+  font-size: 14.5px;
+  color: var(--fg);
+}
+.test span {
+  display: block;
+  margin-bottom: 3px;
+  font-family: var(--font-code);
+  font-size: 11px;
+  letter-spacing: .09em;
+  text-transform: uppercase;
+  color: var(--violet);
+}
+@media (max-width: 880px) { .week { grid-template-columns: minmax(0, 1fr); gap: 10px; } .test { margin-top: 6px; } }
+
+/* ---------- Quiz ---------- */
+.quiz {
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, .9fr);
+  border: 1px solid var(--line-strong);
+  border-radius: var(--r-lg);
+  background: var(--glass);
+  overflow: hidden;
+}
+.quiz-code {
+  margin: 0;
+  padding: 26px 24px;
+  background: var(--ide-bg);
+  border-right: 1px solid var(--line);
+  overflow-x: auto;
+  font-family: var(--font-code);
+  font-size: 14.5px;
+  line-height: 1.85;
+  white-space: pre;
+  min-width: 0;
+}
+.quiz-code .tag {
+  display: block;
+  margin-bottom: 14px;
+  font-size: 11.5px;
+  color: var(--faint);
+  letter-spacing: .02em;
+}
+.quiz-side { padding: 24px; display: grid; gap: 10px; align-content: start; min-width: 0; }
+.quiz-q { margin: 0 0 6px; font-weight: 650; font-size: 17px; }
+.opt {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 12px 14px;
+  text-align: left;
+  font-family: var(--font-code);
+  font-size: 15px;
+  color: var(--fg);
+  background: var(--bg-raised);
+  border: 1px solid var(--line-strong);
+  border-radius: 10px;
+  cursor: pointer;
+  transition: border-color .15s ease, background-color .15s ease;
+}
+.opt .k {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 6px;
+  background: var(--glass-hi);
+  font-size: 12px;
+  color: var(--muted);
+}
+.opt:hover:not(:disabled) { border-color: var(--violet); }
+.opt:disabled { cursor: default; }
+.opt[data-state="correct"] { border-color: var(--emerald); background: var(--emerald-soft); }
+.opt[data-state="correct"] .k { background: var(--emerald); color: var(--emerald-ink); }
+.opt[data-state="wrong"] { border-color: var(--danger); background: var(--danger-soft); }
+.opt[data-state="wrong"] .k { background: var(--danger); color: var(--bg); }
+.feedback { margin: 6px 0 0; font-size: 15px; color: var(--muted); }
+.feedback .good { color: var(--emerald); }
+.feedback .bad { color: var(--danger); }
+.link-btn {
+  justify-self: start;
+  padding: 0;
+  border: 0;
+  background: none;
+  font: inherit;
+  font-family: var(--font-code);
+  font-size: 13px;
+  color: var(--violet);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  cursor: pointer;
+}
+@media (max-width: 820px) {
+  .quiz { grid-template-columns: minmax(0, 1fr); }
+  .quiz-code { border-right: 0; border-bottom: 1px solid var(--line); font-size: 13.5px; }
+}
+
+/* ---------- About ---------- */
+.about {
+  display: grid;
+  grid-template-columns: minmax(0, .75fr) minmax(0, 1.25fr);
+  gap: clamp(24px, 6vw, 80px);
+  align-items: start;
+}
+@media (max-width: 820px) { .about { grid-template-columns: minmax(0, 1fr); } }
+.about-body p { margin: 0 0 18px; max-width: 62ch; font-size: 17.5px; color: var(--fg-soft); }
+.handles {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 22px;
+  margin-top: 6px;
+  font-family: var(--font-code);
+  font-size: 13.5px;
+  color: var(--muted);
+}
+.handles b { color: var(--fg); font-weight: 500; }
+
+/* ---------- Pricing ---------- */
+.price-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(0, .85fr);
+  gap: 20px;
+  align-items: stretch;
+}
+@media (max-width: 880px) { .price-grid { grid-template-columns: minmax(0, 1fr); } }
+.price-card {
+  border: 1px solid var(--line-strong);
+  border-radius: var(--r-lg);
+  background: var(--glass-strong);
+  -webkit-backdrop-filter: blur(16px);
+  backdrop-filter: blur(16px);
+  padding: clamp(24px, 3.6vw, 38px);
+}
+.price { display: flex; flex-wrap: wrap; align-items: baseline; gap: 8px 14px; }
+.amount {
+  font-family: var(--font-display);
+  font-size: clamp(3.6rem, 8vw, 5.6rem);
+  font-weight: 800;
+  letter-spacing: -0.05em;
+  line-height: .95;
+  font-variant-numeric: tabular-nums;
+}
+.per { color: var(--muted); font-size: 16px; }
+.daily { margin: 10px 0 26px; font-family: var(--font-code); font-size: 14px; color: var(--emerald); }
+.includes { list-style: none; margin: 0 0 28px; padding: 0; display: grid; gap: 12px; }
+.includes li { display: flex; gap: 12px; align-items: flex-start; font-size: 16px; color: var(--fg-soft); }
+.seats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 18px;
+  margin: 18px 0 0;
+  font-family: var(--font-code);
+  font-size: 12.5px;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+}
+.seats .hot { color: var(--emerald); }
+
+.refund-card {
+  border: 1px solid var(--emerald-edge);
+  border-radius: var(--r-lg);
+  background: linear-gradient(180deg, var(--emerald-soft), transparent 75%), var(--bg-raised);
+  padding: clamp(24px, 3.4vw, 34px);
+  display: grid;
+  gap: 20px;
+  align-content: start;
+}
+.refund-card h3 {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: clamp(1.6rem, 3vw, 2rem);
+  font-weight: 700;
+  letter-spacing: -0.025em;
+  line-height: 1.1;
+}
+.refund-card > p { margin: -8px 0 0; color: var(--muted); font-size: 15.5px; }
+.promise { display: grid; gap: 4px; padding-top: 18px; border-top: 1px solid var(--line); }
+.promise h4 {
+  margin: 0;
+  font-family: var(--font-code);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: .09em;
+  text-transform: uppercase;
+  color: var(--emerald);
+}
+.promise p { margin: 0; font-size: 16px; color: var(--fg); }
+.fine { margin: 0; font-size: 13.5px; color: var(--faint); }
+
+.after-pay {
+  margin: 22px 0 0;
+  padding: 16px 18px;
+  border: 1px dashed var(--line-strong);
+  border-radius: var(--r-md);
+  font-size: 15px;
+  color: var(--muted);
+}
+.after-pay b { color: var(--fg); font-weight: 600; }
+
+/* ---------- FAQ ---------- */
+.faq-grid {
+  display: grid;
+  grid-template-columns: minmax(0, .75fr) minmax(0, 1.25fr);
+  gap: clamp(24px, 6vw, 80px);
+  align-items: start;
+}
+@media (max-width: 820px) { .faq-grid { grid-template-columns: minmax(0, 1fr); } }
+.faq { border-top: 1px solid var(--line); }
+.faq details { border-bottom: 1px solid var(--line); }
+.faq summary {
+  list-style: none;
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 16px;
+  padding: 20px 0;
+  cursor: pointer;
+  font-size: 17.5px;
+  font-weight: 600;
+}
+.faq summary::-webkit-details-marker { display: none; }
+.faq summary .pm { flex: none; font-family: var(--font-code); color: var(--emerald); transition: transform .2s ease; }
+.faq details[open] .pm { transform: rotate(45deg); }
+.faq details p { margin: -4px 0 22px; max-width: 62ch; color: var(--muted); font-size: 16px; }
+
+/* ---------- Final + footer ---------- */
+.final { text-align: center; }
+.final h2 { font-size: clamp(2.2rem, 5.4vw, 3.9rem); }
+.final p { margin: 18px auto 30px; max-width: 46ch; font-size: 18px; color: var(--muted); }
+.final .fine { margin-top: 16px; }
+footer { border-top: 1px solid var(--line); }
+footer .wrap {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 8px 24px;
+  padding-block: 28px 36px;
+  font-family: var(--font-code);
+  font-size: 12.5px;
+  color: var(--faint);
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .caret, .ide-caret { animation: none; }
+  .btn, .opt, .faq summary .pm { transition: none; }
+}
+
+[hidden] { display: none !important; }
+img { max-width: 100%; }
+.joined { position: relative; z-index: 1; background: var(--emerald-soft); border-bottom: 1px solid var(--emerald-edge); font-size: 15px; color: var(--fg-soft); }
+.joined .wrap { padding-block: 14px; }
+.joined strong { color: var(--emerald); }
+</style>
+</head>
+<body>
+
+
+<div class="ambient" aria-hidden="true"></div>
+
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="#top"><span class="prompt">&gt;</span> realjaycoding</a>
+    <div class="header-right">
+      <span class="header-meta">Founding cohort · starts Mon 9 Nov</span>
+      <a class="btn btn-primary btn-sm" href="#pricing" data-pay>Join · R149</a>
+    </div>
+  </div>
+</header>
+
+<main id="top">
+
+  <div class="joined" id="joined" hidden role="status">
+    <div class="wrap"><strong>You're in.</strong> Paystack has emailed your receipt. Before Mon 9 Nov I'll email your Discord invite and the week 1 workbook. Nothing arrived? DM @realjaycoding.</div>
+  </div>
+
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="wrap hero-grid">
+      <div>
+        <p class="eyebrow"><span class="slashes">// </span>4-week Java cohort for first-years</p>
+        <h1>In the exam, it's you and a <span class="bf">blank file</span><span class="caret" aria-hidden="true"></span></h1>
+        <p class="lede"><strong>Blank File</strong> is a 4-week Java cohort for first-years writing a Java exam or a sup this season. You learn to write the code yourself, without AI, and a crew on Discord checks that you showed up every day.</p>
+        <div class="cta-row">
+          <a class="btn btn-primary" href="#pricing" data-pay>Join the founding cohort <span class="btn-price">R149</span></a>
+        </div>
+        <ul class="promises">
+          <li><svg class="tick" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M4 10.5l4 4 8-9" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>It only runs if 10 people join. If we don't get there, everyone is refunded in full, automatically.</li>
+          <li><svg class="tick" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M4 10.5l4 4 8-9" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>Do week 1. If it's not for you, you get your R149 back. No questions.</li>
+        </ul>
+        <dl class="facts">
+          <div><dt>Starts</dt><dd>Mon 9 Nov</dd></div>
+          <div><dt>Length</dt><dd>4 weeks</dd></div>
+          <div><dt>Spots</dt><dd>25 founding</dd></div>
+          <div><dt>Closes</dt><dd>Fri 6 Nov <span class="sub" data-days-left>Closes Fri 6 Nov</span></dd></div>
+        </dl>
+      </div>
+
+      <div>
+        <div class="ide" id="ide">
+          <div class="ide-bar">
+            <div class="dots" aria-hidden="true"><span></span><span></span><span></span></div>
+            <span class="file-tab"><i aria-hidden="true"></i>Main.java</span>
+            <span class="exam-mode"><i aria-hidden="true"></i>exam mode</span>
+          </div>
+          <p class="sr-only">A Java program that adds three marks, 48, 62 and 71, and prints their average using integer division. It prints Average: 60.</p>
+          <div class="ide-body" aria-hidden="true">
+            <pre class="gutter" id="gutter">1</pre>
+            <pre class="code" id="code"><span class="ide-caret"></span></pre>
+          </div>
+          <div class="console" aria-hidden="true">
+            <div class="cmd"><b>$</b> javac Main.java &amp;&amp; java Main</div>
+            <div class="out" id="out" hidden>Average: 60</div>
+            <div class="ok" id="out-ok" hidden>Process finished · exit code 0</div>
+          </div>
+          <div class="status" aria-hidden="true">
+            <span class="ai-off">AI assistant: off</span>
+            <span>Java</span>
+            <span>UTF-8</span>
+            <span>Spaces: 2</span>
+          </div>
+        </div>
+        <p class="ide-caption">181 ÷ 3 is 60.33. Java's <span class="inline-code">int</span> division drops the .33 without warning you. Week 1 makes sure that never costs you a mark.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Pains -->
+  <section class="section">
+    <div class="wrap">
+      <div class="section-head">
+        <p class="eyebrow"><span class="slashes">// </span>sound familiar?</p>
+        <h2>You can read Java. Writing it from nothing is a different skill.</h2>
+        <p>Watching tutorials and reading solutions trains you to recognise code. The exam asks you to produce it, on a timer, with nobody to copy from.</p>
+      </div>
+      <div class="pains">
+        <div class="pain">
+          <span class="x" aria-hidden="true">✗</span>
+          <div>
+            <h3>The tutorial made sense. The test didn't.</h3>
+            <p>You watched it and nodded along. Then the question gave you an empty class and a timer, and nothing came out.</p>
+          </div>
+        </div>
+        <div class="pain">
+          <span class="x" aria-hidden="true">✗</span>
+          <div>
+            <h3>AI got the practicals done. It isn't coming to the exam.</h3>
+            <p>There's an invigilator now, and no tab to switch to.</p>
+          </div>
+        </div>
+        <div class="pain">
+          <span class="x" aria-hidden="true">✗</span>
+          <div>
+            <h3>You can follow code. You can't start it.</h3>
+            <p>Reading someone else's solution feels like understanding. A blank file shows you whether it was.</p>
+          </div>
+        </div>
+        <div class="pain">
+          <span class="x" aria-hidden="true">✗</span>
+          <div>
+            <h3>Studying alone is easy to quit.</h3>
+            <p>Nobody notices when you skip a night. Then it's three nights, and then it's the exam.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Outcomes -->
+  <section class="section">
+    <div class="wrap">
+      <div class="section-head">
+        <p class="eyebrow"><span class="slashes">// </span>after 4 weeks</p>
+        <h2>What you walk into the exam with</h2>
+      </div>
+      <div class="run">
+        <div class="run-head"><span>$ java AfterFourWeeks</span><span class="ok">BUILD SUCCESSFUL</span></div>
+        <ul class="wins">
+          <li><span class="ok" aria-hidden="true">✓</span><div><strong>You write Java from a blank file.</strong><span class="desc">A full program, from <span class="inline-code">public class</span> to the last closing brace, without AI and without a template to copy.</span></div></li>
+          <li><span class="ok" aria-hidden="true">✓</span><div><strong>You trace code on paper and know what it prints.</strong><span class="desc">Handwritten "what is the output" questions stop being guesswork. You do them every week.</span></div></li>
+          <li><span class="ok" aria-hidden="true">✓</span><div><strong>You spot the bug before the compiler does.</strong><span class="desc">Off-by-one loops, missing returns, <span class="inline-code">=</span> where you meant <span class="inline-code">==</span>. You'll have fixed them all already.</span></div></li>
+          <li><span class="ok" aria-hidden="true">✓</span><div><strong>You've already sat the exam once.</strong><span class="desc">Week 4 ends with a full timed mock exam and a memo, so the real one isn't your first time.</span></div></li>
+          <li><span class="ok" aria-hidden="true">✓</span><div><strong>You've got a crew that notices when you go quiet.</strong><span class="desc">Up to 25 first-years doing the same work and posting it every day.</span></div></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- Weekly rhythm -->
+  <section class="section">
+    <div class="wrap">
+      <div class="section-head">
+        <p class="eyebrow"><span class="slashes">// </span>every week</p>
+        <h2>One topic a week. Something to do every day.</h2>
+        <p>Everything happens in a private Discord server. It's free and runs on your phone.</p>
+      </div>
+      <div class="rhythm">
+        <div><span class="day">Monday</span><h3>Live lesson</h3><p>60 minutes on Discord. Recorded and posted the same night if you can't make it.</p></div>
+        <div><span class="day">Every day</span><h3>Daily commit</h3><p>Post what you coded in #daily-commit. Your streak is visible to the crew, so a skipped day gets noticed.</p></div>
+        <div><span class="day">Wednesday</span><h3>Find the bug</h3><p>A broken program drops in the channel. First correct fix gets the shout-out.</p></div>
+        <div><span class="day">Friday</span><h3>Blank-file test</h3><p>Timed, no AI, marked against a memo so you see exactly where the marks went.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Curriculum -->
+  <section class="section">
+    <div class="wrap">
+      <div class="section-head">
+        <p class="eyebrow"><span class="slashes">// </span>the 4 weeks</p>
+        <h2>The topics first-year Java exams keep coming back to</h2>
+        <p>Each week has its own workbook: trace-the-output questions, find-the-bug tasks and write-it-from-scratch problems, all with memos.</p>
+      </div>
+      <div class="weeks">
+        <article class="week">
+          <div class="week-label"><b>Week 1</b>9 – 15 Nov</div>
+          <div><h3>Foundations</h3><p>Variables and types, Scanner input, operators, integer division and modulus, if/else and switch.</p></div>
+          <div class="test"><span>Friday test</span>Build a grade calculator from a blank file.</div>
+        </article>
+        <article class="week">
+          <div class="week-label"><b>Week 2</b>16 – 22 Nov</div>
+          <div><h3>Loops and methods</h3><p>for, while and do-while, nested loops, writing your own methods with parameters and return values, and tracing loops on paper.</p></div>
+          <div class="test"><span>Friday test</span>A pattern printer, plus trace-the-output questions.</div>
+        </article>
+        <article class="week">
+          <div class="week-label"><b>Week 3</b>23 – 29 Nov</div>
+          <div><h3>Arrays and Strings</h3><p>Declaring and filling arrays, totals, averages and searching, String methods, working with chars, and an intro to ArrayList.</p></div>
+          <div class="test"><span>Friday test</span>A marks analyser that reads, totals and ranks results.</div>
+        </article>
+        <article class="week">
+          <div class="week-label"><b>Week 4</b>30 Nov – 6 Dec</div>
+          <div><h3>Classes, objects and the mock exam</h3><p>Classes, constructors, getters and setters, and arrays of objects. Then a full mock exam under exam conditions.</p></div>
+          <div class="test"><span>Friday test</span>The full timed mock exam, with a memo.</div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- Workbook sample -->
+  <section class="section">
+    <div class="wrap">
+      <div class="section-head">
+        <p class="eyebrow"><span class="slashes">// </span>try the workbook</p>
+        <h2>One question from week 1</h2>
+        <p>Don't run it first. Read it, decide, then pick an answer.</p>
+      </div>
+      <div class="quiz">
+<pre class="quiz-code"><span class="tag">// Workbook · Week 1 · Trace the output</span><span class="t-kw">int</span> x <span class="t-pun">=</span> <span class="t-num">7</span><span class="t-pun">;</span>
+<span class="t-kw">int</span> y <span class="t-pun">=</span> <span class="t-num">2</span><span class="t-pun">;</span>
+<span class="t-type">System</span><span class="t-pun">.</span>out<span class="t-pun">.</span>println<span class="t-pun">(</span>x <span class="t-pun">/</span> y <span class="t-pun">+</span> <span class="t-str">" "</span> <span class="t-pun">+</span> x <span class="t-pun">%</span> y<span class="t-pun">);</span></pre>
+        <div class="quiz-side">
+          <p class="quiz-q">What does this print?</p>
+          <button class="opt" type="button" id="opt-a" data-correct="false"><span class="k">A</span>3.5 1</button>
+          <button class="opt" type="button" id="opt-b" data-correct="true"><span class="k">B</span>3 1</button>
+          <button class="opt" type="button" id="opt-c" data-correct="false"><span class="k">C</span>3 1.0</button>
+          <button class="opt" type="button" id="opt-d" data-correct="false"><span class="k">D</span>4 1</button>
+          <p class="feedback" id="quiz-feedback" aria-live="polite">Pick one. Most first-years get this wrong on their first try.</p>
+          <button class="link-btn" type="button" id="quiz-retry" hidden>Try again</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- About -->
+  <section class="section">
+    <div class="wrap about">
+      <div>
+        <p class="eyebrow"><span class="slashes">// </span>who's running this</p>
+        <h2>Hi, I'm Jay.</h2>
+      </div>
+      <div class="about-body">
+        <p>I'm a 3rd-year Computer Science student, and I make coding content as @realjaycoding. The message I get most in my DMs is someone asking for more Java tutorials.</p>
+        <p>Tutorials are the easy part. What gets people through a Java exam is writing code from scratch, every day, with someone checking that they did. That's what Blank File is.</p>
+        <p>I've had to do this myself. This semester I put a no-AI rule on my own study sessions, because I'd leaned on AI so much that writing code without it had become hard. The blank-file method in this cohort is the one I use for my own tests.</p>
+        <div class="handles"><span>TikTok <b>@realjaycoding</b></span><span>Instagram <b>@thereeljaymiller</b></span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Pricing -->
+  <section class="section" id="pricing">
+    <div class="wrap">
+      <div class="section-head">
+        <p class="eyebrow"><span class="slashes">// </span>founding cohort</p>
+        <h2>Everything for 4 weeks, paid once</h2>
+      </div>
+      <div class="price-grid">
+        <div class="price-card">
+          <div class="price"><span class="amount">R149</span><span class="per">once-off · 4 weeks</span></div>
+          <p class="daily">That's under R5.50 a day.</p>
+          <ul class="includes">
+            <li><svg class="tick" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M4 10.5l4 4 8-9" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>4 live lessons on Discord, all recorded</li>
+            <li><svg class="tick" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M4 10.5l4 4 8-9" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>The interactive workbook for every week, with memos</li>
+            <li><svg class="tick" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M4 10.5l4 4 8-9" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>4 timed blank-file tests and a full mock exam</li>
+            <li><svg class="tick" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M4 10.5l4 4 8-9" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>A private Discord with daily check-ins and streaks</li>
+            <li><svg class="tick" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M4 10.5l4 4 8-9" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>Your questions answered every weekday</li>
+            <li><svg class="tick" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M4 10.5l4 4 8-9" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>Keep the workbook and recordings after it ends</li>
+          </ul>
+          <a class="btn btn-primary btn-block" href="#pricing" data-pay>Join the founding cohort <span class="btn-price">R149</span></a>
+          <div class="seats">
+            <span>25 founding spots</span>
+            <span>Runs if 10 join</span>
+            <span>Closes Fri 6 Nov, 23:59</span>
+            <span class="hot" data-days-left>Closes Fri 6 Nov</span>
+          </div>
+        </div>
+
+        <div class="refund-card">
+          <h3>Two refund promises</h3>
+          <p>You're paying now for something that starts on 9 Nov. This is what protects you.</p>
+          <div class="promise">
+            <h4>If it doesn't run</h4>
+            <p>If fewer than 10 people join by Fri 6 Nov, the cohort is cancelled and I refund everyone in full. You don't have to ask.</p>
+          </div>
+          <div class="promise">
+            <h4>If it's not for you</h4>
+            <p>Do week 1. If it isn't working for you, message me before Sun 15 Nov at 23:59 and you get the full R149 back. No questions.</p>
+          </div>
+          <p class="fine">Refunds go through Paystack and I start them within 2 working days. Your bank may take a few extra days to show the money.</p>
+        </div>
+      </div>
+      <p class="after-pay"><b>After you pay:</b> Paystack emails your receipt. Before Mon 9 Nov, I email you the Discord invite and the week 1 workbook.</p>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="section">
+    <div class="wrap faq-grid">
+      <div>
+        <p class="eyebrow"><span class="slashes">// </span>questions</p>
+        <h2>Before you pay</h2>
+      </div>
+      <div class="faq">
+        <details>
+          <summary>Who is this for?<span class="pm" aria-hidden="true">+</span></summary>
+          <p>First-years writing a Java exam or a supplementary exam this season, who follow the lectures but freeze on a blank file. If you've never written a line of Java, the pace will be fast, but the daily commits will keep you moving.</p>
+        </details>
+        <details>
+          <summary>My university's Java module is different. Will this help?<span class="pm" aria-hidden="true">+</span></summary>
+          <p>The 4 weeks cover the core of first-year Java, from variables to classes and objects. If your module tests something extra, ask in Discord and I'll point you to the right practice.</p>
+        </details>
+        <details>
+          <summary>I'm writing exams right now. Do I have time?<span class="pm" aria-hidden="true">+</span></summary>
+          <p>A daily commit can be 20 minutes. Live lessons are recorded, so you can watch them when your timetable allows. The point is small, daily practice, not extra hours.</p>
+        </details>
+        <details>
+          <summary>Do I need Discord?<span class="pm" aria-hidden="true">+</span></summary>
+          <p>Yes. It's free and works on your phone. If you've never used it, your invite email comes with a short setup guide.</p>
+        </details>
+        <details>
+          <summary>Will you help with my assignments?<span class="pm" aria-hidden="true">+</span></summary>
+          <p>No. Blank File is practice only. I won't write or check graded work, because that can get you into academic trouble. Every workbook task is built for practice.</p>
+        </details>
+        <details>
+          <summary>What if I miss a live lesson?<span class="pm" aria-hidden="true">+</span></summary>
+          <p>Every lesson is recorded and posted in Discord the same night.</p>
+        </details>
+        <details>
+          <summary>Is there a Python version?<span class="pm" aria-hidden="true">+</span></summary>
+          <p>Not yet. This cohort is Java only.</p>
+        </details>
+        <details>
+          <summary>How do I pay, and how do refunds work?<span class="pm" aria-hidden="true">+</span></summary>
+          <p>You pay securely through Paystack. If the cohort doesn't reach 10 people, everyone is refunded automatically. If you do week 1 and it's not for you, message me before Sun 15 Nov at 23:59 for a full refund.</p>
+        </details>
+      </div>
+    </div>
+  </section>
+
+  <!-- Final CTA -->
+  <section class="section final">
+    <div class="wrap">
+      <p class="eyebrow"><span class="slashes">// </span>founding spots close Fri 6 Nov</p>
+      <h2>The exam is coming either way.</h2>
+      <p>Walk in having already written Java from a blank file 28 times.</p>
+      <a class="btn btn-primary" href="#pricing" data-pay>Join the founding cohort <span class="btn-price">R149</span></a>
+      <p class="fine">Full refund if it doesn't run. Full refund after week 1 if it's not for you.</p>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>Blank File is a Real Jay Coding cohort · jaymthethwa.co.za</span>
+    <span>Payments processed securely by Paystack</span>
+  </div>
+</footer>
+
+<script>
+/* ---- Edit these two values before going live ---- */
+const CONFIG = {
+  paystackUrl: "https://paystack.com/pay/REPLACE-WITH-YOUR-PAGE",
+  closesAt: "2026-11-06T23:59:00+02:00"
+};
+
+document.querySelectorAll("[data-pay]").forEach(function (a) { a.href = CONFIG.paystackUrl; });
+
+(function daysLeft() {
+  var ms = new Date(CONFIG.closesAt).getTime() - Date.now();
+  var text;
+  if (ms <= 0) text = "Founding spots closed";
+  else {
+    var d = Math.floor(ms / 86400000);
+    text = d >= 2 ? d + " days left" : d === 1 ? "1 day left" : "Closes tonight";
+  }
+  document.querySelectorAll("[data-days-left]").forEach(function (el) { el.textContent = text; });
+})();
+
+/* ---- Hero IDE: types a first-year program into a blank file ---- */
+(function ide() {
+  var SRC = 'public class Main {\n  public static void main(String[] args) {\n    int[] marks = {48, 62, 71};\n    int total = 0;\n    for (int m : marks) total += m;\n    int avg = total / marks.length;\n    System.out.println("Average: " + avg);\n  }\n}';
+  var KW = { "public": 1, "class": 1, "static": 1, "void": 1, "int": 1, "for": 1 };
+  var TYPES = { "Main": 1, "String": 1, "System": 1 };
+  var codeEl = document.getElementById("code");
+  var gutterEl = document.getElementById("gutter");
+  var outEl = document.getElementById("out");
+  var okEl = document.getElementById("out-ok");
+  if (!codeEl || !gutterEl) return;
+
+  var toks = [];
+  var re = /("(?:[^"\\]|\\.)*")|(\d+)|([A-Za-z_]\w*)|(\s+)|([^\sA-Za-z0-9_"])/g;
+  var m;
+  while ((m = re.exec(SRC))) {
+    if (m[1]) toks.push({ c: "str", s: m[1] });
+    else if (m[2]) toks.push({ c: "num", s: m[2] });
+    else if (m[3]) toks.push({ c: KW[m[3]] ? "kw" : TYPES[m[3]] ? "type" : "", s: m[3] });
+    else if (m[4]) toks.push({ c: "", s: m[4] });
+    else toks.push({ c: "pun", s: m[5] });
+  }
+  function esc(s) { return s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;"); }
+  function render(n) {
+    var out = "", left = n;
+    for (var i = 0; i < toks.length && left > 0; i++) {
+      var part = toks[i].s.slice(0, left);
+      left -= part.length;
+      out += toks[i].c ? '<span class="t-' + toks[i].c + '">' + esc(part) + "</span>" : esc(part);
+    }
+    codeEl.innerHTML = out + '<span class="ide-caret"></span>';
+    var lines = SRC.slice(0, n).split("\n").length;
+    var g = [];
+    for (var j = 1; j <= lines; j++) g.push(j);
+    gutterEl.textContent = g.join("\n");
+  }
+  function finish() {
+    render(SRC.length);
+    if (outEl) outEl.hidden = false;
+    if (okEl) okEl.hidden = false;
+  }
+
+  var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  if (reduce) { finish(); return; }
+
+  var started = false;
+  function start() {
+    if (started) return;
+    started = true;
+    var n = 0;
+    setTimeout(function step() {
+      n++;
+      render(n);
+      if (n >= SRC.length) { setTimeout(finish, 350); return; }
+      var ch = SRC.charAt(n - 1);
+      setTimeout(step, ch === "\n" ? 170 : 16 + Math.random() * 26);
+    }, 1100);
+  }
+  var ide = document.getElementById("ide");
+  if ("IntersectionObserver" in window && ide) {
+    var io = new IntersectionObserver(function (entries) {
+      if (entries.some(function (e) { return e.isIntersecting; })) { start(); io.disconnect(); }
+    }, { threshold: 0.35 });
+    io.observe(ide);
+  } else {
+    start();
+  }
+})();
+
+/* ---- Workbook sample question ---- */
+(function quiz() {
+  var opts = Array.prototype.slice.call(document.querySelectorAll(".opt"));
+  var fb = document.getElementById("quiz-feedback");
+  var retry = document.getElementById("quiz-retry");
+  var EXPLAIN = 'Both are <span class="inline-code">int</span>, so <span class="inline-code">7 / 2</span> is integer division and gives 3, not 3.5. <span class="inline-code">7 % 2</span> is the remainder, 1. Java then joins them as text: "3" + " " + "1".';
+  opts.forEach(function (b) {
+    b.addEventListener("click", function () {
+      var ok = b.getAttribute("data-correct") === "true";
+      opts.forEach(function (o) {
+        o.disabled = true;
+        if (o.getAttribute("data-correct") === "true") o.setAttribute("data-state", "correct");
+      });
+      if (!ok) b.setAttribute("data-state", "wrong");
+      fb.innerHTML = (ok
+        ? '<strong class="good">Correct.</strong> '
+        : '<strong class="bad">Not quite. It prints 3 1.</strong> ') + EXPLAIN;
+      retry.hidden = false;
+    });
+  });
+  retry.addEventListener("click", function () {
+    opts.forEach(function (o) { o.disabled = false; o.removeAttribute("data-state"); });
+    fb.textContent = "Pick one. Most first-years get this wrong on their first try.";
+    retry.hidden = true;
+    opts[0].focus();
+  });
+})();
+(function joined() {
+  if (/[?&](reference|trxref)=/.test(location.search)) {
+    var el = document.getElementById("joined");
+    if (el) { el.hidden = false; window.scrollTo(0, 0); }
+  }
+})();
+</script>
+
+</body>
+</html>
