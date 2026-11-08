@@ -4,7 +4,6 @@ import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { ProductCard, Product } from "@/components/ProductCard";
 import { useStorePrices } from "@/hooks/useStorePrices";
-import { REDLINE_WORKBOOK } from "@/data/redlineWorkbook";
 
 const ArtifactsHeader = () => {
   const { theme, toggleTheme } = useTheme();
@@ -40,7 +39,6 @@ const ArtifactsHeader = () => {
 };
 
 const digitalProducts: Product[] = [
-  REDLINE_WORKBOOK,
   {
     id: "ai-framework",
     title: "AI Productivity Framework",

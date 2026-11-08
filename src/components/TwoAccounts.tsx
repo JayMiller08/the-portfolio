@@ -12,8 +12,9 @@ export const TwoAccounts = () => {
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       transition={{ duration: 0.6 }}
+      className="h-full"
     >
-      <Card className="bg-white border border-neutral-200/60 rounded-2xl shadow-[0_4px_20px_-4px_rgba(0,0,0,0.05)]">
+      <Card className="h-full bg-white border border-neutral-200/60 rounded-2xl shadow-[0_4px_20px_-4px_rgba(0,0,0,0.05)]">
         <CardContent className="p-6 md:p-8 space-y-4 text-neutral-600 leading-relaxed max-w-3xl">
           <p className="text-neutral-900 font-semibold">
             I run two accounts, both mine, both active.

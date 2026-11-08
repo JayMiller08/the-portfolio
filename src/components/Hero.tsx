@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { Github, Code2, Users, ArrowRight, CalendarDays, Braces, Play } from "lucide-react";
+import { Github, Code2, Users, ArrowRight, CalendarDays, Braces, Play, Download } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Button } from "./ui/button";
 import { StatRow } from "./StatRow";
@@ -134,6 +134,18 @@ export const Hero = ({ variant = "landing" }: { variant?: HeroVariant }) => {
                       <a href="https://github.com/JayMiller08" target="_blank" rel="noopener noreferrer">
                         <Github aria-hidden="true" className="mr-2 h-5 w-5" />
                         GitHub
+                      </a>
+                    </Button>
+                  )}
+
+                  {variant === "creator" && (
+                    <Button variant="outline" size="lg" asChild>
+                      <a
+                        href="/Kwandumusa-Mthethwa-CV-Content-Creator.pdf"
+                        download="Kwandumusa-Mthethwa-CV-Content-Creator.pdf"
+                      >
+                        <Download aria-hidden="true" className="mr-2 h-5 w-5" />
+                        Download CV
                       </a>
                     </Button>
                   )}
