@@ -16,6 +16,12 @@ export default {
       screens: {
         lg: "1000px",
       },
+      // Loaded from Google Fonts in index.html. Overriding sans also changes the
+      // page default, because Tailwind's base styles apply font-sans to <html>.
+      fontFamily: {
+        sans: ['"Plus Jakarta Sans"', "ui-sans-serif", "system-ui", "sans-serif"],
+        mono: ['"JetBrains Mono"', "ui-monospace", "monospace"],
+      },
       colors: {
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
