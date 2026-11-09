@@ -1,0 +1,1559 @@
+<!DOCTYPE html>
+<html lang="en-ZA">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The First-Year CS Workbook</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  /* Layout: sticky section rail on the left, one ~700px reading column; each exercise is a bordered panel inside that column */
+  --bg:#f4f3f8;
+  --panel:#ffffff;
+  --field:#fbfbfe;
+  --line:#dcd9e8;
+  --ink:#17151f;
+  --muted:#5c586e;
+  --emerald:#047857;
+  --violet:#6d28d9;
+  --on-accent:#ffffff;
+  --good:#047857;
+  --warn:#9a5b06;
+  --bad:#b42318;
+  --glow-a:rgba(16,185,129,.10);
+  --glow-b:rgba(124,58,237,.10);
+  --font-display:"JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  --font-body:"Atkinson Hyperlegible", system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+  --radius:16px;
+  color-scheme:light;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0c0b12; --panel:rgba(255,255,255,.045); --field:rgba(255,255,255,.06); --line:rgba(255,255,255,.12);
+    --ink:#ecebf4; --muted:#a6a2b8; --emerald:#3ddc9f; --violet:#b9a2ff; --on-accent:#0c0b12;
+    --good:#3ddc9f; --warn:#f5b942; --bad:#ff7d73; --glow-a:rgba(16,185,129,.16); --glow-b:rgba(139,92,246,.18);
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0c0b12; --panel:rgba(255,255,255,.045); --field:rgba(255,255,255,.06); --line:rgba(255,255,255,.12);
+  --ink:#ecebf4; --muted:#a6a2b8; --emerald:#3ddc9f; --violet:#b9a2ff; --on-accent:#0c0b12;
+  --good:#3ddc9f; --warn:#f5b942; --bad:#ff7d73; --glow-a:rgba(16,185,129,.16); --glow-b:rgba(139,92,246,.18);
+  color-scheme:dark;
+}
+
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0; background:var(--bg); color:var(--ink);
+  font-family:var(--font-body); font-size:17px; line-height:1.6;
+}
+body::before{
+  content:""; position:fixed; inset:0; pointer-events:none; z-index:0;
+  background:
+    radial-gradient(60vmax 40vmax at 0% 0%, var(--glow-a), transparent 60%),
+    radial-gradient(60vmax 40vmax at 100% 100%, var(--glow-b), transparent 60%);
+}
+@media (prefers-reduced-motion: no-preference){ html{scroll-behavior:smooth} }
+
+h1,h2,h3{text-wrap:balance; margin:0}
+h1,h2{font-family:var(--font-display); font-weight:700; letter-spacing:-.02em; line-height:1.15}
+h1{font-size:clamp(30px,6.2vw,48px)}
+h2{font-size:clamp(23px,4vw,30px)}
+h3{font-size:18px; font-weight:700; line-height:1.35}
+p{margin:0}
+a{color:var(--emerald); text-underline-offset:3px}
+strong{font-weight:700}
+.mono{font-family:var(--font-display)}
+.muted{color:var(--muted)}
+:focus-visible{outline:2px solid var(--emerald); outline-offset:2px; border-radius:6px}
+
+/* ---------- header ---------- */
+.topbar{
+  position:sticky; top:0; z-index:20;
+  background:color-mix(in srgb, var(--bg) 80%, transparent);
+  -webkit-backdrop-filter:blur(14px); backdrop-filter:blur(14px);
+  border-bottom:1px solid var(--line);
+}
+.topbar-inner{
+  max-width:1120px; margin:0 auto; padding:10px 20px;
+  display:flex; align-items:center; gap:14px;
+}
+.brand{font-family:var(--font-display); font-size:13.5px; font-weight:500; white-space:nowrap}
+.brand b{color:var(--emerald); font-weight:700}
+.brand i{font-style:normal; color:var(--violet)}
+.top-progress{flex:1; display:flex; align-items:center; gap:10px; min-width:0}
+.bar{height:6px; flex:1; max-width:220px; border-radius:99px; background:var(--line); overflow:hidden}
+.bar > span{display:block; height:100%; width:0; background:linear-gradient(90deg,var(--emerald),var(--violet)); border-radius:99px; transition:width .3s}
+.top-pct{font-family:var(--font-display); font-size:12.5px; color:var(--muted); font-variant-numeric:tabular-nums; white-space:nowrap}
+.chips{display:none}
+.nowrap{white-space:nowrap}
+@media (max-width:520px){
+  .brand-sub,.hide-sm,.top-progress .bar{display:none}
+  .top-progress{justify-content:flex-end}
+  .topbar-inner{gap:10px; padding:10px 16px}
+}
+@media (max-width:959px){
+  .chips{
+    display:flex; gap:8px; overflow-x:auto; padding:0 20px 10px; scrollbar-width:none;
+    max-width:1120px; margin:0 auto;
+  }
+  .chips::-webkit-scrollbar{display:none}
+  .chips a{
+    flex:none; font-family:var(--font-display); font-size:12.5px; text-decoration:none; color:var(--muted);
+    border:1px solid var(--line); border-radius:99px; padding:5px 11px; white-space:nowrap; display:flex; gap:6px; align-items:center;
+  }
+  .chips a[aria-current="true"]{color:var(--ink); border-color:var(--emerald)}
+}
+
+/* ---------- buttons ---------- */
+.btn{
+  font:inherit; font-size:14.5px; font-weight:700; cursor:pointer;
+  border-radius:10px; padding:9px 14px; border:1px solid transparent;
+  background:var(--emerald); color:var(--on-accent); white-space:nowrap;
+}
+.btn:hover{filter:brightness(1.06)}
+.btn-ghost{background:transparent; color:var(--ink); border-color:var(--line)}
+.btn-ghost:hover{border-color:var(--emerald)}
+.btn-sm{font-size:13.5px; padding:7px 11px}
+.btn-danger[data-armed="true"]{border-color:var(--bad); color:var(--bad)}
+.icon-btn{
+  font:inherit; font-size:20px; line-height:1; width:38px; height:38px; border-radius:10px; cursor:pointer;
+  background:transparent; color:var(--muted); border:1px solid var(--line);
+}
+.icon-btn:hover{color:var(--bad); border-color:var(--bad)}
+
+/* ---------- layout ---------- */
+.layout{
+  position:relative; z-index:1;
+  max-width:1120px; margin:0 auto; padding:0 20px 80px;
+  display:grid; grid-template-columns:230px minmax(0,1fr); gap:56px;
+}
+.rail{position:sticky; top:72px; align-self:start; padding-top:40px; max-height:calc(100vh - 72px); overflow:auto}
+.rail ol{list-style:none; margin:0; padding:0; display:grid; gap:2px}
+.rail a{
+  display:grid; grid-template-columns:28px 1fr 12px; align-items:center; gap:8px;
+  padding:7px 10px; border-radius:10px; text-decoration:none; color:var(--muted); font-size:14.5px; line-height:1.3;
+}
+.rail a:hover{color:var(--ink); background:var(--panel)}
+.rail a[aria-current="true"]{color:var(--ink); background:var(--panel); box-shadow:inset 2px 0 0 var(--emerald)}
+.rail .n{font-family:var(--font-display); font-size:12px; color:var(--violet)}
+.dot{width:10px; height:10px; border-radius:50%; border:1.5px solid var(--line)}
+.dot[data-state="part"]{border-color:var(--emerald); background:linear-gradient(90deg,var(--emerald) 50%,transparent 50%)}
+.dot[data-state="done"]{border-color:var(--emerald); background:var(--emerald)}
+.rail-foot{margin-top:18px; padding:0 10px; display:grid; gap:8px}
+.rail-foot .btn{width:100%}
+main{min-width:0; max-width:720px}
+@media (max-width:959px){
+  .layout{grid-template-columns:minmax(0,1fr); gap:0}
+  .rail{display:none}
+  main{margin:0 auto; width:100%}
+}
+
+/* ---------- hero ---------- */
+.hero{padding:48px 0 28px; display:grid; gap:18px}
+.eyebrow{
+  font-family:var(--font-display); font-size:12.5px; font-weight:500; letter-spacing:.06em; text-transform:uppercase;
+  color:var(--emerald); display:flex; gap:10px; align-items:center; flex-wrap:wrap;
+}
+.eyebrow span{color:var(--violet)}
+.lede{font-size:19px; color:var(--muted); max-width:62ch}
+.tags{display:flex; flex-wrap:wrap; gap:8px}
+.tag{font-family:var(--font-display); font-size:12.5px; border:1px solid var(--line); border-radius:8px; padding:4px 9px; color:var(--muted); background:var(--panel)}
+.progress-card{
+  border:1px solid var(--line); border-radius:var(--radius); background:var(--panel); padding:16px 18px;
+  display:grid; gap:10px;
+}
+.progress-card .bar{max-width:none; height:8px}
+.progress-row{display:flex; justify-content:space-between; gap:12px; flex-wrap:wrap; font-size:14.5px}
+.save-status{font-family:var(--font-display); font-size:12.5px; color:var(--muted)}
+.save-status[data-state="bad"]{color:var(--bad)}
+.save-status[data-state="ok"]::before{content:"● "; color:var(--good)}
+.author{display:grid; grid-template-columns:auto 1fr; gap:14px; align-items:start; font-size:15.5px; color:var(--muted)}
+.avatar{
+  width:44px; height:44px; border-radius:12px; display:grid; place-items:center;
+  font-family:var(--font-display); font-weight:700; font-size:15px; color:var(--on-accent);
+  background:linear-gradient(135deg,var(--emerald),var(--violet));
+}
+
+/* ---------- sections ---------- */
+.sec{padding:44px 0 8px; display:grid; gap:22px; scroll-margin-top:76px; border-top:1px solid var(--line)}
+@media (max-width:959px){ .sec{scroll-margin-top:110px} }
+.sec-head{display:grid; gap:8px}
+.sec-count{font-family:var(--font-display); font-size:12.5px; color:var(--muted)}
+.prose{display:grid; gap:14px; max-width:65ch}
+.prose ul,.prose ol{margin:0; padding-left:22px; display:grid; gap:8px}
+.callout{
+  border-left:3px solid var(--violet); padding:12px 16px; border-radius:0 12px 12px 0;
+  background:color-mix(in srgb, var(--violet) 8%, transparent); display:grid; gap:4px; max-width:65ch;
+}
+.callout .who{font-family:var(--font-display); font-size:12px; letter-spacing:.06em; text-transform:uppercase; color:var(--violet)}
+
+/* glossary: term column + definition */
+.gloss{margin:0; display:grid; grid-template-columns:minmax(140px,190px) 1fr; border-top:1px solid var(--line)}
+.gloss dt,.gloss dd{margin:0; padding:12px 0; border-bottom:1px solid var(--line)}
+.gloss dt{font-family:var(--font-display); font-size:14px; font-weight:700; color:var(--emerald); padding-right:16px}
+.gloss dd{font-size:16px}
+.gloss dt small{display:block; font-weight:500; color:var(--muted); font-size:12px; margin-top:2px}
+@media (max-width:560px){
+  .gloss{grid-template-columns:1fr}
+  .gloss dt{border-bottom:0; padding-bottom:0}
+}
+
+/* subject families */
+.families{display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:1px; background:var(--line); border:1px solid var(--line); border-radius:var(--radius); overflow:hidden}
+.family{background:var(--bg); padding:16px 18px; display:grid; gap:8px; align-content:start}
+.family h3{font-family:var(--font-display); font-size:15px}
+.family p{font-size:15.5px}
+.family .how{font-size:15px; color:var(--muted)}
+.family .how b{color:var(--ink)}
+
+/* ---------- tasks / panels ---------- */
+.task{
+  border:1px solid var(--line); border-radius:var(--radius); background:var(--panel);
+  padding:20px; display:grid; gap:16px;
+}
+.task-head{display:grid; gap:6px}
+.task-head .label{display:flex; gap:10px; align-items:baseline; flex-wrap:wrap}
+.task-num{font-family:var(--font-display); font-size:12.5px; color:var(--violet); font-weight:700}
+.kind{font-family:var(--font-display); font-size:11.5px; letter-spacing:.06em; text-transform:uppercase; color:var(--muted); border:1px solid var(--line); border-radius:6px; padding:1px 6px}
+.task-head p{font-size:15.5px; color:var(--muted); max-width:62ch}
+.grid-2{display:grid; grid-template-columns:repeat(auto-fit,minmax(210px,1fr)); gap:14px}
+.fld{display:grid; gap:6px; align-content:start; min-width:0}
+.fld > label,.legend{font-size:14.5px; font-weight:700}
+.help{font-size:13.5px; color:var(--muted)}
+input[type="text"],input[type="number"],input[type="date"],select,textarea{
+  width:100%; font:inherit; font-size:16px; color:var(--ink);
+  background:var(--field); border:1px solid var(--line); border-radius:10px; padding:9px 11px; min-height:42px;
+}
+textarea{min-height:92px; resize:vertical; line-height:1.5}
+select option{background:var(--bg); color:var(--ink)}
+input:focus,select:focus,textarea:focus{outline:2px solid var(--emerald); outline-offset:0; border-color:transparent}
+input[readonly]{color:var(--muted)}
+fieldset{border:0; margin:0; padding:0; display:grid; gap:8px; min-width:0}
+legend{padding:0; margin-bottom:8px}
+.opt,.check{display:flex; gap:11px; align-items:flex-start; cursor:pointer; font-size:16px; line-height:1.45; padding:8px 10px; border-radius:10px; border:1px solid transparent}
+.opt:hover,.check:hover{border-color:var(--line)}
+.opt input,.check input{width:19px; height:19px; margin:2px 0 0; flex:none; accent-color:var(--emerald)}
+.todo .check:has(input:checked) span{color:var(--muted); text-decoration:line-through; text-decoration-color:color-mix(in srgb, var(--muted) 60%, transparent)}
+.checklist{display:grid; gap:2px}
+
+/* rating 1-5 */
+.rate-row{display:grid; grid-template-columns:1fr auto; gap:12px; align-items:center; padding:6px 0; border-bottom:1px solid var(--line)}
+.rate-row:last-child{border-bottom:0}
+.rate{display:flex; gap:6px}
+.rate button,.seg button{
+  font-family:var(--font-display); font-size:14px; cursor:pointer; color:var(--muted);
+  background:var(--field); border:1px solid var(--line); border-radius:9px; min-width:38px; height:38px; padding:0 10px;
+}
+.rate button[aria-pressed="true"],.seg button[aria-pressed="true"]{background:var(--emerald); border-color:var(--emerald); color:var(--on-accent)}
+.scale-hint{font-family:var(--font-display); font-size:12px; color:var(--muted)}
+@media (max-width:480px){
+  .rate-row{grid-template-columns:1fr}
+  .rate button{min-width:0; flex:1}
+}
+
+/* chips */
+.chip{
+  display:inline-flex; align-items:center; gap:6px; font-family:var(--font-display); font-size:12px; font-weight:500;
+  padding:3px 9px; border-radius:99px; white-space:nowrap;
+  color:var(--muted); background:color-mix(in srgb, var(--muted) 14%, transparent);
+}
+.chip.good{color:var(--good); background:color-mix(in srgb, var(--good) 15%, transparent)}
+.chip.warn{color:var(--warn); background:color-mix(in srgb, var(--warn) 16%, transparent)}
+.chip.bad{color:var(--bad); background:color-mix(in srgb, var(--bad) 15%, transparent)}
+.chip::before{content:""; width:6px; height:6px; border-radius:50%; background:currentColor}
+
+/* example banner */
+.example-note{
+  display:flex; gap:12px; align-items:center; justify-content:space-between; flex-wrap:wrap;
+  border:1px dashed var(--violet); border-radius:12px; padding:10px 14px; font-size:14.5px;
+  background:color-mix(in srgb, var(--violet) 6%, transparent);
+}
+.example-note[hidden]{display:none}
+
+/* module editor */
+.mod-list,.log-list{display:grid; gap:10px}
+.mod-row,.log-row{
+  position:relative; display:grid; grid-template-columns:repeat(6,minmax(0,1fr)); gap:10px; align-items:end;
+  border:1px solid var(--line); border-radius:12px; padding:12px; background:var(--field);
+}
+.mod-row .c-name{grid-column:span 3}
+.mod-row .c-format{grid-column:span 3}
+.mod-row .c-date{grid-column:span 2}
+.mod-row .c-del,.log-row .c-del{display:flex; justify-content:flex-end}
+.log-row .c-date,.log-row .c-concept{grid-column:span 2}
+.log-row .c-note{grid-column:span 5}
+.mod-row label,.log-row label{font-size:12.5px; font-weight:700; color:var(--muted)}
+@media (max-width:600px){
+  .mod-row,.log-row{grid-template-columns:1fr 1fr; padding-top:14px}
+  .mod-row .c-name,.mod-row .c-date,.log-row .c-concept,.log-row .c-note{grid-column:span 2}
+  .mod-row .c-format,.log-row .c-date{grid-column:span 1}
+  .mod-row .c-name{padding-right:46px}
+  .log-row .c-date{grid-column:span 2; padding-right:46px}
+  .mod-row .c-del,.log-row .c-del{position:absolute; top:10px; right:10px}
+}
+.row-actions{display:flex; gap:10px; flex-wrap:wrap; align-items:center}
+.empty{font-size:15px; color:var(--muted); padding:12px; border:1px dashed var(--line); border-radius:12px}
+
+/* tiles & tables */
+.tiles{display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:10px}
+.tile{border:1px solid var(--line); border-radius:12px; padding:12px 14px; display:grid; gap:2px; background:var(--field)}
+.tile .v{font-family:var(--font-display); font-size:30px; font-weight:700; line-height:1.1; font-variant-numeric:tabular-nums}
+.tile .v small{font-size:15px; color:var(--muted); font-weight:500; margin-left:3px}
+.tile .k{font-size:13.5px; color:var(--muted)}
+.tile.hot{border-color:var(--emerald)}
+.tile.hot .v{color:var(--emerald)}
+.table-wrap{overflow-x:auto; border:1px solid var(--line); border-radius:12px}
+table{width:100%; border-collapse:collapse; font-size:15px; font-variant-numeric:tabular-nums}
+th{font-family:var(--font-display); font-size:11.5px; font-weight:500; letter-spacing:.05em; text-transform:uppercase; color:var(--muted); text-align:left; padding:10px 12px; border-bottom:1px solid var(--line); white-space:nowrap}
+td{padding:10px 12px; border-bottom:1px solid var(--line)}
+tbody tr:last-child td{border-bottom:0}
+tfoot td{font-weight:700; border-top:1px solid var(--line); border-bottom:0}
+.num{text-align:right; white-space:nowrap}
+td.num.self{color:var(--emerald); font-weight:700}
+.verdict{display:grid; gap:6px; padding:14px 16px; border-radius:12px; border:1px solid var(--line); background:var(--field)}
+.verdict p{font-size:15.5px}
+.verdict-top{display:flex; gap:10px; align-items:center; flex-wrap:wrap}
+.big{font-family:var(--font-display); font-weight:700; font-size:clamp(26px,5vw,34px); line-height:1.15; font-variant-numeric:tabular-nums}
+
+/* week bar */
+.weekbar{display:flex; height:22px; border-radius:8px; overflow:hidden; background:var(--line)}
+.weekbar span{display:block; height:100%; min-width:0}
+.legend-list{display:flex; flex-wrap:wrap; gap:6px 14px; font-size:13.5px; color:var(--muted); list-style:none; margin:0; padding:0}
+.legend-list li{display:flex; align-items:center; gap:6px}
+.legend-list i{width:10px; height:10px; border-radius:3px; display:inline-block}
+.seg-sleep{background:color-mix(in srgb, var(--muted) 55%, transparent)}
+.seg-class{background:color-mix(in srgb, var(--violet) 75%, transparent)}
+.seg-travel{background:color-mix(in srgb, var(--muted) 38%, transparent)}
+.seg-daily{background:color-mix(in srgb, var(--muted) 26%, transparent)}
+.seg-work{background:color-mix(in srgb, var(--violet) 40%, transparent)}
+.seg-rest{background:color-mix(in srgb, var(--violet) 22%, transparent)}
+.seg-study{background:var(--emerald)}
+.seg-free{background:repeating-linear-gradient(135deg, color-mix(in srgb, var(--emerald) 35%, transparent) 0 4px, transparent 4px 8px)}
+.seg-over{background:var(--bad)}
+
+/* concept tracker */
+.concepts{display:grid}
+.concept{display:grid; grid-template-columns:1fr auto; gap:10px; align-items:center; padding:8px 0; border-bottom:1px solid var(--line)}
+.concept:last-child{border-bottom:0}
+.seg{display:flex; gap:4px}
+.seg button{font-size:12.5px; padding:0 9px; height:34px}
+@media (max-width:560px){ .concept{grid-template-columns:1fr} .seg button{flex:1} }
+
+/* exam tracker */
+.exam-row{border:1px solid var(--line); border-radius:12px; padding:12px; display:grid; gap:10px; background:var(--field)}
+.exam-top{display:flex; gap:8px 12px; align-items:center; flex-wrap:wrap; justify-content:space-between}
+.exam-top h4{margin:0; font-size:16px}
+.exam-meta{font-family:var(--font-display); font-size:12.5px; color:var(--muted)}
+.exam-fields{display:grid; grid-template-columns:110px 110px 1fr; gap:10px}
+.exam-fields label{font-size:12.5px; font-weight:700; color:var(--muted)}
+@media (max-width:520px){ .exam-fields{grid-template-columns:1fr 1fr} .exam-fields .c-weak{grid-column:span 2} }
+
+/* sorter */
+.sort-row{display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1.1fr) auto; gap:10px; align-items:center; padding:8px 0; border-bottom:1px solid var(--line)}
+.sort-row:last-child{border-bottom:0}
+.sort-row .nm{font-weight:700; font-size:15.5px; overflow-wrap:anywhere}
+.sort-row .nm small{display:block; font-family:var(--font-display); font-weight:500; font-size:12px; color:var(--muted)}
+@media (max-width:640px){ .sort-row{grid-template-columns:1fr} }
+
+/* email */
+.email-out{font-family:var(--font-display); font-size:13.5px; line-height:1.6; min-height:300px; color:var(--ink)}
+
+/* qualification table */
+.qual td:first-child{font-weight:700}
+
+/* cta */
+.cta{
+  border-radius:var(--radius); padding:22px; display:grid; gap:14px;
+  border:1px solid color-mix(in srgb, var(--emerald) 45%, var(--line));
+  background:linear-gradient(135deg, color-mix(in srgb, var(--emerald) 10%, transparent), color-mix(in srgb, var(--violet) 10%, transparent));
+}
+.cta ol{margin:0; padding-left:22px; display:grid; gap:10px}
+.cta-links{display:flex; flex-wrap:wrap; gap:10px}
+.cta-links a{text-decoration:none}
+footer.end{padding:40px 0 0; font-size:14px; color:var(--muted); display:grid; gap:6px; border-top:1px solid var(--line); margin-top:40px}
+
+/* dialog */
+dialog{
+  width:min(680px, calc(100vw - 32px)); border:1px solid var(--line); border-radius:var(--radius);
+  background:var(--bg); color:var(--ink); padding:20px;
+}
+dialog::backdrop{background:rgba(5,5,10,.6)}
+.dlg{display:grid; gap:12px}
+.dlg textarea{min-height:46vh; font-family:var(--font-display); font-size:13px}
+.dlg-actions{display:flex; gap:10px; justify-content:flex-end; flex-wrap:wrap; align-items:center}
+.copy-msg{font-size:13.5px; color:var(--muted); margin-right:auto}
+
+@media (prefers-reduced-motion: reduce){ *{transition:none !important} }
+@media print{
+  .topbar,.rail,.chips,.row-actions,.icon-btn,.example-note{display:none !important}
+  body::before{display:none}
+  .layout{display:block}
+}
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="topbar-inner">
+    <div class="brand"><b>realjaycoding</b><span class="brand-sub"> / <i>cs-workbook</i></span></div>
+    <div class="top-progress" aria-hidden="true">
+      <div class="bar"><span id="top-bar"></span></div>
+      <span class="top-pct" id="top-pct">0%</span>
+    </div>
+    <button class="btn btn-sm" type="button" id="export-top">Copy <span class="hide-sm">my </span>answers</button>
+  </div>
+  <nav class="chips" id="chips" aria-label="Sections"></nav>
+</header>
+
+<div class="layout">
+  <aside class="rail" aria-label="Sections">
+    <ol id="rail-list"></ol>
+    <div class="rail-foot">
+      <button class="btn btn-ghost btn-sm" type="button" id="export-rail">Copy my answers</button>
+    </div>
+  </aside>
+
+  <main id="main">
+    <!-- ================= HERO ================= -->
+    <div class="hero">
+      <p class="eyebrow">Real Jay Coding <span>·</span> Edition 1 <span>·</span> Nov 2026</p>
+      <h1>The <span class="nowrap">First-Year</span> CS Workbook</h1>
+      <p class="lede">A fill-it-in guide to your first year of Computer Science or IT at a South African university. It works for BSc, BCom and diploma programmes, mainstream or extended. Your answers save in this browser as you type.</p>
+      <div class="tags">
+        <span class="tag">11 sections</span>
+        <span class="tag">3 calculators</span>
+        <span class="tag">one section a day</span>
+      </div>
+      <div class="progress-card">
+        <div class="progress-row">
+          <strong id="prog-text">Nothing filled in yet</strong>
+          <span class="save-status" id="save-status">Saves on this device as you type</span>
+        </div>
+        <div class="bar"><span id="hero-bar"></span></div>
+        <p class="help">Nothing you type leaves your device. If you clear your browser data, your answers go with it, so use <strong>Copy my answers</strong> to keep a backup in your notes or email.</p>
+      </div>
+      <div class="author">
+        <div class="avatar" aria-hidden="true">JM</div>
+        <p>I'm Jay, a third-year Computer Science student. I make tech content as Real Jay Coding and run a small software studio, DAC Technologies. The same first-year questions keep landing in my DMs, so I put the answers in one place and made you do some work with them.</p>
+      </div>
+    </div>
+
+    <!-- ================= 00 START ================= -->
+    <section class="sec" id="start" data-num="00" data-title="Start here">
+      <div class="sec-head">
+        <p class="eyebrow"><span>00</span> start here</p>
+        <h2>Start here</h2>
+        <p class="sec-count" data-count></p>
+      </div>
+      <div class="prose">
+        <p>University changes the rules without announcing it. In high school, someone checked your homework, reminded you about deadlines and told you what was in the test. In first year, all of that information still exists. Nobody walks it over to you.</p>
+        <p>This workbook helps you find it and act on it before it costs you a module. Do one section at a time and fill in every box, even roughly. A rough answer you can fix later beats a blank you forget about.</p>
+      </div>
+
+      <div class="task">
+        <div class="task-head"><div class="label"><span class="task-num">0.1</span><h3>Where are you right now?</h3></div></div>
+        <fieldset>
+          <legend class="legend">Pick the one that fits best</legend>
+          <label class="opt"><input type="radio" name="where" id="f-where-soon" value="soon" data-f="where" data-label="Where I am"><span>Starting first year soon</span></label>
+          <label class="opt"><input type="radio" name="where" id="f-where-now" value="now" data-f="where" data-label="Where I am"><span>In first year right now</span></label>
+          <label class="opt"><input type="radio" name="where" id="f-where-repeat" value="repeat" data-f="where" data-label="Where I am"><span>Repeating first year, or redoing some modules</span></label>
+          <label class="opt"><input type="radio" name="where" id="f-where-deciding" value="deciding" data-f="where" data-label="Where I am"><span>Still deciding whether to study CS or IT</span></label>
+        </fieldset>
+      </div>
+
+      <div class="task">
+        <div class="task-head">
+          <div class="label"><span class="task-num">0.2</span><h3>Why are you doing this programme?</h3></div>
+          <p>Be honest. "My parents chose it", "I like games" and "I heard it pays well" are all real answers. You'll reread this in a bad week, so write what's true.</p>
+        </div>
+        <div class="fld">
+          <label for="f-why">My reason</label>
+          <textarea id="f-why" data-f="why" data-label="Why I'm doing this programme" placeholder="I'm doing this because…"></textarea>
+        </div>
+      </div>
+
+      <div class="task">
+        <div class="task-head">
+          <div class="label"><span class="task-num">0.3</span><h3>Rate yourself honestly</h3></div>
+          <p>1 means "not at all", 5 means "very confident". Nobody sees this but you.</p>
+        </div>
+        <div>
+          <div class="rate-row"><span id="lbl-rate_maths">Maths</span><div class="rate" data-rate="rate_maths" data-label="Maths confidence" role="group" aria-labelledby="lbl-rate_maths"></div></div>
+          <div class="rate-row"><span id="lbl-rate_code">Programming experience</span><div class="rate" data-rate="rate_code" data-label="Programming experience" role="group" aria-labelledby="lbl-rate_code"></div></div>
+          <div class="rate-row"><span id="lbl-rate_time">Managing my own time</span><div class="rate" data-rate="rate_time" data-label="Managing my own time" role="group" aria-labelledby="lbl-rate_time"></div></div>
+          <div class="rate-row"><span id="lbl-rate_help">Asking for help when I'm stuck</span><div class="rate" data-rate="rate_help" data-label="Asking for help" role="group" aria-labelledby="lbl-rate_help"></div></div>
+        </div>
+      </div>
+
+      <div class="callout">
+        <span class="who">From Jay</span>
+        <p>If you gave "asking for help" a 1 or a 2, do Section 07 before the coding sections. It will save you more marks.</p>
+      </div>
+    </section>
+
+    <!-- ================= 01 PROGRAMME ================= -->
+    <section class="sec" id="programme" data-num="01" data-title="Decode your programme">
+      <div class="sec-head">
+        <p class="eyebrow"><span>01</span> your programme</p>
+        <h2>Decode your programme</h2>
+        <p class="sec-count" data-count></p>
+      </div>
+      <div class="prose">
+        <p>Computer Science goes by different names depending on where you study: BSc Computer Science, BSc IT, BCom Informatics, Diploma in Computer Science, Diploma in IT. The building blocks underneath are mostly the same.</p>
+        <ul>
+          <li><strong>Every qualification has an NQF level.</strong> The National Qualifications Framework is how South Africa ranks qualifications. It decides what you can study next.</li>
+          <li><strong>Every module has a credit value, and one credit is 10 hours of work.</strong> Those are "notional hours": lectures, practicals, tutorials, assignments, self-study and exams all count. A 16-credit module expects about 160 hours from you.</li>
+          <li><strong>A full-time year is usually about 120 credits.</strong> That's roughly 1,200 hours, or 35 to 40 hours a week across the teaching and exam weeks. Your programme was designed like a full-time job.</li>
+          <li><strong>Extended programmes add a year of support.</strong> You get foundation modules and more time, and you finish with the same qualification.</li>
+          <li><strong>Some modules are locked behind others.</strong> These are prerequisites. Fail one and the next module waits, which can push your graduation back a semester or a year.</li>
+        </ul>
+      </div>
+
+      <div class="table-wrap">
+        <table class="qual">
+          <thead><tr><th>Qualification</th><th>NQF</th><th>Minimum time</th><th class="num">Credits</th></tr></thead>
+          <tbody>
+            <tr><td>Higher Certificate</td><td>5</td><td>1 year</td><td class="num">120</td></tr>
+            <tr><td>Diploma</td><td>6</td><td>3 years</td><td class="num">360</td></tr>
+            <tr><td>Bachelor's degree (BSc, BCom)</td><td>7</td><td>3 years</td><td class="num">360</td></tr>
+            <tr><td>Extended diploma or degree</td><td>same as above</td><td>+1 year</td><td class="num">same</td></tr>
+            <tr><td>Professional bachelor's (4-year)</td><td>8</td><td>4 years</td><td class="num">480</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="task">
+        <div class="task-head">
+          <div class="label"><span class="task-num">1.1</span><h3>Your programme on paper</h3></div>
+          <p>Find your faculty's yearbook, handbook or rules book. The name depends on the university. Search "[your university] [your faculty] yearbook" and you only need your programme's pages.</p>
+        </div>
+        <div class="grid-2">
+          <div class="fld"><label for="f-prog_name">Full name of my qualification</label><input type="text" id="f-prog_name" data-f="prog_name" data-label="Qualification" placeholder="e.g. Diploma in Computer Science (Extended)"></div>
+          <div class="fld"><label for="f-prog_uni">University and faculty</label><input type="text" id="f-prog_uni" data-f="prog_uni" data-label="University and faculty" placeholder="e.g. Faculty of ICT"></div>
+          <div class="fld"><label for="f-prog_nqf">NQF level</label>
+            <select id="f-prog_nqf" data-f="prog_nqf" data-label="NQF level">
+              <option value="">Choose…</option><option value="5">NQF 5</option><option value="6">NQF 6</option><option value="7">NQF 7</option><option value="8">NQF 8</option><option value="unsure">Not sure yet</option>
+            </select>
+          </div>
+          <div class="fld"><label for="f-prog_credits">Credits I need to graduate</label><input type="text" inputmode="numeric" id="f-prog_credits" data-f="prog_credits" data-label="Credits to graduate" placeholder="e.g. 360"></div>
+          <div class="fld"><label for="f-prog_years">Minimum years</label><input type="text" inputmode="numeric" id="f-prog_years" data-f="prog_years" data-label="Minimum years" placeholder="e.g. 4"></div>
+          <div class="fld"><label for="f-prog_rules">Where my yearbook lives</label><input type="text" id="f-prog_rules" data-f="prog_rules" data-label="Where my yearbook lives" placeholder="Link, or 'saved in Downloads'"></div>
+        </div>
+      </div>
+
+      <div class="task" id="modules-task">
+        <div class="task-head">
+          <div class="label"><span class="task-num">1.2</span><h3>This semester's modules</h3><span class="kind">feeds the calculators</span></div>
+          <p>Get the credits from your yearbook or study guides. Class hours means lectures plus practicals plus tutorials per week. Sections 03, 05 and 06 use this list, so fill it in once.</p>
+        </div>
+        <div class="example-note" id="example-note">
+          <span>These are example modules so you can see how the calculators work.</span>
+          <button class="btn btn-sm" type="button" id="clear-examples">Clear examples, add mine</button>
+        </div>
+        <div class="mod-list" id="mod-list"></div>
+        <div class="row-actions"><button class="btn btn-ghost btn-sm" type="button" id="add-module">+ Add a module</button></div>
+      </div>
+
+      <div class="task">
+        <div class="task-head">
+          <div class="label"><span class="task-num">1.3</span><h3>The hours your programme expects</h3><span class="kind">calculator</span></div>
+          <p>Credits × 10 hours, spread over the semester, minus the time you're already in class.</p>
+        </div>
+        <div class="fld" style="max-width:280px">
+          <label for="weeks">Weeks in my semester</label>
+          <input type="number" inputmode="numeric" min="1" max="30" id="weeks">
+          <span class="help">Count teaching weeks plus test and exam weeks. Most semesters land between 15 and 18.</span>
+        </div>
+        <div class="tiles" id="hour-tiles"></div>
+        <div class="table-wrap"><table id="hours-table"></table></div>
+        <div class="verdict"><p id="hours-verdict"></p></div>
+      </div>
+
+      <div class="callout">
+        <span class="who">From Jay</span>
+        <p>Do the calculator above before anything else in this workbook. The rest of it reads differently once you've seen that last number.</p>
+      </div>
+
+      <div class="task">
+        <div class="task-head">
+          <div class="label"><span class="task-num">1.4</span><h3>Prerequisites to protect</h3></div>
+          <p>Which of this semester's modules unlock modules next semester or next year? Those are the ones you can't afford to fail.</p>
+        </div>
+        <div class="fld">
+          <label for="f-prog_prereq">My prerequisite modules and what they unlock</label>
+          <textarea id="f-prog_prereq" data-f="prog_prereq" data-label="Prerequisites to protect" placeholder="e.g. Programming 1 unlocks Programming 2 and Data Structures"></textarea>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= 02 RULES ================= -->
+    <section class="sec" id="rules" data-num="02" data-title="The rules nobody explains">
+      <div class="sec-head">
+        <p class="eyebrow"><span>02</span> the rules</p>
+        <h2>The rules nobody explains</h2>
+        <p class="sec-count" data-count></p>
+      </div>
+      <div class="prose">
+        <p>Every university has written rules that decide whether you can write the exam, what happens when you fail, and when you can be excluded. Most students read them after something has gone wrong. Read them now, while they still feel irrelevant.</p>
+      </div>
+      <dl class="gloss">
+        <dt>Exam entry<small>DP, exam admission, minimum semester mark</small></dt>
+        <dd>A minimum mark (sometimes attendance or practicals too) that you need during the semester before you're allowed into the exam. Miss it and the exam is gone, no matter how well you would have written.</dd>
+        <dt>Semester mark<small>year mark, predicate, CA mark</small></dt>
+        <dd>The marks from your tests, practicals and assignments. It usually counts toward your final mark together with the exam.</dd>
+        <dt>Final mark</dt>
+        <dd>Usually a weighted mix, like 50% semester mark and 50% exam, or 40/60. Each module's study guide gives the split.</dd>
+        <dt>Sub-minimum</dt>
+        <dd>A minimum you need in the exam itself. Some modules fail you for missing it even if your final mark is above the pass mark.</dd>
+        <dt>Supplementary exam<small>"sup"</small></dt>
+        <dd>A second shot at the exam, usually offered when your final mark lands just below the pass mark. The range and the rules differ per university, so check yours.</dd>
+        <dt>Continuous assessment</dt>
+        <dd>Some modules have no final exam. Every test and practical counts, so there's no catching up at the end.</dd>
+        <dt>Academic exclusion</dt>
+        <dd>If you don't pass enough credits over time, the university can stop you from re-registering. The exact rule is in your yearbook.</dd>
+        <dt>Funding rules</dt>
+        <dd>NSFAS and most bursaries have their own academic progress rules on top of the university's. Failing modules can affect your funding, so know your funder's rule as well as the university's.</dd>
+        <dt>Plagiarism and AI</dt>
+        <dd>CS departments run code through similarity checkers, and many now have written AI policies. Submitting a friend's practical is the fastest way to a disciplinary hearing.</dd>
+      </dl>
+
+      <div class="task">
+        <div class="task-head">
+          <div class="label"><span class="task-num">2.1</span><h3>Find your rules</h3><span class="kind">checklist</span></div>
+          <p>Tick each one only once you've actually found it in writing. A friend telling you doesn't count.</p>
+        </div>
+        <div class="checklist todo">
+          <label class="check"><input type="checkbox" id="c-r1" data-c="r1"><span>I found the exam-entry requirement for each module</span></label>
+          <label class="check"><input type="checkbox" id="c-r2" data-c="r2"><span>I know the semester mark vs exam split for each module</span></label>
+          <label class="check"><input type="checkbox" id="c-r3" data-c="r3"><span>I know which modules have an exam sub-minimum</span></label>
+          <label class="check"><input type="checkbox" id="c-r4" data-c="r4"><span>I know how supplementary exams work at my university</span></label>
+          <label class="check"><input type="checkbox" id="c-r5" data-c="r5"><span>I found the academic exclusion rule for my programme</span></label>
+          <label class="check"><input type="checkbox" id="c-r6" data-c="r6"><span>I know my funder's academic progress rule (NSFAS, bursary, or whoever pays)</span></label>
+          <label class="check"><input type="checkbox" id="c-r7" data-c="r7"><span>I've read my department's rules on plagiarism and AI</span></label>
+          <label class="check"><input type="checkbox" id="c-r8" data-c="r8"><span>Every module's study guide is saved somewhere I can open offline</span></label>
+        </div>
+      </div>
+
+      <div class="task">
+        <div class="task-head">
+          <div class="label"><span class="task-num">2.2</span><h3>What do I need in the exam?</h3><span class="kind">calculator</span></div>
+          <p>Use the numbers from one module's study guide. Change them for each module you're worried about.</p>
+        </div>
+        <div class="grid-2">
+          <div class="fld"><label for="mk-sem">My semester mark (%)</label><input type="number" inputmode="decimal" min="0" max="100" id="mk-sem" data-m="sem"></div>
+          <div class="fld"><label for="mk-semW">Semester mark counts for (%)</label><input type="number" inputmode="decimal" min="0" max="100" id="mk-semW" data-m="semW"><span class="help">Exam counts for <strong id="mk-examw">60%</strong></span></div>
+          <div class="fld"><label for="mk-pass">Pass mark (%)</label><input type="number" inputmode="decimal" min="0" max="100" id="mk-pass" data-m="pass"></div>
+          <div class="fld"><label for="mk-sub">Exam sub-minimum (%)</label><input type="number" inputmode="decimal" min="0" max="100" id="mk-sub" data-m="sub"><span class="help">Use 0 if your module has none</span></div>
+          <div class="fld"><label for="mk-entry">Exam entry requirement (%)</label><input type="number" inputmode="decimal" min="0" max="100" id="mk-entry" data-m="entry"></div>
+        </div>
+        <div class="verdict" id="mark-out"></div>
+      </div>
+    </section>
+
+    <!-- ================= 03 SUBJECTS ================= -->
+    <section class="sec" id="subjects" data-num="03" data-title="What you'll actually study">
+      <div class="sec-head">
+        <p class="eyebrow"><span>03</span> the subjects</p>
+        <h2>What you'll actually study</h2>
+        <p class="sec-count" data-count></p>
+      </div>
+      <div class="prose">
+        <p>Module names change between universities, but first-year CS comes down to a handful of subject families. Each family needs a different way of studying, and using the wrong method is how hard-working students still fail.</p>
+      </div>
+      <div class="families">
+        <div class="family">
+          <h3>Programming</h3>
+          <p>Java, Python, C++ or C#, depending on where you study. It's a skill, like a language or a sport, and practicals build on each other week after week.</p>
+          <p class="how"><b>Study it by</b> typing every example yourself and redoing practicals from a blank file.</p>
+        </div>
+        <div class="family">
+          <h3>Mathematics</h3>
+          <p>Calculus, algebra, statistics and discrete maths (logic, sets, proofs). In many BSc programmes this is the module that quietly decides who continues.</p>
+          <p class="how"><b>Study it by</b> doing problems every day. Reading worked solutions feels like learning and mostly isn't.</p>
+        </div>
+        <div class="family">
+          <h3>Computer systems</h3>
+          <p>How the machine works under your code: binary and hex, memory, CPUs, operating systems, networks.</p>
+          <p class="how"><b>Study it by</b> drawing diagrams from memory, using flashcards for terms, and practising conversions until they're automatic.</p>
+        </div>
+        <div class="family">
+          <h3>Information systems and databases</h3>
+          <p>How organisations store and use data. Many programmes introduce SQL in first year.</p>
+          <p class="how"><b>Study it by</b> writing queries on real tables and designing small databases for things you know, like a spaza shop's stock or a taxi rank's routes.</p>
+        </div>
+        <div class="family">
+          <h3>Web and applications</h3>
+          <p>HTML, CSS, sometimes JavaScript or app basics. Usually the most fun module, which is why people lose marks on the boring requirements.</p>
+          <p class="how"><b>Study it by</b> building small pages, and reading the marking rubric before you start.</p>
+        </div>
+        <div class="family">
+          <h3>Communication and literacy</h3>
+          <p>Writing, referencing, presenting, sometimes computer literacy. These are the easiest credits in your year, and students drop them by not taking them seriously.</p>
+          <p class="how"><b>Study it by</b> following the rubric exactly and submitting early.</p>
+        </div>
+      </div>
+
+      <div class="task">
+        <div class="task-head">
+          <div class="label"><span class="task-num">3.1</span><h3>Sort your modules</h3></div>
+          <p>Put each module from Section 01 into its family, then rate how worried you are about it.</p>
+        </div>
+        <div id="sorter"></div>
+        <div class="verdict" id="sorter-out" hidden><p></p></div>
+      </div>
+
+      <div class="task">
+        <div class="task-head">
+          <div class="label"><span class="task-num">3.2</span><h3>The module that will hurt most</h3></div>
+          <p>Name the real reason. The maths, the lecturer's pace, a timetable clash, or the fact that you skipped the first two weeks are all valid.</p>
+        </div>
+        <div class="fld">
+          <label for="f-hurt">Which module, and why</label>
+          <textarea id="f-hurt" data-f="hurt" data-label="The module that will hurt most" placeholder="Mathematics 1, because…"></textarea>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= 04 CODING ================= -->
+    <section class="sec" id="coding" data-num="04" data-title="Learning to code properly">
+      <div class="sec-head">
+        <p class="eyebrow"><span>04</span> programming</p>
+        <h2>Learning to code properly</h2>
+        <p class="sec-count" data-count></p>
+      </div>
+      <div class="prose">
+        <p>Programming is where first-years split into two groups. One group writes code every week. The other watches lectures, copies the practical from a friend or an AI, and meets the code properly for the first time in the test. The second group feels fine right up until the first big test.</p>
+        <p>Three habits fix most of it:</p>
+        <ol>
+          <li><strong>The blank-file test.</strong> Close your notes, open an empty file and write this week's topic from scratch: a loop that sums an array, a class with a constructor, whatever it is. If you can't, you've just found what to practise.</li>
+          <li><strong>The 20-minute rule.</strong> Stuck for 20 minutes? Write down what you expected, what actually happened and what you've tried. Then ask a tutor, a classmate or an AI. Writing it down solves it surprisingly often.</li>
+          <li><strong>AI as a tutor, never the author.</strong> Ask it to explain an error or a concept. Don't paste the practical in and submit what comes out. You'll pass the practical and fail the test.</li>
+        </ol>
+        <p><strong>Know your exam format early.</strong> At some universities the programming exam is handwritten. At others it's on a lab computer with no internet. If yours is on paper, practise writing code on paper, because there's no autocomplete and nothing underlines your mistakes.</p>
+      </div>
+
+      <div class="task">
+        <div class="task-head">
+          <div class="label"><span class="task-num">4.1</span><h3>Concept tracker</h3><span class="kind">tracker</span></div>
+          <p>Be strict with "From a blank file". It means no notes, no AI and no copying from old code. Skip concepts your module doesn't cover yet.</p>
+        </div>
+        <div class="tiles" id="skill-tiles"></div>
+        <div class="concepts" id="concepts"></div>
+      </div>
+
+      <div class="task">
+        <div class="task-head">
+          <div class="label"><span class="task-num">4.2</span><h3>Blank-file test log</h3><span class="kind">log</span></div>
+          <p>Log every test you do. After a few weeks this log tells you exactly what to revise.</p>
+        </div>
+        <div class="log-list" id="log-list"></div>
+        <div class="row-actions"><button class="btn btn-ghost btn-sm" type="button" id="add-test">+ Log a test</button></div>
+      </div>
+
+      <div class="task">
+        <div class="task-head">
+          <div class="label"><span class="task-num">4.3</span><h3>My AI rules</h3><span class="kind">checklist</span></div>
+          <p>Tick the rules you'll actually follow. Leave the rest unticked rather than lying to yourself.</p>
+        </div>
+        <div class="checklist">
+          <label class="check"><input type="checkbox" id="c-ai1" data-c="ai1"><span>I write my own attempt before I ask AI anything</span></label>
+          <label class="check"><input type="checkbox" id="c-ai2" data-c="ai2"><span>I ask AI to explain, not to write the solution</span></label>
+          <label class="check"><input type="checkbox" id="c-ai3" data-c="ai3"><span>I can explain every line of code I submit</span></label>
+          <label class="check"><input type="checkbox" id="c-ai4" data-c="ai4"><span>I don't use AI at all during my practice blocks</span></label>
+          <label class="check"><input type="checkbox" id="c-ai5" data-c="ai5"><span>I check the module's AI policy before using it on assessed work</span></label>
+        </div>
+      </div>
+
+      <div class="callout">
+        <span class="who">From Jay</span>
+        <p>AI is the fastest way to finish a practical and the fastest way to fail the test after it. Use it to understand something, then close it and write the code yourself.</p>
+      </div>
+    </section>
+
+    <!-- ================= 05 WEEK ================= -->
+    <section class="sec" id="week" data-num="05" data-title="Your week">
+      <div class="sec-head">
+        <p class="eyebrow"><span>05</span> time</p>
+        <h2>Your week</h2>
+        <p class="sec-count" data-count></p>
+      </div>
+      <div class="prose">
+        <p>Section 01 gave you the self-study hours your modules expect. Now check whether your actual week can hold them. Plenty of first-years are commuting, working, looking after family or dealing with res and admin. That's real life, and it's exactly why the hours need a plan.</p>
+      </div>
+
+      <div class="task">
+        <div class="task-head">
+          <div class="label"><span class="task-num">5.1</span><h3>Weekly hours budget</h3><span class="kind">calculator</span></div>
+          <p>A week has 168 hours. Take out everything that isn't studying and see what's left.</p>
+        </div>
+        <div class="grid-2">
+          <div class="fld"><label for="b-sleep">Sleep per night (hours)</label><input type="number" inputmode="decimal" min="0" max="14" step="0.5" id="b-sleep" data-b="sleep"></div>
+          <div class="fld"><label for="b-classes">Classes per week (hours)</label><input type="text" id="b-classes" readonly><span class="help">From your module list in 1.2</span></div>
+          <div class="fld"><label for="b-travel">Travel per day (hours, both ways)</label><input type="number" inputmode="decimal" min="0" max="8" step="0.25" id="b-travel" data-b="travel"></div>
+          <div class="fld"><label for="b-days">Days I travel to campus</label><input type="number" inputmode="numeric" min="0" max="7" id="b-days" data-b="days"></div>
+          <div class="fld"><label for="b-daily">Meals, chores, getting ready per day (hours)</label><input type="number" inputmode="decimal" min="0" max="10" step="0.5" id="b-daily" data-b="daily"></div>
+          <div class="fld"><label for="b-work">Work and family duties per week (hours)</label><input type="number" inputmode="decimal" min="0" max="80" id="b-work" data-b="work"></div>
+          <div class="fld"><label for="b-rest">Rest, sport, faith, friends per week (hours)</label><input type="number" inputmode="decimal" min="0" max="80" id="b-rest" data-b="rest"><span class="help">Don't set this to zero. You'll take the hours anyway, just with guilt.</span></div>
+        </div>
+        <div class="weekbar" id="weekbar" role="img" aria-label="How your 168 weekly hours are split"></div>
+        <ul class="legend-list" id="week-legend"></ul>
+        <div class="verdict" id="budget-out"></div>
+      </div>
+
+      <div class="task">
+        <div class="task-head">
+          <div class="label"><span class="task-num">5.2</span><h3>My study blocks</h3></div>
+          <p>Write the time and the module. Two hours on the same evenings every week beats one heroic Sunday.</p>
+        </div>
+        <div class="grid-2">
+          <div class="fld"><label for="f-blk_mon">Monday</label><input type="text" id="f-blk_mon" data-f="blk_mon" data-label="Monday" placeholder="18:00–20:00 Programming practice"></div>
+          <div class="fld"><label for="f-blk_tue">Tuesday</label><input type="text" id="f-blk_tue" data-f="blk_tue" data-label="Tuesday" placeholder="Taxi: Systems flashcards"></div>
+          <div class="fld"><label for="f-blk_wed">Wednesday</label><input type="text" id="f-blk_wed" data-f="blk_wed" data-label="Wednesday"></div>
+          <div class="fld"><label for="f-blk_thu">Thursday</label><input type="text" id="f-blk_thu" data-f="blk_thu" data-label="Thursday"></div>
+          <div class="fld"><label for="f-blk_fri">Friday</label><input type="text" id="f-blk_fri" data-f="blk_fri" data-label="Friday"></div>
+          <div class="fld"><label for="f-blk_sat">Saturday</label><input type="text" id="f-blk_sat" data-f="blk_sat" data-label="Saturday"></div>
+          <div class="fld"><label for="f-blk_sun">Sunday</label><input type="text" id="f-blk_sun" data-f="blk_sun" data-label="Sunday" placeholder="Rest, then plan the week"></div>
+        </div>
+      </div>
+
+      <div class="prose">
+        <ul>
+          <li><strong>Use dead time.</strong> Taxi and bus rides are good for flashcards, definitions and lecture recordings.</li>
+          <li><strong>Download on campus Wi-Fi.</strong> Grab slides, videos and past papers before you leave so you're not burning data at home.</li>
+          <li><strong>Protect one full rest block.</strong> Burning out near exams costs far more than a night off early in the semester.</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- ================= 06 EXAMS ================= -->
+    <section class="sec" id="exams" data-num="06" data-title="Tests and exams">
+      <div class="sec-head">
+        <p class="eyebrow"><span>06</span> assessments</p>
+        <h2>Tests and exams</h2>
+        <p class="sec-count" data-count></p>
+      </div>
+      <div class="prose">
+        <p>CS assessments come in a few formats, and each one needs different preparation:</p>
+        <ul>
+          <li><strong>Handwritten code.</strong> Practise on paper, timed. Learn the syntax cold.</li>
+          <li><strong>On a computer, offline.</strong> Usually an IDE with no internet. Practise without relying on autocomplete, and know how to run and debug quickly.</li>
+          <li><strong>Theory and multiple choice.</strong> Definitions, comparisons, conversions. Flashcards and past papers.</li>
+          <li><strong>Projects and portfolios.</strong> Marks follow the rubric. Read it before you start and tick it off before you submit.</li>
+        </ul>
+        <p><strong>Past papers are the closest thing to a cheat code that's allowed.</strong> Ask your class rep, tutors, seniors and the library. Write them under time, mark yourself honestly, and the topics you keep losing marks on become your study list.</p>
+      </div>
+
+      <div class="task">
+        <div class="task-head">
+          <div class="label"><span class="task-num">6.1</span><h3>Exam prep tracker</h3><span class="kind">tracker</span></div>
+          <p>Pulled from your module list. Aim for at least two past papers done per module before the exam.</p>
+        </div>
+        <div class="mod-list" id="exam-list"></div>
+      </div>
+
+      <div class="task">
+        <div class="task-head">
+          <div class="label"><span class="task-num">6.2</span><h3>Exam-week checklist</h3><span class="kind">checklist</span></div>
+        </div>
+        <div class="checklist todo">
+          <label class="check"><input type="checkbox" id="c-ex1" data-c="ex1"><span>I know the venue and start time of every exam</span></label>
+          <label class="check"><input type="checkbox" id="c-ex2" data-c="ex2"><span>My student card and ID are packed</span></label>
+          <label class="check"><input type="checkbox" id="c-ex3" data-c="ex3"><span>I've written at least two past papers per module under time</span></label>
+          <label class="check"><input type="checkbox" id="c-ex4" data-c="ex4"><span>I know which calculator and stationery are allowed</span></label>
+          <label class="check"><input type="checkbox" id="c-ex5" data-c="ex5"><span>I've planned my travel with time to spare</span></label>
+          <label class="check"><input type="checkbox" id="c-ex6" data-c="ex6"><span>I know what to do if I'm sick on exam day, and what proof I'd need</span></label>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= 07 PEOPLE ================= -->
+    <section class="sec" id="people" data-num="07" data-title="Your people">
+      <div class="sec-head">
+        <p class="eyebrow"><span>07</span> support</p>
+        <h2>Your people</h2>
+        <p class="sec-count" data-count></p>
+      </div>
+      <div class="prose">
+        <p>The students who struggle quietly usually aren't the weakest ones. They're the ones who didn't ask. Lecturers have consultation hours, tutors are paid to help you, and the seniors in your department have already written the papers you're about to write.</p>
+      </div>
+
+      <div class="task">
+        <div class="task-head">
+          <div class="label"><span class="task-num">7.1</span><h3>My contact sheet</h3></div>
+          <p>Fill this in during the first two weeks, while everyone's still introducing themselves.</p>
+        </div>
+        <div class="grid-2">
+          <div class="fld"><label for="f-ppl_lect">Lecturers and consultation times</label><textarea id="f-ppl_lect" data-f="ppl_lect" data-label="Lecturers and consultation times" placeholder="PRG101: Ms Dlamini, Tue 10:00–12:00, Room 3-114"></textarea></div>
+          <div class="fld"><label for="f-ppl_tut">Tutors and tutorial times</label><textarea id="f-ppl_tut" data-f="ppl_tut" data-label="Tutors and tutorial times"></textarea></div>
+          <div class="fld"><label for="f-ppl_rep">My class rep</label><input type="text" id="f-ppl_rep" data-f="ppl_rep" data-label="Class rep"></div>
+          <div class="fld"><label for="f-ppl_mates">Two classmates I can study with</label><input type="text" id="f-ppl_mates" data-f="ppl_mates" data-label="Study partners"></div>
+          <div class="fld"><label for="f-ppl_faculty">Faculty or student admin office</label><input type="text" id="f-ppl_faculty" data-f="ppl_faculty" data-label="Faculty office"></div>
+          <div class="fld"><label for="f-ppl_wellness">Campus counselling or wellness centre</label><input type="text" id="f-ppl_wellness" data-f="ppl_wellness" data-label="Counselling / wellness"></div>
+          <div class="fld"><label for="f-ppl_funding">Funding office (NSFAS or bursary)</label><input type="text" id="f-ppl_funding" data-f="ppl_funding" data-label="Funding office"></div>
+        </div>
+      </div>
+
+      <div class="task">
+        <div class="task-head">
+          <div class="label"><span class="task-num">7.2</span><h3>Email your lecturer</h3><span class="kind">builder</span></div>
+          <p>Lecturers get hundreds of emails. Send from your student email, put the module code in the subject and keep it short.</p>
+        </div>
+        <div class="grid-2">
+          <div class="fld"><label for="f-em_lect">Lecturer's name</label><input type="text" id="f-em_lect" data-f="em_lect" data-noprog placeholder="Dr Mokoena"></div>
+          <div class="fld"><label for="f-em_code">Module code</label><input type="text" id="f-em_code" data-f="em_code" data-noprog placeholder="PRG101"></div>
+          <div class="fld"><label for="f-em_name">My name</label><input type="text" id="f-em_name" data-f="em_name" data-noprog></div>
+          <div class="fld"><label for="f-em_num">My student number</label><input type="text" id="f-em_num" data-f="em_num" data-noprog></div>
+          <div class="fld"><label for="f-em_ask">What I'm asking for</label>
+            <select id="f-em_ask" data-f="em_ask" data-noprog>
+              <option value="consult">A consultation slot</option>
+              <option value="feedback">Feedback on a test</option>
+              <option value="clarify">Clarity on an assignment</option>
+              <option value="extension">An extension</option>
+            </select>
+          </div>
+          <div class="fld"><label for="f-em_avail">When I'm available</label><input type="text" id="f-em_avail" data-f="em_avail" data-noprog placeholder="Wednesday after 12:00 or Thursday morning"></div>
+        </div>
+        <div class="fld"><label for="f-em_stuck">What I'm struggling with</label><input type="text" id="f-em_stuck" data-f="em_stuck" data-noprog placeholder="recursion in Practical 6"></div>
+        <div class="fld"><label for="f-em_tried">What I've already tried</label><input type="text" id="f-em_tried" data-f="em_tried" data-noprog placeholder="rewatched the lecture, worked through the textbook examples and asked a tutor"></div>
+        <div class="fld">
+          <label for="em-out">Your email</label>
+          <textarea id="em-out" class="email-out" readonly></textarea>
+        </div>
+        <div class="row-actions">
+          <button class="btn btn-sm" type="button" id="em-copy">Copy email</button>
+          <span class="help" id="em-msg" aria-live="polite"></span>
+        </div>
+      </div>
+
+      <div class="callout">
+        <span class="who">From Jay</span>
+        <p>Asking a tutor a "stupid" question costs you thirty seconds of feeling awkward. Not asking can cost you the module.</p>
+      </div>
+    </section>
+
+    <!-- ================= 08 SETBACKS ================= -->
+    <section class="sec" id="setbacks" data-num="08" data-title="When it goes wrong">
+      <div class="sec-head">
+        <p class="eyebrow"><span>08</span> setbacks</p>
+        <h2>When it goes wrong</h2>
+        <p class="sec-count" data-count></p>
+      </div>
+      <div class="prose">
+        <p>Failing a test in first year is common, and it doesn't decide your degree. A failed module is a setback with a process for fixing it. The real damage comes from hiding it, from yourself, your funder or your family, until the options run out.</p>
+        <ol>
+          <li><strong>Get the facts.</strong> Your actual marks, whether you qualify for a sup, and what the rules say about repeating.</li>
+          <li><strong>Find the cause honestly.</strong> Use the post-mortem below.</li>
+          <li><strong>Talk to someone this week.</strong> Your lecturer for the academic side, the faculty office for the rules, and the funding office if your funding could be affected.</li>
+          <li><strong>Make a plan with dates on it.</strong></li>
+        </ol>
+        <p>If it's bigger than marks, like stress, money, home or your mental health, your campus counselling or wellness centre is there for registered students and is usually free. Go before it becomes an emergency.</p>
+      </div>
+
+      <div class="task">
+        <div class="task-head">
+          <div class="label"><span class="task-num">8.1</span><h3>Post-mortem</h3></div>
+          <p>For a test or module that went badly. Skip it if nothing has gone wrong yet, and come back when it does.</p>
+        </div>
+        <div class="grid-2">
+          <div class="fld"><label for="f-pm_module">Module and assessment</label><input type="text" id="f-pm_module" data-f="pm_module" data-label="Module and assessment" placeholder="MAT101 Test 2"></div>
+          <div class="fld"><label for="f-pm_mark">My mark</label><input type="text" id="f-pm_mark" data-f="pm_mark" data-label="My mark" placeholder="38%"></div>
+        </div>
+        <fieldset>
+          <legend class="legend">What actually caused it? Tick all that apply.</legend>
+          <div class="checklist">
+            <label class="check"><input type="checkbox" id="c-pm1" data-c="pm1"><span>I didn't attend enough</span></label>
+            <label class="check"><input type="checkbox" id="c-pm2" data-c="pm2"><span>I didn't practise enough</span></label>
+            <label class="check"><input type="checkbox" id="c-pm3" data-c="pm3"><span>I practised, but I didn't really understand the work</span></label>
+            <label class="check"><input type="checkbox" id="c-pm4" data-c="pm4"><span>I understood it, but ran out of time in the test</span></label>
+            <label class="check"><input type="checkbox" id="c-pm5" data-c="pm5"><span>I didn't know the format or what to study</span></label>
+            <label class="check"><input type="checkbox" id="c-pm6" data-c="pm6"><span>I relied on friends or AI to do the work during the semester</span></label>
+            <label class="check"><input type="checkbox" id="c-pm7" data-c="pm7"><span>Life outside varsity got in the way</span></label>
+          </div>
+        </fieldset>
+        <div class="fld"><label for="f-pm_change">What I'll do differently (be specific)</label><textarea id="f-pm_change" data-f="pm_change" data-label="What I'll do differently" placeholder="Two past papers a week from now until the sup, done timed at the library"></textarea></div>
+        <div class="fld"><label for="f-pm_talk">Who I'll talk to, and by when</label><input type="text" id="f-pm_talk" data-f="pm_talk" data-label="Who I'll talk to" placeholder="Lecturer's consultation on Tuesday"></div>
+      </div>
+
+      <div class="callout">
+        <span class="who">From Jay</span>
+        <p>If something has gone wrong, tell the people who need to know early: your lecturer, your funder, your family. Bad news gets heavier the longer you carry it alone.</p>
+      </div>
+    </section>
+
+    <!-- ================= 09 BUILD ================= -->
+    <section class="sec" id="build" data-num="09" data-title="Beyond the marks">
+      <div class="sec-head">
+        <p class="eyebrow"><span>09</span> building</p>
+        <h2>Beyond the marks</h2>
+        <p class="sec-count" data-count></p>
+      </div>
+      <div class="prose">
+        <p>You don't need a startup or a GitHub full of green squares in first year. Marks come first. But one small project you build because you want to teaches you what practicals can't: planning, getting stuck with no memo to check, and finishing something.</p>
+        <ul>
+          <li><strong>Make a GitHub account</strong> and keep your own projects there. Keep assessed work private.</li>
+          <li><strong>Build one thing you'd actually use.</strong> A budget tracker, a timetable app, a quiz for one of your modules.</li>
+          <li><strong>Use the holidays.</strong> December and the mid-year break are when you can get ahead without a timetable fighting you.</li>
+        </ul>
+      </div>
+
+      <div class="task">
+        <div class="task-head"><div class="label"><span class="task-num">9.1</span><h3>One thing I'll build</h3></div></div>
+        <div class="grid-2">
+          <div class="fld"><label for="f-bd_what">What it is</label><input type="text" id="f-bd_what" data-f="bd_what" data-label="What I'll build" placeholder="A study timetable app"></div>
+          <div class="fld"><label for="f-bd_lang">Language or tools</label><input type="text" id="f-bd_lang" data-f="bd_lang" data-label="Language or tools" placeholder="Java, or HTML/CSS"></div>
+          <div class="fld"><label for="f-bd_why">Why I'd use it</label><input type="text" id="f-bd_why" data-f="bd_why" data-label="Why I'd use it"></div>
+          <div class="fld"><label for="f-bd_start">I'll start on</label><input type="date" id="f-bd_start" data-f="bd_start" data-label="Start date"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= 10 COMMIT ================= -->
+    <section class="sec" id="commit" data-num="10" data-title="Commit">
+      <div class="sec-head">
+        <p class="eyebrow"><span>10</span> commit</p>
+        <h2>Commit</h2>
+        <p class="sec-count" data-count></p>
+      </div>
+      <div class="prose">
+        <p>Everything above is useless if nothing changes this week. Pick three actions small enough that you'll really do them.</p>
+      </div>
+      <div class="task">
+        <div class="task-head"><div class="label"><span class="task-num">10.1</span><h3>This week I will</h3></div></div>
+        <div class="fld"><label for="f-cm1">1.</label><input type="text" id="f-cm1" data-f="cm1" data-label="This week, action 1" placeholder="Find the exam-entry rule for every module"></div>
+        <div class="fld"><label for="f-cm2">2.</label><input type="text" id="f-cm2" data-f="cm2" data-label="This week, action 2"></div>
+        <div class="fld"><label for="f-cm3">3.</label><input type="text" id="f-cm3" data-f="cm3" data-label="This week, action 3"></div>
+        <div class="grid-2">
+          <div class="fld"><label for="f-cm_stop">One thing I'll stop doing</label><input type="text" id="f-cm_stop" data-f="cm_stop" data-label="One thing I'll stop doing"></div>
+          <div class="fld"><label for="f-cm_date">I'll reopen this workbook on</label><input type="date" id="f-cm_date" data-f="cm_date" data-label="Check-in date"></div>
+        </div>
+      </div>
+
+      <div class="cta">
+        <h3>What's next</h3>
+        <ol>
+          <li><strong>Reply to the email this workbook came in.</strong> Tell me which module worries you most. I read the replies, and they decide what I make next.</li>
+          <li><strong>Join the free December build challenge.</strong> It starts on 1 December. You build something small alongside other students while there's no timetable in the way.</li>
+          <li><strong>Follow along for the short versions</strong> on TikTok and Instagram.</li>
+        </ol>
+        <div class="cta-links">
+          <a class="btn" href="https://jaymthethwa.co.za">Join the build challenge</a>
+          <a class="btn btn-ghost" href="https://www.tiktok.com/@realjaycoding">TikTok @realjaycoding</a>
+          <a class="btn btn-ghost" href="https://www.instagram.com/thereeljaymiller">Instagram</a>
+        </div>
+      </div>
+
+      <div class="row-actions">
+        <button class="btn" type="button" id="export-bottom">Copy my answers</button>
+        <button class="btn btn-ghost btn-danger" type="button" id="reset-btn">Erase all my answers</button>
+      </div>
+    </section>
+
+    <footer class="end">
+      <p>The First-Year CS Workbook, Edition 1, November 2026. Made by Jay Mthethwa · Real Jay Coding · jaymthethwa.co.za</p>
+      <p>Rules differ between universities. When this workbook and your yearbook disagree, your yearbook wins.</p>
+    </footer>
+  </main>
+</div>
+
+<dialog id="export-dlg" aria-labelledby="export-title">
+  <div class="dlg">
+    <h3 id="export-title">Your answers</h3>
+    <p class="help">Copy this into your notes app or email it to yourself as a backup.</p>
+    <label for="export-text" class="help">Workbook answers as plain text</label>
+    <textarea id="export-text" readonly></textarea>
+    <div class="dlg-actions">
+      <span class="copy-msg" id="export-msg" aria-live="polite"></span>
+      <button class="btn btn-ghost" type="button" id="export-close">Close</button>
+      <button class="btn" type="button" id="export-copy">Copy</button>
+    </div>
+  </div>
+</dialog>
+
+<script>
+(function(){
+'use strict';
+var $=function(s,r){return (r||document).querySelector(s);};
+var $$=function(s,r){return Array.prototype.slice.call((r||document).querySelectorAll(s));};
+var KEY='rjc-first-year-cs-workbook-v1';
+function esc(s){return String(s==null?'':s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];});}
+function num(v,d){var n=parseFloat(String(v==null?'':v).replace(',','.'));return isFinite(n)?n:(d===undefined?0:d);}
+function clamp(n,a,b){return Math.min(b,Math.max(a,n));}
+function f1(n){var r=Math.round(n*10)/10;return (Math.abs(r%1)<1e-9)?r.toFixed(0):r.toFixed(1);}
+function pad(n){return String(n).padStart(2,'0');}
+function iso(d){return d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate());}
+function today(){var d=new Date();d.setHours(0,0,0,0);return d;}
+function addDays(n){var d=today();d.setDate(d.getDate()+n);return iso(d);}
+function daysUntil(s){if(!s)return null;var p=String(s).split('-').map(Number);if(p.length!==3||p.some(isNaN))return null;var d=new Date(p[0],p[1]-1,p[2]);return Math.round((d-today())/86400000);}
+function uid(){return Math.random().toString(36).slice(2,9);}
+function fmtDate(s){var p=String(s).split('-').map(Number);if(p.length!==3||p.some(isNaN))return s;return new Date(p[0],p[1]-1,p[2]).toLocaleDateString('en-ZA',{day:'numeric',month:'short'});}
+
+var CONCEPTS=[['vars','Variables and data types'],['io','Input and output'],['cond','If/else and logical operators'],['loops','Loops (for, while)'],['arrays','Arrays and lists'],['funcs','Methods and functions'],['strings','Strings and string methods'],['classes','Classes and objects'],['ctors','Constructors'],['inherit','Inheritance'],['except','Exception handling'],['files','Reading and writing files'],['errors','Reading an error message'],['debug','Using the debugger and breakpoints']];
+var SKILL_LEVELS=[['0','Not yet'],['1','With notes'],['2','From a blank file']];
+var FAMILIES=[['','Choose a family…'],['programming','Programming'],['maths','Mathematics'],['systems','Computer systems'],['data','Information systems and databases'],['web','Web and applications'],['comms','Communication and literacy'],['other','Something else']];
+var FORMATS=[['','Not sure yet'],['paper','Handwritten'],['computer','On a computer'],['mcq','Online or MCQ'],['project','Project or portfolio'],['none','No exam (continuous)']];
+var RESULTS=[['done','Got it'],['partly','Partly'],['no',"Couldn't"]];
+function label(list,v){for(var i=0;i<list.length;i++){if(list[i][0]===v)return list[i][1];}return '';}
+function opts(list,sel){return list.map(function(o){return '<option value="'+esc(o[0])+'"'+(o[0]===sel?' selected':'')+'>'+esc(o[1])+'</option>';}).join('');}
+
+function defaults(){return {mark:{sem:52,semW:40,pass:50,sub:40,entry:40},budget:{sleep:8,travel:1.5,days:5,daily:2.5,work:6,rest:14},weeks:16};}
+function newModule(){return {id:uid(),name:'',code:'',credits:'',contact:'',format:'',examDate:'',family:'',worry:''};}
+function exampleState(){
+  var d=defaults();
+  return {v:1,examples:true,weeks:d.weeks,
+    modules:[
+      {id:'m1',name:'Programming 1',code:'PRG101',credits:16,contact:5,format:'computer',examDate:addDays(24),family:'programming',worry:'4'},
+      {id:'m2',name:'Mathematics 1',code:'MAT101',credits:16,contact:4,format:'paper',examDate:addDays(28),family:'maths',worry:'5'},
+      {id:'m3',name:'Computer Systems',code:'CSY101',credits:12,contact:3,format:'paper',examDate:addDays(31),family:'systems',worry:'3'},
+      {id:'m4',name:'Information Systems',code:'INF101',credits:8,contact:2,format:'mcq',examDate:addDays(35),family:'data',worry:'2'},
+      {id:'m5',name:'Communication Skills',code:'COM101',credits:8,contact:2,format:'project',examDate:'',family:'comms',worry:'1'}
+    ],
+    f:{},c:{},skills:{},
+    tests:[{id:'t1',date:addDays(-2),concept:'loops',mins:'25',result:'partly',note:'Off-by-one error in my for loop (example entry)'}],
+    papers:{m1:{found:'3',done:'1',weak:'2D arrays, recursion'},m2:{found:'4',done:'0',weak:''}},
+    mark:d.mark,budget:d.budget};
+}
+function blankState(){var d=defaults();return {v:1,examples:false,weeks:d.weeks,modules:[newModule()],f:{},c:{},skills:{},tests:[],papers:{},mark:d.mark,budget:d.budget};}
+
+var storageOK=true, S=null;
+try{var raw=localStorage.getItem(KEY);if(raw)S=JSON.parse(raw);}catch(e){storageOK=false;}
+if(!S||S.v!==1){S=exampleState();}
+else{
+  var base=blankState();
+  Object.keys(base).forEach(function(k){if(S[k]===undefined||S[k]===null)S[k]=base[k];});
+  S.mark=Object.assign({},base.mark,S.mark);S.budget=Object.assign({},base.budget,S.budget);
+}
+
+/* ---------- saving ---------- */
+var saveEl=$('#save-status'), saveTimer=null;
+function setStatus(t,st){saveEl.textContent=t;saveEl.setAttribute('data-state',st);}
+function persist(){
+  try{localStorage.setItem(KEY,JSON.stringify(S));storageOK=true;setStatus('Saved on this device','ok');}
+  catch(e){storageOK=false;setStatus('Not saved: your browser is blocking storage. Use Copy my answers.','bad');}
+}
+function save(){clearTimeout(saveTimer);setStatus('Saving…','busy');saveTimer=setTimeout(persist,300);}
+if(!storageOK)setStatus('Your browser is blocking storage, so answers won’t be kept. Use Copy my answers.','bad');
+
+/* ---------- static fields ---------- */
+$$('[data-rate]').forEach(function(g){
+  var html='';for(var i=1;i<=5;i++){html+='<button type="button" value="'+i+'" aria-pressed="false" aria-label="'+i+' out of 5">'+i+'</button>';}
+  g.innerHTML=html;
+});
+function applyStatic(){
+  $$('[data-f]').forEach(function(el){
+    var k=el.getAttribute('data-f'), v=S.f[k];
+    if(el.type==='radio'){el.checked=(v===el.value);}
+    else if(el.tagName==='SELECT'){ if(v!=null&&v!=='')el.value=v; else el.selectedIndex=0; }
+    else{el.value=(v==null?'':v);}
+  });
+  $$('[data-c]').forEach(function(el){el.checked=!!S.c[el.getAttribute('data-c')];});
+  $$('[data-rate]').forEach(function(g){var k=g.getAttribute('data-rate');$$('button',g).forEach(function(b){b.setAttribute('aria-pressed',String(S.f[k]===b.value));});});
+  $$('[data-m]').forEach(function(el){el.value=S.mark[el.getAttribute('data-m')];});
+  $$('[data-b]').forEach(function(el){el.value=S.budget[el.getAttribute('data-b')];});
+  $('#weeks').value=S.weeks;
+}
+function bindStatic(){
+  $$('[data-f]').forEach(function(el){
+    var k=el.getAttribute('data-f');
+    if(el.type==='radio'){el.addEventListener('change',function(){if(el.checked){S.f[k]=el.value;changed();}});}
+    else{el.addEventListener('input',function(){S.f[k]=el.value;changed();if(k.indexOf('em_')===0)renderEmail();});}
+  });
+  $$('[data-c]').forEach(function(el){el.addEventListener('change',function(){S.c[el.getAttribute('data-c')]=el.checked;changed();});});
+  $$('[data-rate]').forEach(function(g){
+    var k=g.getAttribute('data-rate');
+    $$('button',g).forEach(function(b){b.addEventListener('click',function(){
+      S.f[k]=(S.f[k]===b.value)?'':b.value;
+      $$('button',g).forEach(function(x){x.setAttribute('aria-pressed',String(S.f[k]===x.value));});
+      changed();
+    });});
+  });
+  $$('[data-m]').forEach(function(el){el.addEventListener('input',function(){S.mark[el.getAttribute('data-m')]=el.value;renderMark();save();});});
+  $$('[data-b]').forEach(function(el){el.addEventListener('input',function(){S.budget[el.getAttribute('data-b')]=el.value;renderBudget();save();});});
+  $('#weeks').addEventListener('input',function(){S.weeks=this.value;renderHours();renderBudget();save();});
+}
+function changed(){save();updateProgress();}
+
+/* ---------- modules ---------- */
+function renderModules(){
+  var wrap=$('#mod-list');wrap.innerHTML='';
+  if(!S.modules.length){wrap.innerHTML='<p class="empty">No modules yet. Add the modules you’re registered for this semester.</p>';}
+  S.modules.forEach(function(m){
+    var row=document.createElement('div');row.className='mod-row';
+    var id=m.id;
+    row.innerHTML=
+      '<div class="fld c-name"><label for="mod-name-'+id+'">Module name</label><input type="text" id="mod-name-'+id+'" data-k="name" placeholder="e.g. Programming 1"></div>'+
+      '<div class="fld"><label for="mod-code-'+id+'">Code</label><input type="text" id="mod-code-'+id+'" data-k="code" placeholder="PRG101"></div>'+
+      '<div class="fld"><label for="mod-credits-'+id+'">Credits</label><input type="number" inputmode="decimal" min="0" id="mod-credits-'+id+'" data-k="credits" placeholder="16"></div>'+
+      '<div class="fld"><label for="mod-contact-'+id+'">Class hrs/wk</label><input type="number" inputmode="decimal" min="0" step="0.5" id="mod-contact-'+id+'" data-k="contact" placeholder="4"></div>'+
+      '<div class="fld c-format"><label for="mod-format-'+id+'">Exam format</label><select id="mod-format-'+id+'" data-k="format">'+opts(FORMATS,m.format||'')+'</select></div>'+
+      '<div class="fld c-date"><label for="mod-date-'+id+'">Exam date</label><input type="date" id="mod-date-'+id+'" data-k="examDate"></div>'+
+      '<div class="c-del"><button type="button" class="icon-btn" data-del aria-label="Remove '+esc(m.name||'this module')+'">×</button></div>';
+    $$('[data-k]',row).forEach(function(inp){
+      var k=inp.getAttribute('data-k');
+      if(inp.tagName!=='SELECT')inp.value=(m[k]==null?'':m[k]);
+      inp.addEventListener('input',function(){m[k]=inp.value;S.examples=false;modulesChanged(false);});
+    });
+    $('[data-del]',row).addEventListener('click',function(){
+      var i=S.modules.indexOf(m);if(i>-1)S.modules.splice(i,1);delete S.papers[m.id];S.examples=false;modulesChanged(true);
+    });
+    wrap.appendChild(row);
+  });
+  $('#example-note').hidden=!S.examples;
+}
+function modulesChanged(rerender){
+  if(rerender)renderModules();
+  $('#example-note').hidden=!S.examples;
+  renderHours();renderSorter();renderExams();renderBudget();save();updateProgress();
+}
+$('#add-module').addEventListener('click',function(){
+  var m=newModule();S.modules.push(m);S.examples=false;modulesChanged(true);
+  var el=document.getElementById('mod-name-'+m.id);if(el)el.focus();
+});
+$('#clear-examples').addEventListener('click',function(){
+  S.modules=[newModule()];S.tests=[];S.papers={};S.examples=false;
+  modulesChanged(true);renderLog();
+  var el=document.getElementById('mod-name-'+S.modules[0].id);if(el)el.focus();
+});
+
+/* ---------- hours ---------- */
+function hoursData(){
+  var w=Math.max(1,num(S.weeks,16)),credits=0,expected=0,contact=0,self=0;
+  var rows=S.modules.map(function(m){
+    var cr=Math.max(0,num(m.credits)),exp=cr*10/w,con=Math.max(0,num(m.contact)),sf=Math.max(0,exp-con);
+    credits+=cr;expected+=exp;contact+=con;self+=sf;
+    return {m:m,cr:cr,exp:exp,con:con,self:sf};
+  });
+  return {w:w,rows:rows,credits:credits,expected:expected,contact:contact,self:self};
+}
+function renderHours(){
+  var h=hoursData();
+  $('#hour-tiles').innerHTML=
+    '<div class="tile"><span class="v">'+f1(h.credits)+'</span><span class="k">credits this semester</span></div>'+
+    '<div class="tile"><span class="v">'+f1(h.credits*10)+'<small>h</small></span><span class="k">notional hours this semester</span></div>'+
+    '<div class="tile"><span class="v">'+f1(h.expected)+'<small>h</small></span><span class="k">expected work per week</span></div>'+
+    '<div class="tile hot"><span class="v">'+f1(h.self)+'<small>h</small></span><span class="k">on your own, per week</span></div>';
+  var body=h.rows.map(function(r){
+    var nm=r.m.name||r.m.code||'Unnamed module';
+    return '<tr><td>'+esc(nm)+'</td><td class="num">'+f1(r.cr)+'</td><td class="num">'+f1(r.exp)+'</td><td class="num">'+f1(r.con)+'</td><td class="num self">'+f1(r.self)+'</td></tr>';
+  }).join('');
+  $('#hours-table').innerHTML='<thead><tr><th>Module</th><th class="num">Credits</th><th class="num">Expected h/wk</th><th class="num">In class</th><th class="num">On your own</th></tr></thead>'+
+    '<tbody>'+(body||'<tr><td colspan="5" class="muted">Add modules in 1.2 to see your hours.</td></tr>')+'</tbody>'+
+    '<tfoot><tr><td>Total</td><td class="num">'+f1(h.credits)+'</td><td class="num">'+f1(h.expected)+'</td><td class="num">'+f1(h.contact)+'</td><td class="num self">'+f1(h.self)+'</td></tr></tfoot>';
+  var v;
+  if(!h.credits){v='Add your modules and their credits in 1.2 and this will tell you how many hours a week your programme expects from you.';}
+  else if(h.expected>50){v='That’s more than '+f1(h.expected)+' hours a week, which is heavier than a full-time job. Double-check the credits and the number of weeks, and if they’re right, speak to an academic advisor about your load.';}
+  else if(h.self<1){v='Your class hours already cover the notional hours, which is unusual. Double-check the credits and class hours you entered.';}
+  else{v='Your modules are designed around <strong>'+f1(h.expected)+' hours a week</strong>. Classes cover '+f1(h.contact)+'. The other <strong>'+f1(h.self)+' hours</strong> are yours to find and protect. If you’ve only been counting lectures, this is the gap.';}
+  $('#hours-verdict').innerHTML=v;
+}
+
+/* ---------- mark calculator ---------- */
+function renderMark(){
+  var m=S.mark,sem=clamp(num(m.sem),0,100),sw=clamp(num(m.semW),0,100),ew=100-sw,pass=num(m.pass,50),sub=clamp(num(m.sub),0,100),entry=num(m.entry);
+  $('#mk-examw').textContent=f1(ew)+'%';
+  var out=$('#mark-out'),entryOK=sem>=entry,banked=sem*sw/100,html='';
+  var entryChip=entryOK?'<span class="chip good">Exam entry met</span>':'<span class="chip bad">Exam entry not met</span>';
+  if(ew<=0){
+    var passed=sem>=pass;
+    html='<div class="verdict-top">'+(passed?'<span class="chip good">Passing</span>':'<span class="chip bad">Below the pass mark</span>')+'</div>'+
+      '<p class="big">No exam: your final mark is '+f1(sem)+'%</p>'+
+      '<p>With continuous assessment, every remaining test and practical moves this number directly.</p>';
+  }else{
+    var need=(pass-banked)/(ew/100),req=Math.max(need,sub),dist=Math.max((75-banked)/(ew/100),sub),max=banked+ew;
+    if(req>100){
+      html='<div class="verdict-top">'+entryChip+'<span class="chip bad">Not reachable through the exam</span></div>'+
+        '<p class="big">Even 100% gets you '+f1(max)+'%</p>'+
+        '<p>The exam alone can’t get you to '+f1(pass)+'%. Speak to your lecturer this week about your options, including supplementary exams and what repeating would involve.</p>';
+    }else{
+      var reqR=Math.max(0,Math.ceil(req-1e-9));
+      var subNote=(need<=sub&&sub>0)?' Your semester mark is carrying you, so the exam sub-minimum of '+f1(sub)+'% is your real target.':'';
+      html='<div class="verdict-top">'+entryChip+
+        (reqR>=70?'<span class="chip warn">Hard but possible</span>':'<span class="chip good">Reachable</span>')+
+        (dist<=100?'<span class="chip">Distinction needs '+Math.ceil(dist-1e-9)+'%</span>':'<span class="chip">Distinction out of reach</span>')+
+        '</div>'+
+        '<p class="big">You need '+reqR+'% in the exam</p>'+
+        '<p>Your semester mark already banks '+f1(banked)+' of the '+f1(pass)+' marks you need to pass. The exam carries the other '+f1(ew)+'%.'+subNote+'</p>';
+    }
+  }
+  if(!entryOK){html+='<p><strong>Your semester mark is below the entry requirement you entered.</strong> You may not be allowed to write. Confirm with your lecturer or faculty office now, not in exam week.</p>';}
+  out.innerHTML=html;
+}
+
+/* ---------- sorter ---------- */
+function renderSorter(){
+  var wrap=$('#sorter');wrap.innerHTML='';
+  var named=S.modules.filter(function(m){return (m.name||m.code);});
+  if(!named.length){wrap.innerHTML='<p class="empty">Add your modules in Section 01 and they’ll show up here.</p>';$('#sorter-out').hidden=true;return;}
+  named.forEach(function(m){
+    var row=document.createElement('div');row.className='sort-row';var id=m.id;
+    var rate='';for(var i=1;i<=5;i++){rate+='<button type="button" value="'+i+'" aria-pressed="'+(String(m.worry)===String(i))+'" aria-label="Worry '+i+' out of 5">'+i+'</button>';}
+    row.innerHTML='<div class="nm">'+esc(m.name||m.code)+(m.name&&m.code?'<small>'+esc(m.code)+'</small>':'')+'</div>'+
+      '<div class="fld"><label class="help" for="fam-'+id+'">Family</label><select id="fam-'+id+'">'+opts(FAMILIES,m.family||'')+'</select></div>'+
+      '<div class="fld"><span class="help" id="wl-'+id+'">How worried? (1–5)</span><div class="rate" role="group" aria-labelledby="wl-'+id+'">'+rate+'</div></div>';
+    $('select',row).addEventListener('input',function(){m.family=this.value;save();renderSorterOut();});
+    $$('.rate button',row).forEach(function(b){b.addEventListener('click',function(){
+      m.worry=(String(m.worry)===b.value)?'':b.value;
+      $$('.rate button',row).forEach(function(x){x.setAttribute('aria-pressed',String(String(m.worry)===x.value));});
+      save();renderSorterOut();
+    });});
+    wrap.appendChild(row);
+  });
+  renderSorterOut();
+}
+function renderSorterOut(){
+  var out=$('#sorter-out'),top=null;
+  S.modules.forEach(function(m){if(num(m.worry)>0&&(!top||num(m.worry)>num(top.worry)))top=m;});
+  if(!top){out.hidden=true;return;}
+  var fam=top.family,tip={programming:'Start Section 04 with this module in mind.',maths:'Daily problems, starting this week. Ask for the tutorial answers and do the problems before you look.',systems:'Make flashcards for the terms and practise conversions until they’re automatic.',data:'Write queries every week on real tables, not just in the practical.',web:'Read the rubric for the next project before you write a line of code.',comms:'Get the rubric and submit a day early.',other:'Find out how it’s assessed and get the past papers first.'}[fam]||'Put it into a family above to get a study tip.';
+  out.hidden=false;$('p',out).innerHTML='Your most worrying module is <strong>'+esc(top.name||top.code)+'</strong>. '+tip;
+}
+
+/* ---------- concepts ---------- */
+function renderSkills(){
+  var wrap=$('#concepts');wrap.innerHTML='';
+  CONCEPTS.forEach(function(c){
+    var row=document.createElement('div');row.className='concept';var cur=String(S.skills[c[0]]||'0');
+    row.innerHTML='<span id="sk-'+c[0]+'">'+esc(c[1])+'</span><div class="seg" role="group" aria-labelledby="sk-'+c[0]+'">'+
+      SKILL_LEVELS.map(function(l){return '<button type="button" value="'+l[0]+'" aria-pressed="'+(cur===l[0])+'">'+l[1]+'</button>';}).join('')+'</div>';
+    $$('button',row).forEach(function(b){b.addEventListener('click',function(){
+      S.skills[c[0]]=b.value;$$('button',row).forEach(function(x){x.setAttribute('aria-pressed',String(x.value===b.value));});
+      renderSkillTiles();save();
+    });});
+    wrap.appendChild(row);
+  });
+  renderSkillTiles();
+}
+function renderSkillTiles(){
+  var n=[0,0,0];CONCEPTS.forEach(function(c){n[num(S.skills[c[0]])]++;});
+  $('#skill-tiles').innerHTML='<div class="tile hot"><span class="v">'+n[2]+'<small>/ '+CONCEPTS.length+'</small></span><span class="k">from a blank file</span></div>'+
+    '<div class="tile"><span class="v">'+n[1]+'</span><span class="k">with notes</span></div>'+
+    '<div class="tile"><span class="v">'+n[0]+'</span><span class="k">not yet</span></div>';
+}
+
+/* ---------- test log ---------- */
+function renderLog(){
+  var wrap=$('#log-list');wrap.innerHTML='';
+  if(!S.tests.length){wrap.innerHTML='<p class="empty">No tests logged yet. Pick a concept from 4.1, close your notes, set a timer and try it.</p>';return;}
+  S.tests.forEach(function(t){
+    var row=document.createElement('div');row.className='log-row';var id=t.id;
+    var conceptOpts=[['','Choose…']].concat(CONCEPTS).concat([['other','Something else']]);
+    row.innerHTML=
+      '<div class="fld c-date"><label for="t-date-'+id+'">Date</label><input type="date" id="t-date-'+id+'" data-k="date"></div>'+
+      '<div class="fld c-concept"><label for="t-concept-'+id+'">Concept</label><select id="t-concept-'+id+'" data-k="concept">'+opts(conceptOpts,t.concept||'')+'</select></div>'+
+      '<div class="fld"><label for="t-mins-'+id+'">Minutes</label><input type="number" inputmode="numeric" min="0" id="t-mins-'+id+'" data-k="mins"></div>'+
+      '<div class="fld"><label for="t-result-'+id+'">Result</label><select id="t-result-'+id+'" data-k="result">'+opts(RESULTS,t.result||'done')+'</select></div>'+
+      '<div class="fld c-note"><label for="t-note-'+id+'">What tripped me up</label><input type="text" id="t-note-'+id+'" data-k="note"></div>'+
+      '<div class="c-del"><button type="button" class="icon-btn" data-del aria-label="Delete this test">×</button></div>';
+    $$('[data-k]',row).forEach(function(inp){var k=inp.getAttribute('data-k');if(inp.tagName!=='SELECT')inp.value=(t[k]==null?'':t[k]);inp.addEventListener('input',function(){t[k]=inp.value;save();});});
+    $('[data-del]',row).addEventListener('click',function(){var i=S.tests.indexOf(t);if(i>-1)S.tests.splice(i,1);renderLog();save();});
+    wrap.appendChild(row);
+  });
+}
+$('#add-test').addEventListener('click',function(){
+  var t={id:uid(),date:iso(today()),concept:'',mins:'',result:'done',note:''};S.tests.unshift(t);renderLog();save();
+  var el=document.getElementById('t-concept-'+t.id);if(el)el.focus();
+});
+
+/* ---------- budget ---------- */
+function renderBudget(){
+  var b=S.budget,h=hoursData();
+  var parts=[
+    ['sleep','Sleep',Math.max(0,num(b.sleep))*7],
+    ['class','Classes',h.contact],
+    ['travel','Travel',Math.max(0,num(b.travel))*clamp(num(b.days),0,7)],
+    ['daily','Meals and chores',Math.max(0,num(b.daily))*7],
+    ['work','Work and family',Math.max(0,num(b.work))],
+    ['rest','Rest and life',Math.max(0,num(b.rest))]
+  ];
+  $('#b-classes').value=f1(h.contact)+' h';
+  var used=parts.reduce(function(a,p){return a+p[2];},0),avail=168-used,need=h.self,diff=avail-need;
+  var segs=parts.slice();
+  if(avail>0){segs.push(['study','Self-study needed',Math.min(need,avail)]);if(diff>0)segs.push(['free','Spare',diff]);}
+  if(avail<need){segs.push(['over','Missing',Math.min(need,Math.max(0,need-Math.max(avail,0)))]);}
+  var total=Math.max(168,segs.reduce(function(a,p){return a+p[2];},0));
+  $('#weekbar').innerHTML=segs.map(function(p){return p[2]>0?'<span class="seg-'+p[0]+'" style="width:'+(p[2]/total*100).toFixed(2)+'%" title="'+esc(p[1])+': '+f1(p[2])+' h"></span>':'';}).join('');
+  $('#week-legend').innerHTML=segs.filter(function(p){return p[2]>0;}).map(function(p){return '<li><i class="seg-'+p[0]+'"></i>'+esc(p[1])+' '+f1(p[2])+' h</li>';}).join('');
+  var out=$('#budget-out'),html;
+  if(!need){html='<p>Add your modules in 1.2 to compare your free hours with what your programme expects. Right now you have <strong>'+f1(Math.max(avail,0))+' hours</strong> a week left over.</p>';}
+  else if(diff>=4){html='<div class="verdict-top"><span class="chip good">Fits with '+f1(diff)+' h spare</span></div><p class="big">'+f1(avail)+' h free vs '+f1(need)+' h needed</p><p>Your week can hold it. The hard part is protecting those hours, so put them into specific blocks in 5.2.</p>';}
+  else if(diff>=-4){html='<div class="verdict-top"><span class="chip warn">Tight</span></div><p class="big">'+f1(avail)+' h free vs '+f1(need)+' h needed</p><p>It fits on paper with almost no slack, so one bad week will break it. Use travel time for revision and get ahead early in the semester while it’s quieter.</p>';}
+  else{html='<div class="verdict-top"><span class="chip bad">Short by '+f1(-diff)+' h</span></div><p class="big">'+f1(Math.max(avail,0))+' h free vs '+f1(need)+' h needed</p><p>Your week can’t hold what your modules expect. That’s common if you work or commute far. Cut or move a commitment, turn travel into revision time, or talk to an academic advisor about your load. Check your funding rules before dropping any module.</p>';}
+  out.innerHTML=html;
+}
+
+/* ---------- exam tracker ---------- */
+function examStatus(m,p){
+  if(m.format==='none')return ['','No exam'];
+  var d=daysUntil(m.examDate),done=num(p.done);
+  if(d===null)return ['','Add exam date in 1.2'];
+  if(d<0)return ['','Exam done'];
+  if(d<=14&&done<2)return ['bad','Behind: write papers now'];
+  if(d<=30&&done<1)return ['warn','Start past papers'];
+  return ['good','On track'];
+}
+function renderExams(){
+  var wrap=$('#exam-list');wrap.innerHTML='';
+  var named=S.modules.filter(function(m){return (m.name||m.code);});
+  if(!named.length){wrap.innerHTML='<p class="empty">Add your modules in Section 01 and they’ll show up here.</p>';return;}
+  named.forEach(function(m){
+    var p=S.papers[m.id]||(S.papers[m.id]={found:'',done:'',weak:''}),id=m.id,d=daysUntil(m.examDate);
+    var when=m.examDate?(fmtDate(m.examDate)+(d!==null&&d>=0?' · '+d+(d===1?' day':' days')+' left':'')):'no date yet';
+    var row=document.createElement('div');row.className='exam-row';
+    row.innerHTML='<div class="exam-top"><div><h4>'+esc(m.name||m.code)+'</h4><span class="exam-meta">'+esc(label(FORMATS,m.format||'')||'Format unknown')+' · '+esc(when)+'</span></div><span class="chip" data-chip></span></div>'+
+      '<div class="exam-fields">'+
+      '<div class="fld"><label for="pp-found-'+id+'">Papers found</label><input type="number" inputmode="numeric" min="0" id="pp-found-'+id+'" data-k="found"></div>'+
+      '<div class="fld"><label for="pp-done-'+id+'">Papers done</label><input type="number" inputmode="numeric" min="0" id="pp-done-'+id+'" data-k="done"></div>'+
+      '<div class="fld c-weak"><label for="pp-weak-'+id+'">Topics I keep losing marks on</label><input type="text" id="pp-weak-'+id+'" data-k="weak"></div></div>';
+    var chip=$('[data-chip]',row);
+    function upd(){var s=examStatus(m,p);chip.className='chip'+(s[0]?' '+s[0]:'');chip.textContent=s[1];}
+    $$('[data-k]',row).forEach(function(inp){var k=inp.getAttribute('data-k');inp.value=(p[k]==null?'':p[k]);inp.addEventListener('input',function(){p[k]=inp.value;upd();save();});});
+    upd();wrap.appendChild(row);
+  });
+}
+
+/* ---------- email builder ---------- */
+function renderEmail(){
+  var f=S.f;function g(k,d){return (f[k]&&String(f[k]).trim())||d;}
+  var ask=f.em_ask||'consult';
+  var askLine={consult:'book a consultation slot to go through it with you',feedback:'see my marked test or get feedback, so I can understand where I lost marks',clarify:'get clarity on what the assignment requires',extension:'request a short extension on the assignment'}[ask];
+  var subj={consult:'Consultation request',feedback:'Test feedback request',clarify:'Assignment question',extension:'Extension request'}[ask];
+  var name=g('em_name','[Your name]'),sn=g('em_num','[Student number]'),code=g('em_code','[Module code]');
+  var txt='Subject: '+code+' | '+subj+' | '+name+' ('+sn+')\n\n'+
+    'Good day '+g('em_lect','[Lecturer’s name]')+',\n\n'+
+    'My name is '+name+', student number '+sn+', and I’m registered for '+code+'.\n\n'+
+    'I’m struggling with '+g('em_stuck','[what you’re struggling with]')+'. So far I have '+g('em_tried','[what you’ve already tried]')+'.\n\n'+
+    'Could I please '+askLine+'? I’m available '+g('em_avail','[when you’re free]')+'.\n\n'+
+    'Thank you for your time.\n\nKind regards,\n'+name+'\n'+sn;
+  $('#em-out').value=txt;
+}
+
+/* ---------- copy helpers ---------- */
+function copyText(text,ta,msgEl){
+  function fallback(){
+    try{ta.focus();ta.select();var ok=document.execCommand&&document.execCommand('copy');msgEl.textContent=ok?'Copied.':'Selected. Press Ctrl+C, or long-press and choose Copy.';}
+    catch(e){msgEl.textContent='Selected. Press Ctrl+C, or long-press and choose Copy.';}
+  }
+  try{
+    if(navigator.clipboard&&navigator.clipboard.writeText){
+      navigator.clipboard.writeText(text).then(function(){msgEl.textContent='Copied.';},fallback);
+    }else fallback();
+  }catch(e){fallback();}
+}
+$('#em-copy').addEventListener('click',function(){copyText($('#em-out').value,$('#em-out'),$('#em-msg'));});
+
+/* ---------- export ---------- */
+function buildExport(){
+  var L=['THE FIRST-YEAR CS WORKBOOK: my answers','Copied on '+new Date().toLocaleDateString('en-ZA',{day:'numeric',month:'long',year:'numeric'}),''];
+  var h=hoursData();
+  var dyn={
+    programme:function(o){
+      var named=S.modules.filter(function(m){return m.name||m.code||m.credits;});
+      if(named.length){o.push('Modules:');named.forEach(function(m){o.push('  - '+[m.name,m.code].filter(Boolean).join(' ')+(m.credits?' | '+m.credits+' credits':'')+(m.contact?' | '+m.contact+' class h/wk':'')+(m.format?' | '+label(FORMATS,m.format):'')+(m.examDate?' | exam '+m.examDate:''));});
+        o.push('Expected work: '+f1(h.expected)+' h/week ('+f1(h.self)+' h on my own, over '+f1(h.w)+' weeks)');}
+    },
+    rules:function(o){var t=$('#mark-out .big');if(t)o.push('Exam calculator: '+t.textContent+' (semester mark '+S.mark.sem+'%, weighted '+S.mark.semW+'%)');},
+    subjects:function(o){S.modules.forEach(function(m){if((m.name||m.code)&&(m.family||m.worry))o.push('  - '+(m.name||m.code)+': '+(label(FAMILIES,m.family||'')||'no family')+(m.worry?', worry '+m.worry+'/5':''));});},
+    coding:function(o){
+      var lv={};CONCEPTS.forEach(function(c){var v=String(S.skills[c[0]]||'0');(lv[v]=lv[v]||[]).push(c[1]);});
+      if(lv['2'])o.push('From a blank file: '+lv['2'].join(', '));
+      if(lv['1'])o.push('With notes: '+lv['1'].join(', '));
+      if(S.tests.length){o.push('Blank-file tests:');S.tests.forEach(function(t){o.push('  - '+[t.date,label([['other','Something else']].concat(CONCEPTS),t.concept),t.mins?t.mins+' min':'',label(RESULTS,t.result),t.note].filter(Boolean).join(' | '));});}
+    },
+    week:function(o){var t=$('#budget-out .big');if(t)o.push('Weekly budget: '+t.textContent);},
+    exams:function(o){S.modules.forEach(function(m){var p=S.papers[m.id];if((m.name||m.code)&&p&&(p.found||p.done||p.weak))o.push('  - '+(m.name||m.code)+': '+(p.done||0)+'/'+(p.found||0)+' papers done'+(p.weak?' | weak: '+p.weak:''));});}
+  };
+  $$('.sec').forEach(function(sec){
+    var o=[],seen={};
+    $$('[data-f]:not([data-noprog]),[data-c],[data-rate]',sec).forEach(function(el){
+      if(el.hasAttribute('data-rate')){var k=el.getAttribute('data-rate');if(S.f[k])o.push(el.getAttribute('data-label')+': '+S.f[k]+'/5');return;}
+      if(el.hasAttribute('data-c')){var t=(el.parentNode.textContent||'').trim();o.push((el.checked?'[x] ':'[ ] ')+t);return;}
+      var key=el.getAttribute('data-f');if(seen[key])return;seen[key]=1;
+      var v=S.f[key];if(v==null||String(v).trim()==='')return;
+      if(el.type==='radio'){var chk=$('input[name="'+el.name+'"]:checked',sec);if(chk)o.push(el.getAttribute('data-label')+': '+chk.parentNode.textContent.trim());return;}
+      if(el.tagName==='SELECT'){o.push(el.getAttribute('data-label')+': '+el.options[el.selectedIndex].text);return;}
+      o.push(el.getAttribute('data-label')+': '+v);
+    });
+    if(dyn[sec.id])dyn[sec.id](o);
+    if(o.length){L.push('== '+sec.getAttribute('data-num')+' '+sec.getAttribute('data-title').toUpperCase()+' ==');L=L.concat(o);L.push('');}
+  });
+  return L.join('\n');
+}
+var dlg=$('#export-dlg');
+function openExport(){
+  $('#export-text').value=buildExport();$('#export-msg').textContent='';
+  try{if(dlg.showModal)dlg.showModal();else dlg.setAttribute('open','');}catch(e){dlg.setAttribute('open','');}
+}
+['#export-top','#export-rail','#export-bottom'].forEach(function(s){$(s).addEventListener('click',openExport);});
+$('#export-close').addEventListener('click',function(){try{dlg.close();}catch(e){dlg.removeAttribute('open');}});
+$('#export-copy').addEventListener('click',function(){copyText($('#export-text').value,$('#export-text'),$('#export-msg'));});
+
+/* ---------- reset ---------- */
+var resetBtn=$('#reset-btn'),resetTimer=null;
+resetBtn.addEventListener('click',function(){
+  if(resetBtn.getAttribute('data-armed')!=='true'){
+    resetBtn.setAttribute('data-armed','true');resetBtn.textContent='Tap again to erase everything';
+    resetTimer=setTimeout(function(){resetBtn.setAttribute('data-armed','false');resetBtn.textContent='Erase all my answers';},4000);
+    return;
+  }
+  clearTimeout(resetTimer);
+  try{localStorage.removeItem(KEY);}catch(e){}
+  S=blankState();applyStatic();renderEverything();persist();
+  resetBtn.setAttribute('data-armed','false');resetBtn.textContent='Erase all my answers';
+  document.getElementById('start').scrollIntoView();
+});
+
+/* ---------- navigation + progress ---------- */
+var secs=$$('.sec'),keyCache=new Map();
+secs.forEach(function(sec){
+  var ks={};
+  $$('[data-f]:not([data-noprog])',sec).forEach(function(el){ks['f:'+el.getAttribute('data-f')]=1;});
+  $$('[data-c]',sec).forEach(function(el){ks['c:'+el.getAttribute('data-c')]=1;});
+  $$('[data-rate]',sec).forEach(function(el){ks['f:'+el.getAttribute('data-rate')]=1;});
+  keyCache.set(sec,Object.keys(ks));
+});
+var railList=$('#rail-list'),chips=$('#chips');
+secs.forEach(function(sec){
+  var n=sec.getAttribute('data-num'),t=sec.getAttribute('data-title'),id=sec.id;
+  var li=document.createElement('li');
+  li.innerHTML='<a href="#'+id+'" data-go="'+id+'"><span class="n">'+n+'</span><span>'+esc(t)+'</span><span class="dot" data-dot="'+id+'"></span></a>';
+  railList.appendChild(li);
+  var a=document.createElement('a');a.href='#'+id;a.setAttribute('data-go',id);a.innerHTML='<span class="dot" data-dot="'+id+'"></span>'+n+' '+esc(t);chips.appendChild(a);
+});
+document.addEventListener('click',function(e){
+  var a=e.target.closest?e.target.closest('[data-go]'):null;if(!a)return;e.preventDefault();
+  var el=document.getElementById(a.getAttribute('data-go'));if(!el)return;
+  var reduce=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  el.scrollIntoView({behavior:reduce?'auto':'smooth',block:'start'});
+});
+function filled(k){var t=k.charAt(0),key=k.slice(2);if(t==='c')return !!S.c[key];var v=S.f[key];return v!=null&&String(v).trim()!=='';}
+function updateProgress(){
+  var total=0,done=0,started=0;
+  secs.forEach(function(sec){
+    var ks=keyCache.get(sec),n=ks.filter(filled).length;total+=ks.length;done+=n;if(n)started++;
+    var st=n===0?'none':(n>=ks.length?'done':'part');
+    $$('[data-dot="'+sec.id+'"]').forEach(function(d){d.setAttribute('data-state',st);});
+    var c=$('[data-count]',sec);if(c)c.textContent=n+' of '+ks.length+' answered';
+  });
+  var pct=total?Math.round(done/total*100):0;
+  $('#top-bar').style.width=pct+'%';$('#hero-bar').style.width=pct+'%';$('#top-pct').textContent=pct+'%';
+  $('#prog-text').textContent=done?(pct+'% filled in · '+started+' of '+secs.length+' sections started'):'Nothing filled in yet';
+}
+if('IntersectionObserver' in window){
+  var io=new IntersectionObserver(function(entries){
+    entries.forEach(function(en){if(en.isIntersecting){var id=en.target.id;$$('[data-go]').forEach(function(a){a.setAttribute('aria-current',String(a.getAttribute('data-go')===id));});
+      var chip=$('.chips [data-go="'+id+'"]');if(chip&&chips.scrollWidth>chips.clientWidth){chips.scrollTo({left:chip.offsetLeft-20,behavior:'auto'});}}});
+  },{rootMargin:'-35% 0px -60% 0px'});
+  secs.forEach(function(s){io.observe(s);});
+}
+
+function renderEverything(){renderModules();renderHours();renderMark();renderSorter();renderSkills();renderLog();renderBudget();renderExams();renderEmail();updateProgress();}
+applyStatic();bindStatic();renderEverything();
+if(storageOK){try{if(localStorage.getItem(KEY))setStatus('Saved on this device','ok');}catch(e){}}
+var h0=(location.hash||'').slice(1);if(h0&&document.getElementById(h0)&&document.getElementById(h0).classList.contains('sec')){setTimeout(function(){document.getElementById(h0).scrollIntoView();},50);}
+})();
+</script>
+</body>
+</html>

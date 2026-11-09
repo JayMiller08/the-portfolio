@@ -1,4 +1,4 @@
-import { Bell, ExternalLink, Eye, ShoppingBag } from "lucide-react";
+import { Bell, Download, ExternalLink, Eye, ShoppingBag } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "./ui/card";
 import { Button } from "./ui/button";
 import { Badge } from "./ui/badge";
@@ -6,6 +6,7 @@ import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, Di
 import { EmailDownloadDialog } from "./EmailDownloadDialog";
 import { BuyDialog } from "./BuyDialog";
 import { WaitlistForm } from "./WaitlistForm";
+import { WhatsAppResourceGate, type GatedResource } from "./WhatsAppResourceGate";
 import { formatPrice, isLaunchOffer, isSoldOut, type StorePrice } from "@/lib/store";
 
 export interface Product {
@@ -29,6 +30,8 @@ export interface Product {
         launchQuantity: number;
         currency: string;
     };
+    /** A free resource unlocked by leaving a WhatsApp number. */
+    whatsappResource?: GatedResource;
 }
 
 interface ProductCardProps {
@@ -48,6 +51,7 @@ const getTagStyles = (tag: string) => {
     switch (tag.toLowerCase()) {
         case "ebook":
             return `${baseStyle} bg-gradient-to-r from-violet-500/90 to-fuchsia-500/90 text-white border-white/20 dark:border-white/10`;
+        case "free workbook":
         case "free pdf guide":
             return `${baseStyle} bg-gradient-to-r from-emerald-500/90 to-teal-500/90 text-white border-white/20 dark:border-white/10`;
         case "notion template":
@@ -178,6 +182,35 @@ export const ProductCard = ({ product, price, storeReady = false }: ProductCardP
                                 <ExternalLink className="h-4 w-4 flex-shrink-0" />
                             </a>
                         </Button>
+                    )}
+
+                    {product.whatsappResource && (
+                        <Dialog>
+                            <DialogTrigger asChild>
+                                <Button
+                                    variant="default"
+                                    className="w-full gap-2 shadow-md hover:shadow-lg transition-all bg-foreground text-background hover:bg-foreground/90"
+                                >
+                                    <span className="truncate">Get it free</span>
+                                    <Download aria-hidden="true" className="h-4 w-4 flex-shrink-0" />
+                                </Button>
+                            </DialogTrigger>
+                            <DialogContent className="w-[calc(100%-2rem)] sm:max-w-md max-h-[90vh] overflow-y-auto">
+                                <DialogHeader>
+                                    <DialogTitle>{product.title}</DialogTitle>
+                                    <DialogDescription>
+                                        Free. Leave your WhatsApp number to download it.
+                                    </DialogDescription>
+                                </DialogHeader>
+                                <div className="pt-2">
+                                    <WhatsAppResourceGate
+                                        resource={product.whatsappResource}
+                                        source="resources"
+                                        autoFocus
+                                    />
+                                </div>
+                            </DialogContent>
+                        </Dialog>
                     )}
 
                     {product.downloadUrl && (

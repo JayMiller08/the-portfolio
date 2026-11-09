@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { ProductCard, Product } from "@/components/ProductCard";
 import { useStorePrices } from "@/hooks/useStorePrices";
+import { FIRST_YEAR_WORKBOOK } from "@/data/firstYearWorkbook";
 
 const ArtifactsHeader = () => {
   const { theme, toggleTheme } = useTheme();
@@ -39,6 +40,14 @@ const ArtifactsHeader = () => {
 };
 
 const digitalProducts: Product[] = [
+  {
+    id: FIRST_YEAR_WORKBOOK.slug,
+    title: FIRST_YEAR_WORKBOOK.title,
+    description: FIRST_YEAR_WORKBOOK.description,
+    tag: FIRST_YEAR_WORKBOOK.tag,
+    image: FIRST_YEAR_WORKBOOK.image,
+    whatsappResource: FIRST_YEAR_WORKBOOK,
+  },
   {
     id: "ai-framework",
     title: "AI Productivity Framework",
@@ -115,6 +124,7 @@ const ArtifactsPage = () => {
               // unless it has a pre-launch waitlist and the store lookup worked.
               .filter(
                 (product) =>
+                  product.whatsappResource ||
                   product.downloadUrl ||
                   product.gumroadUrl ||
                   (product.slug && prices?.[product.slug]) ||

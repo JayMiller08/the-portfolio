@@ -3,7 +3,7 @@ import { Hero } from "@/components/Hero";
 import { RouteChooser } from "@/components/RouteChooser";
 import { About } from "@/components/About";
 import { Contact } from "@/components/Contact";
-import { BlankFilePopup } from "@/components/BlankFilePopup";
+import { FirstYearWorkbookPopup } from "@/components/FirstYearWorkbookPopup";
 import { useDocumentMeta } from "@/hooks/useDocumentMeta";
 import { useHashScroll } from "@/hooks/useHashScroll";
 
@@ -28,7 +28,9 @@ const Index = () => {
       <RouteChooser />
       <About />
       <Contact />
-      <BlankFilePopup />
+      {/* Blank File's popup closed with its cohort on 6 Nov 2026; the
+          component is kept in case it runs again. */}
+      <FirstYearWorkbookPopup />
     </Layout>
   );
 };
